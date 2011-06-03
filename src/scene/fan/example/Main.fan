@@ -1,3 +1,5 @@
+using fwt
+using gfx
 
 @Js
 class Main
@@ -6,9 +8,11 @@ class Main
   {
     scene := NativeScene()
     text := scene.text
-    text.text = "Som Text"
+    text.font = Desktop.sysFontMonospace()
+    text.text = "Some Text"
+    echo(text.size)
     group := scene.group
-    group.add(text);
-    scene.root = group;
+    group.add(text)
+    scene.root = group
   }
 }
