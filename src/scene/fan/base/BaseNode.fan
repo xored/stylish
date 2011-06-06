@@ -1,4 +1,5 @@
 using gfx
+using kawhyCss
 
 @Js
 class BaseNode : Node
@@ -13,5 +14,7 @@ class BaseNode : Node
   override Rect bounds() { Rect.makePosSize(pos, size) }
 
   override Node? parent
+
+  override Style? style
 
 }

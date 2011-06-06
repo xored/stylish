@@ -29,6 +29,18 @@ fan.kawhyScene.ZNode.prototype.bounds = function()
 fan.kawhyScene.ZNode.prototype.m_parent = null;
 fan.kawhyScene.ZNode.prototype.parent = function() { return this.m_parent; }
 
+fan.kawhyScene.ZNode.prototype.m_style = null
+fan.kawhyScene.ZNode.prototype.style   = function() { return this.m_style }
+fan.kawhyScene.ZNode.prototype.style$  = function(style)
+{
+  this.m_pos = pos;
+  with (this.m_elem)
+  {
+    left = pos.m_x + "px";
+    top  = pos.m_y + "px";
+  }
+}
+
 fan.kawhyScene.ZNode.prototype.scene = function()
 {
   //no supported

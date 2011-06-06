@@ -1,4 +1,5 @@
 using gfx
+using kawhyCss
 
 @Js
 mixin Node
@@ -13,5 +14,7 @@ mixin Node
   abstract Rect bounds()
 
   abstract Node? parent()
+
+  abstract Style? style
 
 }
