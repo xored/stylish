@@ -18,9 +18,12 @@ const abstract class Style
       map[ps.typeof] = ps
     }
     styles := map.vals.sort
-    if (styles.size == 0) return defVal
-    if (styles.size == 1) return styles[0]
-    return GroupStyle(styles)
+    switch (styles.size)
+    {
+      case 0: return defVal
+      case 1 : return styles[0]
+      default: return GroupStyle(styles)
+    }
   }
 
   Style? findStyle(Type t)
@@ -32,6 +35,10 @@ const abstract class Style
   @Operator
   Style plusStyle(Style s) { merge(s) }
 
+  abstract StyleItem[] toCss()
+
   abstract AtomStyle[] atomize()
+
+  override Str toStr() { StyleItem.toStyleString(toCss()) }
 
 }

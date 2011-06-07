@@ -18,6 +18,9 @@ const class GroupStyle: Style
 
   override Int hash() { styles.hash }
 
-  override Str toStr() { styles.join(" ") }
+  override StyleItem[] toCss()
+  {
+    styles.map { it.toCss }.flatten
+  }
 
 }

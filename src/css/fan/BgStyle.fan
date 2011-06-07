@@ -4,9 +4,9 @@ using gfx
 const class BgStyle : AtomStyle
 {
 
-  const Brush brush
+  const Brush bg
 
-  new make(Brush brush) { this.brush = brush }
+  new make(Brush bg) { this.bg = bg }
 
   override AtomStyle mergeSame(AtomStyle s) { s }
 
@@ -16,11 +16,11 @@ const class BgStyle : AtomStyle
   {
     that := o as BgStyle
     if (that == null) return false
-    return that.brush == brush
+    return that.bg == bg
   }
 
-  override Int hash() { brush.hash }
+  override StyleItem[] toCss() { [StyleItem("background", bg.toStr)] }
 
-  override Str toStr() { "brush=$brush" }
+  override Int hash() { bg.hash }
 
 }

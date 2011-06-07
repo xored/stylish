@@ -33,12 +33,10 @@ fan.kawhyScene.ZNode.prototype.m_style = null
 fan.kawhyScene.ZNode.prototype.style   = function() { return this.m_style }
 fan.kawhyScene.ZNode.prototype.style$  = function(style)
 {
-  this.m_pos = pos;
-  with (this.m_elem)
-  {
-    left = pos.m_x + "px";
-    top  = pos.m_y + "px";
-  }
+  this.m_style = style;
+  var str = fan.kawhyCss.StyleItem.toStyleString(style.toCss());
+  this.m_elem.style.cssText = str;
+  this.initStyle();
 }
 
 fan.kawhyScene.ZNode.prototype.scene = function()
@@ -49,13 +47,18 @@ fan.kawhyScene.ZNode.prototype.scene = function()
 fan.kawhyScene.ZNode.prototype.init = function()
 {
   this.m_elem = this.create();
+  this.initStyle();
+  this.m_pos = fan.gfx.Point.m_defVal;
+}
+
+fan.kawhyScene.ZNode.prototype.initStyle = function()
+{
   with (this.m_elem.style)
   {
     position = "relative";
     top  = "0px";
     left = "0px";
   }
-  this.m_pos = fan.gfx.Point.m_defVal;
 }
 
 fan.kawhyScene.ZNode.prototype.create = function()
