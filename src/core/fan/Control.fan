@@ -1,13 +1,13 @@
 using gfx
 
 @Js
-class Control
+abstract class Control
 {
 
   Point pos := Point.defVal { internal set }
 
   Size size := Size.defVal { internal set }
 
-  Str position := "relative"
+  LayoutHints hints := LayoutHints { private set }
 
 }
