@@ -1,9 +1,8 @@
+using kawhyScene
 
 @Js
 class Composite : Control
 {
-
-  Control[] kids := [,]
 
   Void layout()
   {
@@ -15,6 +14,10 @@ class Composite : Control
       groups.getOrAdd(layout) { [,] }.add(it)
     }
   }
+
+  override protected Group node
+
+  private Control[] kids := [,]
 
   private Str:Layout layouts := [RelativeLayout.id:RelativeLayout()]
 

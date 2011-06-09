@@ -1,4 +1,5 @@
 using gfx
+using kawhyScene
 
 @Js
 abstract class Control
@@ -9,5 +10,9 @@ abstract class Control
   Size size := Size.defVal { internal set }
 
   LayoutHints hints := LayoutHints { private set }
+
+  abstract protected Void sync(Group parent)
+
+  abstract protected Node node()
 
 }
