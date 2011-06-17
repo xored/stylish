@@ -7,11 +7,9 @@ class BaseNode : Node
 
   override Scene scene() { throw ArgErr() }
 
-  override Point pos
+  override Point pos := Point.defVal
 
-  override Size size
-
-  override Rect bounds() { Rect.makePosSize(pos, size) }
+  override Size size := Size.defVal
 
   override Node? parent
 

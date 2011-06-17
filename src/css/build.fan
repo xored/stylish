@@ -7,6 +7,6 @@ class Build : build::BuildPod
     podName = "kawhyCss"
     summary = ""
     srcDirs = [`fan/`]
-    depends = ["sys 1.0", "gfx 1.0"]
+    depends = ["sys 1.0", "gfx 1.0", "fwt 1.0"]
   }
 }

@@ -7,6 +7,10 @@ class BaseGroup : BaseNode, Group
 
   override Void remove(Node kid) { kids.remove(kid) }
 
+  override Void removeAll() { kids = [,] }
+
+  override Position position := Position.horizontal
+
   private Node[] kids := [,]
 
 }

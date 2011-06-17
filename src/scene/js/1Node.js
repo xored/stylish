@@ -6,24 +6,18 @@ fan.kawhyScene.ZNode.prototype.pos   = function() { return this.m_pos }
 fan.kawhyScene.ZNode.prototype.pos$  = function(pos)
 {
   this.m_pos = pos;
-  with (this.m_elem)
+  with (this.m_elem.style)
   {
     left = pos.m_x + "px";
     top  = pos.m_y + "px";
   }
 }
 
-fan.kawhyScene.ZNode.prototype.m_size = null;
 fan.kawhyScene.ZNode.prototype.size   = function()
 {
   var w = this.m_elem.offsetWidth;
   var h = this.m_elem.offsetHeight;
   return fan.gfx.Size.make(w, h);
-}
-
-fan.kawhyScene.ZNode.prototype.bounds = function()
-{
-  return fan.gfx.Rect.makePosSize(this.pos(), this.size());
 }
 
 fan.kawhyScene.ZNode.prototype.m_parent = null;
@@ -41,29 +35,29 @@ fan.kawhyScene.ZNode.prototype.style$  = function(style)
 
 fan.kawhyScene.ZNode.prototype.scene = function()
 {
-  //no supported
+  //not supported
 }
 
 fan.kawhyScene.ZNode.prototype.init = function()
 {
   this.m_elem = this.create();
-  this.initStyle();
   this.m_pos = fan.gfx.Point.m_defVal;
+  this.initStyle();
 }
 
 fan.kawhyScene.ZNode.prototype.initStyle = function()
 {
   with (this.m_elem.style)
   {
-    position = "relative";
-    top  = "0px";
-    left = "0px";
+    position = "absolute";
+    left = this.m_pos.m_x + "px";
+    top  = this.m_pos.m_y + "px";
   }
 }
 
 fan.kawhyScene.ZNode.prototype.create = function()
 {
-  return document.createElement("div");
+  return document.createElement("span");
 }
 
 fan.kawhyScene.ZNode.prototype.m_elem = null;

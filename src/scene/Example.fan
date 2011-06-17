@@ -40,7 +40,7 @@ const class ExampleMod : WebMod
     out.docType
     out.html
     out.head
-      out.title.w("Text widget demo").titleEnd
+      out.title.w("Statis Content").titleEnd
       out.includeJs(`/pod/sys/sys.js`)
       out.includeJs(`/pod/concurrent/concurrent.js`)
       out.includeJs(`/pod/gfx/gfx.js`)
@@ -50,9 +50,6 @@ const class ExampleMod : WebMod
       out.script.w("window.onload = function() { fan.kawhyScene.Main.main(); }").scriptEnd
     out.headEnd
     out.body
-    out.h1
-    out.w("Web Editor")
-    out.h1End
     out.bodyEnd
     out.htmlEnd
   }

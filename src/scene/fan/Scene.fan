@@ -7,8 +7,16 @@ mixin Scene
 
   abstract Group group()
 
+  abstract ScrollArea scroll()
+
+  abstract FixedNode fixed()
+
+  abstract Checkbox checkbox()
+
+  abstract Link link()
+
   abstract Node copy(Node node)
 
-  abstract Node root
+  abstract Node? root
 
 }

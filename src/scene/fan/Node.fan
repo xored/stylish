@@ -11,7 +11,7 @@ mixin Node
 
   abstract Size size()
 
-  abstract Rect bounds()
+  virtual Rect bounds() { Rect.makePosSize(pos, size) }
 
   abstract Node? parent()
 
