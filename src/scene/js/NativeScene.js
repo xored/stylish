@@ -1,10 +1,88 @@
 fan.kawhyScene.NativeScene = fan.sys.Obj.$extend(fan.sys.Obj);
-fan.kawhyScene.NativeScene.prototype.$ctor = function() {}
+fan.kawhyScene.NativeScene.prototype.$ctor = function()
+{
+  var $this = this;
+  window.addEventListener("mousemove", function(e) { $this.handleMove(e); }, false);
+  window.addEventListener("mousedown", function(e) { $this.handleDown(e); }, false);
+  window.addEventListener("mouseup",   function(e) { $this.handleUp(e);   }, false);
+  this.m_mouse = fan.kawhyScene.Mouse.make();
+}
 
 fan.kawhyScene.NativeScene.make = function()
 {
   return new fan.kawhyScene.NativeScene();
 }
+
+/////////////////////////
+// Events
+/////////////////////////
+
+fan.kawhyScene.NativeScene.prototype.mouse = function()
+{
+  return this.m_mouse;
+}
+
+fan.kawhyScene.NativeScene.prototype.handleMove = function(e)
+{
+  this.m_mouse.pos$(fan.gfx.Point.make(e.clientX, e.clientY));
+}
+
+fan.kawhyScene.NativeScene.prototype.handleDown = function(e)
+{
+  var button = fan.kawhyScene.NativeScene.buttonSlot(e);
+  button.set(this.m_mouse, true);
+}
+
+fan.kawhyScene.NativeScene.prototype.handleUp = function(e)
+{
+  var button = fan.kawhyScene.NativeScene.buttonSlot(e);
+  button.set(this.m_mouse, false);
+}
+
+fan.kawhyScene.NativeScene.prototype.handleClick = function(e, down)
+{
+  if (this.clicks == null)
+  {
+    this.clicks =
+    {
+      time:   new Date().getTime(),
+      pos:    this.m_mouse.m_pos,
+      count:  1,
+      button: e.button
+    };
+  }
+  else
+  {
+    var diff = new Date().getTime() - this.clicks.time;
+    if (diff < 600 && this.m_mouse.m_pos.equals(this.clicks.m_pos) && e.button == this.clicks.button)
+    {
+      this.clicks.count++;
+    }
+    else
+    {
+      this.clicks.count  = 1;
+      this.clicks.button = e.button;
+    }
+  }
+  var slot = fan.kawhyScene.NativeScene.buttonSlot(e);
+  var button = slot.get(this.m_mouse);
+  button.onClick(down, this.clicks.count);
+}
+
+fan.kawhyScene.NativeScene.buttonSlot = function(e)
+{
+  switch (e.button)
+  {
+    case 0: return fan.kawhyScene.Mouse.$type.field("left");
+    case 1: return fan.kawhyScene.Mouse.$type.field("middle");
+    case 2: return fan.kawhyScene.Mouse.$type.field("right");
+  }
+  return null;
+}
+
+/////////////////////////
+// Creation
+/////////////////////////
 
 fan.kawhyScene.NativeScene.prototype.text = function()
 {
@@ -48,6 +126,10 @@ fan.kawhyScene.NativeScene.prototype.link = function()
   return node;
 }
 
+/////////////////////////
+// Fields
+/////////////////////////
+
 fan.kawhyScene.NativeScene.prototype.root = function() { this.m_root = root; }
 fan.kawhyScene.NativeScene.prototype.root$ = function(root)
 {
@@ -56,6 +138,7 @@ fan.kawhyScene.NativeScene.prototype.root$ = function(root)
   this.m_root = root;
   document.body.appendChild(root.m_elem);
 }
-fan.kawhyScene.NativeScene.prototype.m_root = null
+fan.kawhyScene.NativeScene.prototype.m_root = null;
 
-fan.kawhyScene.NativeScene.prototype.copy = function() { }
+fan.kawhyScene.NativeScene.prototype.m_lastClickTime = null;
+fan.kawhyScene.NativeScene.prototype.m_lastClickButton = null;

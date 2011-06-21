@@ -46,6 +46,7 @@ const class ExampleMod : WebMod
       out.includeJs(`/pod/gfx/gfx.js`)
       out.includeJs(`/pod/fwt/fwt.js`)
       out.includeJs(`/pod/kawhyCss/kawhyCss.js`)
+      out.includeJs(`/pod/kawhyNotice/kawhyNotice.js`)
       out.includeJs(`/pod/kawhyScene/kawhyScene.js`)
       out.script.w("window.onload = function() { fan.kawhyScene.Main.main(); }").scriptEnd
     out.headEnd

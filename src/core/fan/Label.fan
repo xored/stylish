@@ -10,7 +10,7 @@ class Label : Control
     set { node.text = it }
   }
 
-  abstract protected Void sync(Group parent)
+  override protected Void sync(Group parent)
   {
     
   }

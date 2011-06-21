@@ -7,16 +7,19 @@ mixin Scene
 
   abstract Group group()
 
-  abstract ScrollArea scroll()
+  abstract Node? root
 
-  abstract FixedNode fixed()
+  abstract Mouse mouse()
+
+  //
+  // TRASH
+  //
+  abstract ScrollArea scroll()
 
   abstract Checkbox checkbox()
 
   abstract Link link()
 
-  abstract Node copy(Node node)
-
-  abstract Node? root
+  abstract FixedNode fixed()
 
 }

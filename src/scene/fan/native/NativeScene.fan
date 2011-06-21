@@ -15,7 +15,7 @@ native class NativeScene : Scene
 
   override Link link()
 
-  override Node copy(Node node)
+  override Mouse mouse()
 
   override Node? root
 

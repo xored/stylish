@@ -9,6 +9,11 @@ class Main
   static Void main()
   {
     scene := NativeScene()
+    scene.mouse.on(Mouse#pos).add    { echo(it) }
+    scene.mouse.left.on(MouseButton#down).add   { echo("left: $it") }
+    scene.mouse.right.on(MouseButton#down).add  { echo("right: $it") }
+    scene.mouse.middle.on(MouseButton#down).add { echo("middle: $it") }
+
     v := StaticVisualizer(scene)
 
     total := scene.text

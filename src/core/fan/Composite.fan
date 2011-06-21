@@ -15,6 +15,8 @@ class Composite : Control
     }
   }
 
+  override protected Void sync(Group parent) {}
+
   override protected Group node
 
   private Control[] kids := [,]

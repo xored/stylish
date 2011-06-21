@@ -20,9 +20,6 @@ fan.kawhyScene.ZNode.prototype.size   = function()
   return fan.gfx.Size.make(w, h);
 }
 
-fan.kawhyScene.ZNode.prototype.m_parent = null;
-fan.kawhyScene.ZNode.prototype.parent = function() { return this.m_parent; }
-
 fan.kawhyScene.ZNode.prototype.m_style = null
 fan.kawhyScene.ZNode.prototype.style   = function() { return this.m_style }
 fan.kawhyScene.ZNode.prototype.style$  = function(style)
@@ -31,11 +28,6 @@ fan.kawhyScene.ZNode.prototype.style$  = function(style)
   var str = fan.kawhyCss.StyleItem.toStyleString(style.toCss());
   this.m_elem.style.cssText = str;
   this.initStyle();
-}
-
-fan.kawhyScene.ZNode.prototype.scene = function()
-{
-  //not supported
 }
 
 fan.kawhyScene.ZNode.prototype.init = function()
