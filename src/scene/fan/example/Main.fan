@@ -10,9 +10,9 @@ class Main
   {
     scene := NativeScene()
     scene.mouse.on(Mouse#pos).add    { echo(it) }
-    scene.mouse.left.on(MouseButton#down).add   { echo("left: $it") }
-    scene.mouse.right.on(MouseButton#down).add  { echo("right: $it") }
-    scene.mouse.middle.on(MouseButton#down).add { echo("middle: $it") }
+    add("left", scene.mouse.left)
+    add("right", scene.mouse.right)
+    add("middle", scene.mouse.middle)
 
     v := StaticVisualizer(scene)
 
@@ -32,6 +32,14 @@ class Main
     g.add(v.scroll)
     g.style = BoxStyle { padding = Insets(10) }
     scene.root = g
+  }
+
+  static Void add(Str name, MouseButton button)
+  {
+    button.on(MouseButton#down).add
+    {
+      echo("$name: $button.down $button.clicks")
+    }
   }
 
   static Group create(Scene scene)

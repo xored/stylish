@@ -45,6 +45,7 @@ const class ExampleMod : WebMod
       out.includeJs(`/pod/concurrent/concurrent.js`)
       out.includeJs(`/pod/gfx/gfx.js`)
       out.includeJs(`/pod/fwt/fwt.js`)
+      out.includeJs(`/pod/kawhyMath/kawhyMath.js`)
       out.includeJs(`/pod/kawhyCss/kawhyCss.js`)
       out.includeJs(`/pod/kawhyNotice/kawhyNotice.js`)
       out.includeJs(`/pod/kawhyScene/kawhyScene.js`)

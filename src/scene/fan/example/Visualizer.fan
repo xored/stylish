@@ -65,41 +65,34 @@ abstract class Visualizer
     group := scene.group
     group.position = Position.horizontal
 
-    text0 := scene.text
-    text0.text = "$line".justl(6)
-    text0.style = TextStyle { color = Color(0x808080) }
-    group.add(text0)
+    styles := StyleRange[,]
+    text := "$line".justl(6)
+    offset := 6
+    styles.add(StyleRange(TextStyle { color = Color(0x808080) }, 0..5))
 
     if ((line + 1) % 10 == 0)
     {
-      link := scene.link()
-      link.link = "http://google.com"
-      link.text = "ssr-server2:"
-      text1 := scene.text
-      text1.text = " "
-      group.add(link)
-      group.add(text1)
+      group.add(scene.text { it.text = text; it.styles = styles })
+      group.add(scene.link { link = "http://google.com"; it.text = "ssr-server2:" })
+      text = ""
+      styles = [,]
+      offset = 0
     }
     else
     {
-      text1 := scene.text
-      text1.text = "ssr-server2: "
-      text1.style = TextStyle { color = Color.orange }
-      group.add(text1)
+      text += "ssr-server2:"
+      styles.add(StyleRange(TextStyle { color = Color.orange }, offset..<text.size))
+      offset = text.size
     }
 
     if (!filtered)
     {
-      text2 := scene.text
-      text2.text = " 2009-09-22T06:59:28: "
-      text2.style = TextStyle { color = Color.blue }
-      group.add(text2)
+      text += " 2009-09-22T06:59:28: "
+      styles.add(StyleRange(TextStyle { color = Color.blue }, offset..<text.size))
+      offset = text.size
     }
-
-    text3 := scene.text
-    text3.text = "%autoeasy-5-NOTICE: %[pname=TRP--mode,linenum=1]: *** testbed-AAA-IOU-SSR2-con.log.00001 ***"
-    group.add(text3)
-
+    text += "%autoeasy-5-NOTICE: %[pname=TRP--mode,linenum=1]: *** testbed-AAA-IOU-SSR2-con.log.00001 ***"
+    group.add(scene.text { it.text = text; it.styles = styles })
     group.pos = Point(0, line * lineSize)
     content.add(group)
     return group

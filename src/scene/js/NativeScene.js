@@ -27,17 +27,9 @@ fan.kawhyScene.NativeScene.prototype.handleMove = function(e)
   this.m_mouse.pos$(fan.gfx.Point.make(e.clientX, e.clientY));
 }
 
-fan.kawhyScene.NativeScene.prototype.handleDown = function(e)
-{
-  var button = fan.kawhyScene.NativeScene.buttonSlot(e);
-  button.set(this.m_mouse, true);
-}
+fan.kawhyScene.NativeScene.prototype.handleDown = function(e) { this.handleClick(e, true); }
 
-fan.kawhyScene.NativeScene.prototype.handleUp = function(e)
-{
-  var button = fan.kawhyScene.NativeScene.buttonSlot(e);
-  button.set(this.m_mouse, false);
-}
+fan.kawhyScene.NativeScene.prototype.handleUp = function(e) { this.handleClick(e, false); }
 
 fan.kawhyScene.NativeScene.prototype.handleClick = function(e, down)
 {
@@ -51,10 +43,12 @@ fan.kawhyScene.NativeScene.prototype.handleClick = function(e, down)
       button: e.button
     };
   }
-  else
+  else if (down)
   {
-    var diff = new Date().getTime() - this.clicks.time;
-    if (diff < 600 && this.m_mouse.m_pos.equals(this.clicks.m_pos) && e.button == this.clicks.button)
+    var now = new Date().getTime();
+    var diff = now - this.clicks.time;
+    this.clicks.time = now;
+    if (diff < 600 && this.m_mouse.m_pos.equals(this.clicks.pos) && e.button == this.clicks.button)
     {
       this.clicks.count++;
     }
@@ -62,6 +56,7 @@ fan.kawhyScene.NativeScene.prototype.handleClick = function(e, down)
     {
       this.clicks.count  = 1;
       this.clicks.button = e.button;
+      this.clicks.pos = this.m_mouse.m_pos;
     }
   }
   var slot = fan.kawhyScene.NativeScene.buttonSlot(e);
@@ -81,7 +76,7 @@ fan.kawhyScene.NativeScene.buttonSlot = function(e)
 }
 
 /////////////////////////
-// Creation
+// Factory
 /////////////////////////
 
 fan.kawhyScene.NativeScene.prototype.text = function()
