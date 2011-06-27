@@ -20,6 +20,12 @@ fan.kawhyScene.ZNode.prototype.size   = function()
   return fan.gfx.Size.make(w, h);
 }
 
+fan.kawhyScene.ZNode.prototype.size$  = function(size)
+{
+  this.m_elem.style.width  = size.m_w + "px";
+  this.m_elem.style.height = size.m_h + "px";
+}
+
 fan.kawhyScene.ZNode.prototype.m_style = null
 fan.kawhyScene.ZNode.prototype.style   = function() { return this.m_style }
 fan.kawhyScene.ZNode.prototype.style$  = function(style)

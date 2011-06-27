@@ -18,7 +18,7 @@ abstract class Visualizer
       onSumChange(sum)
     }
 
-    content = scene.fixed()
+    content = scene.group()
     content.size = Size(600, lineCount * lineSize)
     content.position = Position.absolute
     scroll.add(content)
@@ -109,7 +109,7 @@ abstract class Visualizer
 
   |Int| onSumChange := |Int sum| {}
 
-  private FixedNode content { private set }
+  private Group content { private set }
 
   private Scene scene
 

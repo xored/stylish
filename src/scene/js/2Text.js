@@ -21,7 +21,7 @@ fan.kawhyScene.KYTextNode.prototype.styles$ = function(styles)
   this.m_styles = styles;
   this.fillContent();
 }
-fan.kawhyScene.KYTextNode.prototype.m_styles = fan.sys.List.make(fan.kawhyScene.StyleRange.$type);
+fan.kawhyScene.KYTextNode.prototype.m_styles = fan.sys.List.make(fan.kawhyCss.StyleRange.$type);
 
 fan.kawhyScene.KYTextNode.prototype.fillContent = function()
 {

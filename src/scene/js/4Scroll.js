@@ -1,4 +1,4 @@
-fan.kawhyScene.KYScrollArea = fan.sys.Obj.$extend(fan.kawhyScene.KYFixedNode);
+fan.kawhyScene.KYScrollArea = fan.sys.Obj.$extend(fan.kawhyScene.DivNode);
 fan.kawhyScene.KYScrollArea.prototype.$ctor = function() {}
 
 fan.kawhyScene.KYScrollArea.prototype.create = function()

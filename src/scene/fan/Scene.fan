@@ -20,6 +20,4 @@ mixin Scene
 
   abstract Link link()
 
-  abstract FixedNode fixed()
-
 }

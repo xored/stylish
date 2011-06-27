@@ -3,9 +3,9 @@
 mixin Notifier
 {
 
-  Listeners on(Slot s) { listeners.on(s) }
+  Listeners on(Obj key) { listeners.on(key) }
 
-  Void notify(Slot s, Obj? val) { listeners.notify(s, val) }
+  Void notify(Obj key, Obj? val) { listeners.notify(key, val) }
 
   abstract protected ListenerStorage listeners()
 

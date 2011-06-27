@@ -1,20 +1,18 @@
 
 @Js
-class StyleList
+const class StyleList
 {
-  @Operator Void set(Range r, Style s)
+
+  const StyleRange[] ranges
+
+  new make(StyleRange[] ranges)
   {
+    this.ranges = ranges
   }
 
-  Void overlay(Range r, Style s)
+  StyleList replace(Int index, Int remove, Int insert, Style? style)
   {
-    
+    this
   }
-
-  @Operator Style? get(Int pos) { Style.defVal }
-
-  StyleRange[] ranges() { [,] }
-
-  Style? style
 
 }

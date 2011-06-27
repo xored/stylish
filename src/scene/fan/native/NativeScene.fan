@@ -9,8 +9,6 @@ native class NativeScene : Scene
 
   override ScrollArea scroll()
 
-  override FixedNode fixed()
-
   override Checkbox checkbox()
 
   override Link link()

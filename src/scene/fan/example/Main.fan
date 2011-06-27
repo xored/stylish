@@ -34,6 +34,37 @@ class Main
     scene.root = g
   }
 
+  static Void test1()
+  {
+    text := ""
+    size := 0
+    n1 := DateTime.now()
+    for(i := 0; i < 50000; i++)
+    {
+      text += "add"
+      size += 3
+      text = text.getRange(0..-2)
+      size -= 1
+    }
+    n2 := DateTime.now()
+    echo(size.toStr + " for " + (n2 - n1))
+  }
+
+  static Void test2()
+  {
+    text := TextNotifier()
+    l := TextListener()
+    text.listen(l)
+    n1 := DateTime.now()
+    for(i := 0; i < 50000; i++)
+    {
+      text.add("add")
+      text.remove(1)
+    }
+    n2 := DateTime.now()
+    echo(l.size.toStr + " for " + (n2 - n1))
+  }
+
   static Void add(Str name, MouseButton button)
   {
     button.on(MouseButton#down).add

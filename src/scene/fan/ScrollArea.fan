@@ -1,7 +1,7 @@
 using gfx
 
 @Js
-mixin ScrollArea : FixedNode
+mixin ScrollArea : Group
 {
 
   abstract Point scroll

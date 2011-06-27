@@ -7,9 +7,7 @@ mixin Node
 
   abstract Point pos
 
-  abstract Size size()
-
-  virtual Rect bounds() { Rect.makePosSize(pos, size) }
+  abstract Size size
 
   abstract Style? style
 

@@ -1,18 +1,27 @@
 using gfx
+using kawhyCss
 using kawhyScene
 
 @Js
 abstract class Control
 {
 
-  Point pos := Point.defVal { internal set }
+  Point pos() { node.pos }
 
-  Size size := Size.defVal { internal set }
+  Size size() { node.size }
 
-  LayoutHints hints := LayoutHints { private set }
+  Style? style
+  {
+    get { node.style }
+    set { node.style = it }
+  }
 
-  abstract protected Void sync(Group parent)
+  LayoutHints hints := LayoutHints()
 
-  abstract protected Node node()
+  internal Void attach(Group parent) { parent.add(node) }
+
+  internal Void detach(Group parent) { parent.remove(node) }
+
+  abstract protected Node? node()
 
 }

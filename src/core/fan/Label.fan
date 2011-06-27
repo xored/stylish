@@ -10,11 +10,6 @@ class Label : Control
     set { node.text = it }
   }
 
-  override protected Void sync(Group parent)
-  {
-    
-  }
-
-  override protected TextNode node
+  override protected TextNode? node := null
 
 }

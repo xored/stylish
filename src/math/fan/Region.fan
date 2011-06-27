@@ -46,6 +46,8 @@ const class Region
 
   Int last() { end - 1 }
 
+  Range toRange() { start..<end }
+
   override Bool equals(Obj? obj)
   {
     that := obj as Region
