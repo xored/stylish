@@ -1,6 +1,8 @@
+using kawhy
+using kawhyScene
 
 @Js
-class TextEdit
+class TextEdit : Control
 {
 
   new make(TextDoc source)
@@ -9,5 +11,7 @@ class TextEdit
   }
 
   TextDoc source
+
+  override protected Node node := ScrollArea()
 
 }

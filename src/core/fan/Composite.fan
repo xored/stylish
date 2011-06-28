@@ -15,9 +15,21 @@ class Composite : Control
     }
   }
 
-  override protected Group? node := null
+  Void add(Control kid)
+  {
+    kids.add(kid)
+    node.add(kid.node)
+  }
+
+  Void remove(Control kid)
+  {
+    node.remove(kid.node)
+    kids.remove(kid)
+  }
 
   private Control[] kids := [,]
+
+  override protected Group node := Group()
 
   private Str:Layout layouts := [RelativeLayout.id:RelativeLayout()]
 

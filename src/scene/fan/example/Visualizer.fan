@@ -8,7 +8,7 @@ abstract class Visualizer
   new make(Scene scene)
   {
     this.scene = scene
-    scroll = scene.scroll()
+    scroll = ScrollArea()
     scroll.position = Position.absolute
     scroll.style = FontStyle(FontStyle.monospace.name, 16)
     scroll.size = Size(scrollWidth, scrollHeight)
@@ -18,7 +18,7 @@ abstract class Visualizer
       onSumChange(sum)
     }
 
-    content = scene.group()
+    content = Group()
     content.size = Size(600, lineCount * lineSize)
     content.position = Position.absolute
     scroll.add(content)
@@ -62,7 +62,7 @@ abstract class Visualizer
   protected Node createElement(Int line)
   {
     sum++
-    group := scene.group
+    group := Group()
     group.position = Position.horizontal
 
     styles := StyleRange[,]
@@ -72,8 +72,8 @@ abstract class Visualizer
 
     if ((line + 1) % 10 == 0)
     {
-      group.add(scene.text { it.text = text; it.styles = styles })
-      group.add(scene.link { link = "http://google.com"; it.text = "ssr-server2:" })
+      group.add(TextNode() { it.text = text; it.styles = styles })
+      group.add(Link() { link = "http://google.com"; it.text = "ssr-server2:" })
       text = ""
       styles = [,]
       offset = 0
@@ -92,7 +92,7 @@ abstract class Visualizer
       offset = text.size
     }
     text += "%autoeasy-5-NOTICE: %[pname=TRP--mode,linenum=1]: *** testbed-AAA-IOU-SSR2-con.log.00001 ***"
-    group.add(scene.text { it.text = text; it.styles = styles })
+    group.add(TextNode() { it.text = text; it.styles = styles })
     group.pos = Point(0, line * lineSize)
     content.add(group)
     return group

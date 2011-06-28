@@ -22,6 +22,6 @@ abstract class Control
 
   internal Void detach(Group parent) { parent.remove(node) }
 
-  abstract protected Node? node()
+  abstract protected Node node()
 
 }

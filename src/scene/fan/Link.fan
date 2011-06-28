@@ -1,10 +1,10 @@
 
 @Js
-mixin Link : Node
+class Link : Node
 {
 
-  abstract Str link
+  native Str link
 
-  abstract Str text
+  native Str text
 
 }

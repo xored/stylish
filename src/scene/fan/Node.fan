@@ -2,13 +2,13 @@ using gfx
 using kawhyCss
 
 @Js
-mixin Node
+class Node
 {
 
-  abstract Point pos
+  native Point pos
 
-  abstract Size size
+  native Size size
 
-  abstract Style? style
+  native Style? style
 
 }

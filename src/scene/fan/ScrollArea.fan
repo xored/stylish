@@ -1,13 +1,13 @@
 using gfx
 
 @Js
-mixin ScrollArea : Group
+class ScrollArea : Group
 {
 
-  abstract Point scroll
+  native Point scroll
 
-  abstract |Point| onScroll
+  native |Point| onScroll
 
-  abstract Size clientArea()
+  native Size clientArea()
 
 }

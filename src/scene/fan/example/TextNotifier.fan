@@ -17,9 +17,11 @@ class TextNotifier : ListNotifier
 
   Void remove(Int size)
   {
-    text := text.getRange(0..-size-1)
+    text = text.getRange(0..-size-1)
     fire(StrNotice(text.size, size, ""))
   }
+
+  override Int size() { text.size }
 
   override protected ListListener[] listeners := [,]
 

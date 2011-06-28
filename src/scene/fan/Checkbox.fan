@@ -1,12 +1,12 @@
 
 @Js
-mixin Checkbox : Node
+class CheckBox : Node
 {
 
-  abstract Str text
+  native Str text
 
-  abstract Bool checked
+  native Bool checked
 
-  abstract |Bool| onClick
+  native |Bool| onClick
 
 }

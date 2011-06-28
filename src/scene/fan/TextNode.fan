@@ -1,11 +1,11 @@
 using kawhyCss
 
 @Js
-mixin TextNode : Node
+class TextNode : Node
 {
 
-  abstract Str text
+  native Str text
 
-  abstract StyleRange[] styles
+  native StyleRange[] styles
 
 }

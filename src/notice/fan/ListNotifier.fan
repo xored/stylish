@@ -4,6 +4,8 @@ using kawhyMath
 mixin ListNotifier
 {
 
+  abstract Int size()
+
   protected Void fire(ListNotice notice)
   {
     listeners().each { it.fire(notice) }

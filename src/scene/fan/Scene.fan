@@ -1,23 +1,10 @@
 
 @Js
-mixin Scene
+class Scene
 {
 
-  abstract TextNode text()
+  native Node? root
 
-  abstract Group group()
-
-  abstract Node? root
-
-  abstract Mouse mouse()
-
-  //
-  // TRASH
-  //
-  abstract ScrollArea scroll()
-
-  abstract Checkbox checkbox()
-
-  abstract Link link()
+  native Mouse mouse()
 
 }

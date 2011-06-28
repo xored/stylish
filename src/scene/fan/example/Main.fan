@@ -8,24 +8,24 @@ class Main
 
   static Void main()
   {
-    scene := NativeScene()
-    scene.mouse.on(Mouse#pos).add    { echo(it) }
+    scene := Scene()
+    scene.mouse.on(Mouse#pos).add { echo(it) }
     add("left", scene.mouse.left)
     add("right", scene.mouse.right)
     add("middle", scene.mouse.middle)
 
     v := StaticVisualizer(scene)
 
-    total := scene.text
+    total := TextNode()
     total.text = "Total elements: $v.sum"
     v.onSumChange = |Int sum| { total.text = "Total elements: $sum" }
 
-    checkbox := scene.checkbox()
+    checkbox := CheckBox()
     checkbox.text = "Filter timestamps"
     checkbox.style = BoxStyle { padding = Insets(5, 0, 5, 0) }
     checkbox.onClick = |Bool check| { v.filtered = check }
 
-    g := scene.group
+    g := Group()
     g.position = Position.vertical
     g.add(total)
     g.add(checkbox)
@@ -75,12 +75,10 @@ class Main
 
   static Group create(Scene scene)
   {
-    group := scene.group
+    group := Group()
     for(i := 0; i < 10; i++)
     {
-      text := scene.text
-      text.text = "Text" + i
-      group.add(text)
+      group.add(TextNode() { it.text = "Text" + i })
     }
     return group
   }

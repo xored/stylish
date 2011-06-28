@@ -1,29 +1,29 @@
-fan.kawhyScene.KYTextNode = fan.sys.Obj.$extend(fan.kawhyScene.ZNode);
-fan.kawhyScene.KYTextNode.prototype.$ctor = function() {}
+fan.kawhyScene.TextNodePeer = fan.sys.Obj.$extend(fan.kawhyScene.NodePeer);
+fan.kawhyScene.TextNodePeer.prototype.$ctor = function() { this.init(); }
 
-fan.kawhyScene.KYTextNode.prototype.create = function()
+fan.kawhyScene.TextNodePeer.prototype.create = function()
 {
   var span = document.createElement("span");
   return span;
 }
 
-fan.kawhyScene.KYTextNode.prototype.text = function() { return this.m_text; }
-fan.kawhyScene.KYTextNode.prototype.text$ = function(text)
+fan.kawhyScene.TextNodePeer.prototype.text = function(self) { return this.m_text; }
+fan.kawhyScene.TextNodePeer.prototype.text$ = function(self, text)
 {
   this.m_text = text;
   this.fillContent();
 }
-fan.kawhyScene.KYTextNode.prototype.m_text = "";
+fan.kawhyScene.TextNodePeer.prototype.m_text = "";
 
-fan.kawhyScene.KYTextNode.prototype.styles = function() { return this.m_styles.dup(); }
-fan.kawhyScene.KYTextNode.prototype.styles$ = function(styles)
+fan.kawhyScene.TextNodePeer.prototype.styles = function(self) { return this.m_styles.dup(); }
+fan.kawhyScene.TextNodePeer.prototype.styles$ = function(self, styles)
 {
   this.m_styles = styles;
   this.fillContent();
 }
-fan.kawhyScene.KYTextNode.prototype.m_styles = fan.sys.List.make(fan.kawhyCss.StyleRange.$type);
+fan.kawhyScene.TextNodePeer.prototype.m_styles = fan.sys.List.make(fan.kawhyCss.StyleRange.$type);
 
-fan.kawhyScene.KYTextNode.prototype.fillContent = function()
+fan.kawhyScene.TextNodePeer.prototype.fillContent = function()
 {
   this.m_elem.innerHTML = "";
   var textSize = this.m_text.length;
@@ -60,28 +60,28 @@ fan.kawhyScene.KYTextNode.prototype.fillContent = function()
   }
 }
 
-fan.kawhyScene.KYTextNode.prototype.initStyle = function()
+fan.kawhyScene.TextNodePeer.prototype.initStyle = function()
 {
-  fan.kawhyScene.ZNode.prototype.initStyle.call(this);
+  fan.kawhyScene.NodePeer.prototype.initStyle.call(this);
   with (this.m_elem.style)
   {
     whiteSpace = "pre"
   }
 }
 
-fan.kawhyScene.KYTextNode.prototype.textWidth = function(str)
+fan.kawhyScene.TextNodePeer.prototype.textWidth = function(str)
 {
   // use global var to store a context for computing string width
-  if (fan.kawhyScene.KYTextNode.fontCx == null)
+  if (fan.kawhyScene.TextNodePeer.fontCx == null)
   {
-    fan.kawhyScene.KYTextNode.fontCx = document.createElement("canvas").getContext("2d");
+    fan.kawhyScene.TextNodePeer.fontCx = document.createElement("canvas").getContext("2d");
   }
 
   fan.fwt.FwtEnvPeer.fontCx.font = this.calcFont();
   return Math.round(fan.fwt.FwtEnvPeer.fontCx.measureText(str).width);
 }
 
-fan.kawhyScene.KYTextNode.prototype.calcFont = function()
+fan.kawhyScene.TextNodePeer.prototype.calcFont = function()
 {
   var font = null;
   var defView = document.defaultView;
@@ -97,7 +97,7 @@ fan.kawhyScene.KYTextNode.prototype.calcFont = function()
   return font;
 }
 
-fan.kawhyScene.KYTextNode.fontToCss = function(font)
+fan.kawhyScene.TextNodePeer.fontToCss = function(font)
 {
   if (font == null) return "";
   var s = "";
@@ -109,4 +109,4 @@ fan.kawhyScene.KYTextNode.fontToCss = function(font)
 }
 
 //global variable to store a CanvasRenderingContext2D
-fan.kawhyScene.KYTextNode.fontCx = null;
+fan.kawhyScene.TextNodePeer.fontCx = null;
