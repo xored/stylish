@@ -11,4 +11,6 @@ class Node
 
   native Style? style
 
+  Str:Obj data := [:]
+
 }

@@ -10,9 +10,9 @@ mixin ListListener : Listener
     if (n.add > 0) onAdd(n.add, n.add)
   }
 
-  abstract Void onAdd(Int index, Int size)
+  virtual Void onAdd(Int index, Int size) {}
 
-  abstract Void onRemove(Int index, Int size)
+  virtual Void onRemove(Int index, Int size) {}
 
 }
 

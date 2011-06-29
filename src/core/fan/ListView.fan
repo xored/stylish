@@ -19,6 +19,8 @@ abstract class ListView : Control
 
   abstract protected Node createView(Int i)
 
+  virtual protected Void disposeView(Node node) {}
+
   internal override Void attach(GroupControl? parent)
   {
     super.attach(parent)
@@ -52,7 +54,11 @@ abstract class ListView : Control
       }
       node.pos = Point(0, i * itemSize)
     }
-    cache.trash.each { content.remove(it) }
+    cache.trash.each
+    {
+      disposeView(it)
+      content.remove(it)
+    }
     cache.clearTrash()
   }
 

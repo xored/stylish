@@ -7,15 +7,15 @@ using kawhyCss
 mixin TextLine : ListNotifier
 {
 
-  override Int size() { text.size }
-
-  Int get(Int i) { text[i] }
-
-  Str getRange(Range range) { text.getRange(range) }
-
   abstract Str text
 
   abstract StyleList styles
+
+  override Int size() { text.size }
+
+  @Operator Int get(Int i) { text[i] }
+
+  @Operator Str getRange(Range range) { text.getRange(range) }
 
   protected Void replace(Int index, Int remove, Str insert, Style? style)
   {

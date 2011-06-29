@@ -15,7 +15,7 @@ class ControlPane : Pane
       node := it?.node
       pane = ScenePane
       {
-        scene = Scene { root = node }
+        it.scene = Scene { root = node }
         onAttach = |->|
         {
           control.attach(null)
@@ -24,6 +24,8 @@ class ControlPane : Pane
       add(pane)
     }
   }
+
+  Scene? scene() { pane?.scene }
 
   override Size prefSize(Hints hints := Hints.defVal)
   {

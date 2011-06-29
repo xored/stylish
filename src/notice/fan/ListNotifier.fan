@@ -15,6 +15,6 @@ mixin ListNotifier
 
   virtual Void discard(ListListener l) { listeners.remove(l) }
 
-  abstract protected ListListener[] listeners()
+  virtual protected ListListener[] listeners() { [,] }
 
 }
