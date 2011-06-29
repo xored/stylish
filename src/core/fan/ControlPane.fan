@@ -10,11 +10,16 @@ class ControlPane : Pane
   {
     set
     {
+      &control = it
       if (pane != null) remove(pane)
       node := it?.node
       pane = ScenePane
       {
         scene = Scene { root = node }
+        onAttach = |->|
+        {
+          control.attach(null)
+        }
       }
       add(pane)
     }

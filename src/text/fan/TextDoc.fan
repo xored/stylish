@@ -7,23 +7,18 @@ mixin TextDoc : ListNotifier
 {
 
   **
-  ** Number of lines. Always positive
-  **
-  abstract Int lineCount()
-
-  **
   ** throws IndexErr when invalid index
   **
-  abstract TextLine line(Int index)
+  @Operator abstract TextLine get(Int index)
 
   **
   ** 
   **
-  virtual TextLine[] lines(Range range)
+  @Operator virtual TextLine[] getRange(Range range)
   {
-    region := Region.fromRange(range, lineCount)
+    region := Region.fromRange(range, size)
     if (region == null) return [,]
-    return region.toRange.map |l| { line(l) }
+    return region.toRange.map |l| { get(l) }
   }
 
 }

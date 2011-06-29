@@ -7,6 +7,8 @@ class ScenePane : Pane
 
   native Scene? scene
 
+  |->| onAttach := |->| {}
+
   override Size prefSize(Hints hints := Hints.defVal)
   {
     scene?.root?.size ?: Size.defVal

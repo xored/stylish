@@ -5,7 +5,7 @@ class Build : build::BuildPod
   {
     podName = "kawhyMath"
     summary = ""
-    srcDirs = [`fan/`]
+    srcDirs = [`test/`, `fan/`]
     depends = ["sys 1.0"]
   }
 }

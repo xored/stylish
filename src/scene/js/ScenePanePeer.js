@@ -14,6 +14,13 @@ fan.kawhyScene.ScenePanePeer.prototype.attachTo = function(self, elem)
     if (root != null)
     {
       this.elem.appendChild(root.peer.m_elem);
+      this.relayout = function(s, e)
+      {
+        s.m_onAttach.call();
+        // let's use small JS trick
+        s.peer.relayout = fan.fwt.PanePeer.prototype.relayout;
+        s.peer.relayout(s, e);
+      }
     }
   }
 }

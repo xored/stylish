@@ -19,99 +19,69 @@ abstract class ListView : Control
 
   abstract protected Node createView(Int i)
 
-  protected Void init()
+  internal override Void attach(GroupControl? parent)
   {
-    source.listen(cache)
+    super.attach(parent)
+    source.listen(listener)
     node.onScroll = |p| { sync() }
+    sync()
+  }
+
+  internal override Void detach(GroupControl? parent)
+  {
+    source.discard(listener)
+    node.onScroll = |p| {}
+    super.detach(parent)
   }
 
   protected Void sync()
   {
     start := scroll.y / itemSize
     size := (node.clientArea.h.toFloat / itemSize.toFloat).ceil.toInt
-    cache.area = Region(start, size)
+    cache.moveRegion(Region(start, size))
     height := source.size * itemSize
     content.size = Size(100, height)
-    for(i := 0; i < size; i++)
+    for(i := start; i < start + size; i++)
     {
-      node := cache[i]
+      node := cache[i] as Node
       if (node == null)
       {
         node = createView(i)
         content.add(node)
+        cache[i] = node
       }
-      node.pos = Point((start + i) * itemSize, 0)
+      node.pos = Point(0, i * itemSize)
     }
+    cache.trash.each { content.remove(it) }
+    cache.clearTrash()
   }
 
   protected Group content := Group()
 
   override internal ScrollArea node := ScrollArea() { it.add(content) }
 
-  private ListViewCache cache := ListViewCache()
+  private ListCache cache := ListCache()
+
+  private ListViewListener listener := ListViewListener(cache)
 
 }
 
 @Js
-internal class ListViewCache : ListListener
+internal class ListViewListener : ListListener
 {
 
-  @Operator Node? get(Int i) { nodes[i] }
-
-  @Operator Void set(Int i, Node node) { nodes[i] = node }
-
-  Region area := Region.defVal
-  {
-    set
-    {
-      updateCache(&area, it)
-      &area = it
-    }
-  }
-
-  private Void updateCache(Region or, Region nr)
-  {
-    if (or.equals(nr)) return
-    Node?[] nn := [,] { fill(null, nr.size) }
-    ir := or.intersect(nr)
-    if (ir != null)
-    {
-      end := ir.end
-      toTrash(0, ir.start - or.start)
-      toTrash(end - or.start, or.size)
-      for(i := ir.start; i < end; i++)
-        nn[i - nr.start] = nodes[i - or.start]
-    }
-    else
-    {
-      toTrash(0, nodes.size)
-    }
-    nodes = nn
-  }
+  new make(ListCache cache) { this.cache = cache }
 
   override Void onAdd(Int index, Int size)
   {
-    if (index < area.start || index >= area.end) return
-    diff := index - area.start
-    toTrash(diff, nodes.size.min(index + size))
+    cache.add(index, size)
   }
 
   override Void onRemove(Int index, Int size)
   {
-    
+    cache.remove(index, size)
   }
 
-  private Void toTrash(Int from, Int to)
-  {
-    for(i := from; i < to; i++)
-    {
-      node := nodes[i]
-      if (node != null) trash.add(node)
-    }
-  }
-
-  private Node?[] nodes := [,]
-
-  private Node[] trash := [,]
+  private ListCache cache
 
 }

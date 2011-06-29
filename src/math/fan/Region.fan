@@ -58,6 +58,12 @@ const class Region
     return Region(s, e - s)
   }
 
+  Region offset(Int offset)
+  {
+    if (offset == 0) return this
+    return Region(start + offset, size)
+  }
+
   override Bool equals(Obj? obj)
   {
     that := obj as Region
