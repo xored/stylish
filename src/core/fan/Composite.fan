@@ -1,7 +1,7 @@
 using kawhyScene
 
 @Js
-class Composite : Control
+class Composite : GroupControl
 {
 
   Void layout()
@@ -18,18 +18,14 @@ class Composite : Control
   Void add(Control kid)
   {
     kids.add(kid)
-    node.add(kid.node)
+    if (parent != null) kid.attach(this)
   }
 
   Void remove(Control kid)
   {
-    node.remove(kid.node)
+    if (parent != null) kid.detach(this)
     kids.remove(kid)
   }
-
-  private Control[] kids := [,]
-
-  override protected Group node := Group()
 
   private Str:Layout layouts := [RelativeLayout.id:RelativeLayout()]
 

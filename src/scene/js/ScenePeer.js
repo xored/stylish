@@ -77,10 +77,7 @@ fan.kawhyScene.ScenePeer.buttonSlot = function(e)
 fan.kawhyScene.ScenePeer.prototype.root = function(self) { return this.m_root; }
 fan.kawhyScene.ScenePeer.prototype.root$ = function(self, root)
 {
-  if (this.m_root)
-    document.body.removeChild(this.m_root.peer.m_elem);
   this.m_root = root;
-  document.body.appendChild(root.peer.m_elem);
 }
 fan.kawhyScene.ScenePeer.prototype.m_root = null;
 

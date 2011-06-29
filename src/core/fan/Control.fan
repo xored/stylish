@@ -18,10 +18,20 @@ abstract class Control
 
   LayoutHints hints := LayoutHints()
 
-  internal Void attach(Group parent) { parent.add(node) }
+  internal virtual Void attach(GroupControl parent)
+  {
+    this.parent = parent
+    parent.node.add(node)
+  }
 
-  internal Void detach(Group parent) { parent.remove(node) }
+  internal virtual Void detach(GroupControl parent)
+  {
+    parent.node.remove(node)
+    this.parent = null
+  }
 
-  abstract protected Node node()
+  internal GroupControl? parent
+
+  abstract internal Node node()
 
 }

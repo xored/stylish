@@ -3,6 +3,8 @@
 const class Region
 {
 
+  static const Region defVal := Region(0, 0)
+
   const Int start
   const Int size
 
@@ -47,6 +49,14 @@ const class Region
   Int last() { end - 1 }
 
   Range toRange() { start..<end }
+
+  Region? intersect(Region r)
+  {
+    if (r.end < start || end < r.start) return null
+    s := start.max(r.start)
+    e := end.min(r.end)
+    return Region(s, e - s)
+  }
 
   override Bool equals(Obj? obj)
   {

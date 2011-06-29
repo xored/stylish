@@ -12,6 +12,4 @@ class TextEdit : Control
 
   TextDoc source
 
-  override protected Node node := ScrollArea()
-
 }
