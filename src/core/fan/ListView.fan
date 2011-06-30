@@ -15,11 +15,9 @@ abstract class ListView : Control
 
   abstract protected ListNotifier source()
 
-  abstract protected Int itemSize()
+  abstract protected Node createItem(Int i)
 
-  abstract protected Node createView(Int i)
-
-  virtual protected Void disposeView(Node node) {}
+  virtual protected Void disposeItem(Node node) {}
 
   internal override Void attach(GroupControl? parent)
   {
@@ -38,25 +36,40 @@ abstract class ListView : Control
 
   protected Void sync()
   {
-    start := scroll.y / itemSize
-    size := (node.clientArea.h.toFloat / itemSize.toFloat).ceil.toInt
-    cache.moveRegion(Region(start, size))
-    height := source.size * itemSize
-    content.size = Size(100, height)
-    for(i := start; i < start + size; i++)
+    if (source.size == 0)
     {
-      node := cache[i] as Node
-      if (node == null)
+      cache.moveRegion(Region.defVal)
+      content.size = Size.defVal
+    }
+    else
+    {
+      if (itemSize == null)
       {
-        node = createView(i)
-        content.add(node)
-        cache[i] = node
+        view := createItem(0)
+        content.add(view)
+        itemSize = view.size.h
+        content.remove(view)
       }
-      node.pos = Point(0, i * itemSize)
+      start := scroll.y / itemSize
+      size := (node.clientArea.h.toFloat / itemSize.toFloat).ceil.toInt
+      cache.moveRegion(Region(start, size))
+      height := source.size * itemSize
+      content.size = Size(100, height)
+      for(i := start; i < start + size; i++)
+      {
+        node := cache[i] as Node
+        if (node == null)
+        {
+          node = createItem(i)
+          content.add(node)
+          cache[i] = node
+        }
+        node.pos = Point(0, i * itemSize)
+      }
     }
     cache.trash.each
     {
-      disposeView(it)
+      disposeItem(it)
       content.remove(it)
     }
     cache.clearTrash()
@@ -69,6 +82,8 @@ abstract class ListView : Control
   private ListCache cache := ListCache()
 
   private ListViewListener listener := ListViewListener(cache)
+
+  private Int? itemSize := null
 
 }
 

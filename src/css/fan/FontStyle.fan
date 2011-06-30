@@ -19,6 +19,8 @@ const class FontStyle : AtomStyle
 
   static FontStyle fromFont(Font font) { FontStyle(font.name, font.size) }
 
+  Font toFont() { Font.makeFields(name, size) }
+
   override FontStyle mergeSame(AtomStyle s)
   {
     that := (FontStyle)s

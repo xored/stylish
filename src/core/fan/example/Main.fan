@@ -1,4 +1,5 @@
 using kawhyMath
+using fwt
 
 @Js
 class Main
@@ -8,7 +9,7 @@ class Main
   {
     view := StrListView()
     view.insert(Region(0, 1000))
-    fwt::Window()
+    Window()
     {
       content = ControlPane
       {

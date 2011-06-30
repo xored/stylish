@@ -18,9 +18,7 @@ class StrListView : ListView
 
   override protected ListNotifier source() { listContent }
 
-  override protected Int itemSize() { 20 }
-
-  override protected Node createView(Int i)
+  override protected Node createItem(Int i)
   {
     TextNode { text = "item num $i" }
   }

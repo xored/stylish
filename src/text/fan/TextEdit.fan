@@ -1,4 +1,5 @@
 using kawhy
+using kawhyCss
 using kawhyScene
 using kawhyNotice
 
@@ -6,34 +7,26 @@ using kawhyNotice
 class TextEdit : ListView
 {
 
-  new make(TextDoc source)
-  {
-    this.source = source
-  }
-
-  ** TODO need to fix sizing issue
-  override protected Int itemSize() { 20 }
-
-  override protected Node createView(Int i)
-  {
-    item := source[i]
-    node := TextNode()
-    node.data["lineListener"] = LineListener(node, item)
-    return node
-  }
-
-  override protected Void disposeView(Node node)
-  {
-    listener := node.data["lineListener"] as LineListener
-    listener?.dispose
-  }
-
   override TextDoc source { private set }
+
+  new make(TextDoc source) { this.source = source }
+
+  override protected Node createItem(Int i)
+  {
+    TextNode { it.data[lineData] = LineListener(it, source[i]) }
+  }
+
+  override protected Void disposeItem(Node node)
+  {
+    (node.data[lineData] as LineListener)?.dispose
+  }
+
+  private static const Str lineData := "lineListener"
 
 }
 
 @Js
-class LineListener : ListListener
+internal class LineListener : ListListener
 {
 
   new make(TextNode node, TextLine line)
