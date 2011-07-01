@@ -34,7 +34,7 @@ abstract class ListView : Control
     super.detach(parent)
   }
 
-  protected Void sync()
+  virtual protected Void sync()
   {
     if (source.size == 0)
     {

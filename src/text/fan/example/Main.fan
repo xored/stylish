@@ -9,7 +9,7 @@ class Main
   static Void main()
   {
     doc := TestDoc()
-    edit := TextEdit(doc)
+    edit := TextEdit { source = doc }
     edit.style = FontStyle.monospace
     control := ControlPane { it.control = edit }
     Window()

@@ -7,27 +7,36 @@ using kawhyNotice
 class TextEdit : ListView
 {
 
-  override TextDoc source { private set }
+  new make(|This|? f) { f(this) }
 
-  new make(TextDoc source) { this.source = source }
+//////////////////////////////////////////////////////////////////////////
+// State
+//////////////////////////////////////////////////////////////////////////
+
+  override TextDoc source := BaseTextDoc()
+
+  Selection selection := Selection(this)
+
+//////////////////////////////////////////////////////////////////////////
+// Implementation
+//////////////////////////////////////////////////////////////////////////
 
   override protected Node createItem(Int i)
   {
     TextNode
     {
-      node := it
-      node.data[lineData] = LineListener(node, source[i])
-      onHover.add |Obj? val|
-      {
-        ap := node.absPos
-        echo("hover line $i: $val absPos: $ap")
-      }
+      it.data[lineData] = LineListener(it, source[i])
     }
   }
 
   override protected Void disposeItem(Node node)
   {
     (node.data[lineData] as LineListener)?.dispose
+  }
+
+  override protected Void sync()
+  {
+    super.sync()
   }
 
   private static const Str lineData := "lineListener"
