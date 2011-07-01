@@ -1,5 +1,5 @@
 fan.kawhyScene.CheckBoxPeer = fan.sys.Obj.$extend(fan.kawhyScene.NodePeer);
-fan.kawhyScene.CheckBoxPeer.prototype.$ctor = function() { this.init(); }
+fan.kawhyScene.CheckBoxPeer.prototype.$ctor = function(self) { this.init(self); }
 
 fan.kawhyScene.CheckBoxPeer.prototype.create = function()
 {

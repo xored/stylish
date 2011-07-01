@@ -1,5 +1,5 @@
 fan.kawhyScene.TextNodePeer = fan.sys.Obj.$extend(fan.kawhyScene.NodePeer);
-fan.kawhyScene.TextNodePeer.prototype.$ctor = function() { this.init(); }
+fan.kawhyScene.TextNodePeer.prototype.$ctor = function(self) { this.init(self); }
 
 fan.kawhyScene.TextNodePeer.prototype.create = function()
 {

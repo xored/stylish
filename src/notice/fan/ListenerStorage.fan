@@ -13,6 +13,8 @@ class ListenerStorage
     storage[key]?.notify(val)
   }
 
+  Void clear() { storage = [:] }
+
   private Obj:PlainListeners storage := [:]
 
 }

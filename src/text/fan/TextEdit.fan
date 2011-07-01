@@ -13,7 +13,16 @@ class TextEdit : ListView
 
   override protected Node createItem(Int i)
   {
-    TextNode { it.data[lineData] = LineListener(it, source[i]) }
+    TextNode
+    {
+      node := it
+      node.data[lineData] = LineListener(node, source[i])
+      onHover.add |Obj? val|
+      {
+        ap := node.absPos
+        echo("hover line $i: $val absPos: $ap")
+      }
+    }
   }
 
   override protected Void disposeItem(Node node)

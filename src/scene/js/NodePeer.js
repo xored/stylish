@@ -1,16 +1,55 @@
 fan.kawhyScene.NodePeer = fan.sys.Obj.$extend(fan.sys.Obj);
-fan.kawhyScene.NodePeer.prototype.$ctor = function() {}
+fan.kawhyScene.NodePeer.prototype.$ctor = function(self) {}
 
-fan.kawhyScene.NodePeer.prototype.m_pos = null
+fan.kawhyScene.NodePeer.prototype.m_parent = null
+fan.kawhyScene.NodePeer.prototype.parent   = function(self) { return this.parent; }
+fan.kawhyScene.NodePeer.prototype.attach   = function(self, parent)
+{
+  this.m_parent = parent;
+  this.resetAbsPos();
+}
+
+fan.kawhyScene.NodePeer.prototype.detach   = function(self, parent)
+{
+  if (this.m_hover) this.hover$(self, false);
+  //TODO actually need to remove native listeners
+  self.m_listeners.clear();
+  this.m_parent = null;
+  this.m_absPos = null;
+}
+
+fan.kawhyScene.NodePeer.prototype.m_pos = fan.gfx.Point.m_defVal;
 fan.kawhyScene.NodePeer.prototype.pos   = function(self) { return this.m_pos }
 fan.kawhyScene.NodePeer.prototype.pos$  = function(self, pos)
 {
+  if (this.m_pos.equals(pos)) return;
   this.m_pos = pos;
   with (this.m_elem.style)
   {
     left = pos.m_x + "px";
     top  = pos.m_y + "px";
   }
+  this.resetAbsPos();
+}
+
+fan.kawhyScene.NodePeer.prototype.m_absPos = null;
+fan.kawhyScene.NodePeer.prototype.absPos   = function(self)
+{
+  if (this.m_absPos == null)
+  {
+    if (this.m_parent == null) return this.m_pos;
+    this.m_absPos = this.m_parent.kidAbsPos(this);
+  }
+  return this.m_absPos;
+}
+fan.kawhyScene.NodePeer.prototype.resetAbsPos = function()
+{
+  if (this.m_absPos != null)
+  {
+    this.m_absPos = null;
+    return true;
+  }
+  return false;
 }
 
 fan.kawhyScene.NodePeer.prototype.size   = function(self)
@@ -26,7 +65,7 @@ fan.kawhyScene.NodePeer.prototype.size$  = function(self, size)
   this.m_elem.style.height = size.m_h + "px";
 }
 
-fan.kawhyScene.NodePeer.prototype.m_style = null
+fan.kawhyScene.NodePeer.prototype.m_style = null;
 fan.kawhyScene.NodePeer.prototype.style   = function(self) { return this.m_style }
 fan.kawhyScene.NodePeer.prototype.style$  = function(self, style)
 {
@@ -36,11 +75,26 @@ fan.kawhyScene.NodePeer.prototype.style$  = function(self, style)
   this.initStyle();
 }
 
-fan.kawhyScene.NodePeer.prototype.init = function()
+fan.kawhyScene.NodePeer.prototype.m_hover = false;
+fan.kawhyScene.NodePeer.prototype.hover   = function(self) { return this.m_hover; }
+fan.kawhyScene.NodePeer.prototype.hover$  = function(self, hover)
+{
+  this.m_hover = hover;
+  self.notify(fan.kawhyScene.Node.$type.slot("hover"), hover);
+}
+
+fan.kawhyScene.NodePeer.prototype.init = function(self)
 {
   this.m_elem = this.create();
-  this.m_pos = fan.gfx.Point.m_defVal;
   this.initStyle();
+  this.m_elem.addEventListener("mouseover", function()
+  {
+  	self.peer.hover$(self, true);
+  }, false);
+  this.m_elem.addEventListener("mouseout",  function()
+  {
+    self.peer.hover$(self, false);
+  }, false);
 }
 
 fan.kawhyScene.NodePeer.prototype.initStyle = function()

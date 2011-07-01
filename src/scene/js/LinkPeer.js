@@ -1,5 +1,5 @@
 fan.kawhyScene.LinkPeer = fan.sys.Obj.$extend(fan.kawhyScene.NodePeer);
-fan.kawhyScene.LinkPeer.prototype.$ctor = function() { this.init(); }
+fan.kawhyScene.LinkPeer.prototype.$ctor = function(self) { this.init(self); }
 
 fan.kawhyScene.LinkPeer.prototype.create = function()
 {
