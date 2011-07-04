@@ -1,4 +1,6 @@
+using gfx
 using fwt
+using kawhyMath
 using kawhy
 using kawhyCss
 using kawhyScene
@@ -9,8 +11,12 @@ class Main
   static Void main()
   {
     doc := TestDoc()
-    edit := TextEdit { source = doc }
-    edit.style = FontStyle.monospace
+    edit := TextEdit
+    {
+      source = doc
+      selection.range = GridRange(GridPos(2, 5), GridPos(10, 3))
+      style = FontStyle.monospace + BoxStyle { margin = Insets(5) }
+    }
     control := ControlPane { it.control = edit }
     Window()
     {

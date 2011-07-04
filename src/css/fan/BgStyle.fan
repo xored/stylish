@@ -19,7 +19,11 @@ const class BgStyle : AtomStyle
     return that.bg == bg
   }
 
-  override StyleItem[] toCss() { [StyleItem("background", bg.toStr)] }
+  override StyleItem[] toCss()
+  {
+    color := bg as Color
+    return [StyleItem("background", color != null ? color.toCss : bg.toStr)]
+  }
 
   override Int hash() { bg.hash }
 

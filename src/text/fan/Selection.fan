@@ -7,40 +7,21 @@ class Selection
   new make(TextEdit edit) { this.edit = edit }
 
   GridRange range := GridRange.defVal
-  {
-    get { &range }
-    set { &range = it; ranges = [it] }
-  }
-
-  GridRange[] ranges := [range].toImmutable
-  {
-    get { &ranges }
-    set
-    {
-      if (it.size == 0) throw ArgErr("Empty ranges is not appropriate")
-      &ranges = it.toImmutable
-    }
-  }
 
   Str text() { throw UnsupportedErr() }
 
-  Bool isEmpty()
-  {
-    for(i := 0; i < ranges.size; i++)
-      if (!ranges[i].isEmpty) return false
-    return true
-  }
+  Bool isEmpty() { range.isEmpty }
 
   override Bool equals(Obj? o)
   {
     that := o as Selection
     if (that == null) return false
-    return ranges == that.ranges 
+    return range == that.range 
   }
 
-  override Int hash() { ranges.hash }
+  override Int hash() { range.hash }
 
-  override Str toStr() { ranges.toStr }
+  override Str toStr() { range.toStr }
 
   private TextEdit edit
 

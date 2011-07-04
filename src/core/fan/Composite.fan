@@ -18,12 +18,12 @@ class Composite : GroupControl
   Void add(Control kid)
   {
     kids.add(kid)
-    if (parent != null) kid.attach(this)
+    if (parent != null) kid.doAttach(this, this.node)
   }
 
   Void remove(Control kid)
   {
-    if (parent != null) kid.detach(this)
+    if (parent != null) kid.doDetach()
     kids.remove(kid)
   }
 

@@ -18,7 +18,7 @@ class ControlPane : Pane
         it.scene = Scene { root = node }
         onAttach = |->|
         {
-          control.attach(null)
+          control.doAttach(null, null)
         }
       }
       add(pane)

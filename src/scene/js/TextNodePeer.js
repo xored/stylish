@@ -69,6 +69,27 @@ fan.kawhyScene.TextNodePeer.prototype.initStyle = function()
   }
 }
 
+fan.kawhyScene.TextNodePeer.prototype.offsetAt = function(self, pos)
+{
+  //TODO only for monospace fonts without tabs for now
+  var offset = pos / this.charWidth();
+  if (offset >= this.m_text.length) return null;
+  return offset;
+}
+
+fan.kawhyScene.TextNodePeer.prototype.charRange = function(self, index)
+{
+  if (index >= this.m_text.length)
+    throw new ArgErr("invalid index: " + index);
+  var width = this.charWidth();
+  return fan.sys.Range.makeExclusive(index * width, (index + 1) * width);
+}
+
+fan.kawhyScene.TextNodePeer.prototype.charWidth = function()
+{
+  return this.m_elem.offsetWidth / this.m_text.length;
+}
+
 fan.kawhyScene.TextNodePeer.prototype.textWidth = function(str)
 {
   // use global var to store a context for computing string width

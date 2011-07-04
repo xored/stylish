@@ -19,19 +19,35 @@ abstract class ListView : Control
 
   virtual protected Void disposeItem(Node node) {}
 
-  internal override Void attach(GroupControl? parent)
+  override protected Void attach()
   {
-    super.attach(parent)
+    super.attach()
     source.listen(listener)
     node.onScroll = |p| { sync() }
     sync()
   }
 
-  internal override Void detach(GroupControl? parent)
+  override protected Void detach()
   {
     source.discard(listener)
     node.onScroll = |p| {}
-    super.detach(parent)
+    super.detach()
+  }
+
+  once protected Int itemSize()
+  {
+    view := createItem(0)
+    content.add(view)
+    size := view.size.h
+    content.remove(view)
+    return size
+  }
+
+  // max width in pixels
+  protected Int maxWidth()
+  {
+    //TODO how we should calculate it?
+    1000
   }
 
   virtual protected Void sync()
@@ -43,18 +59,11 @@ abstract class ListView : Control
     }
     else
     {
-      if (itemSize == null)
-      {
-        view := createItem(0)
-        content.add(view)
-        itemSize = view.size.h
-        content.remove(view)
-      }
       start := scroll.y / itemSize
       size := (node.clientArea.h.toFloat / itemSize.toFloat).ceil.toInt
       cache.moveRegion(Region(start, size))
       height := source.size * itemSize
-      content.size = Size(100, height)
+      content.size = Size(maxWidth(), height)
       for(i := start; i < start + size; i++)
       {
         node := cache[i] as Node
@@ -75,15 +84,15 @@ abstract class ListView : Control
     cache.clearTrash()
   }
 
+  protected Region visibleLines() { cache.region }
+
   protected Group content := Group()
 
-  override internal ScrollArea node := ScrollArea() { it.add(content) }
+  override protected ScrollArea node := ScrollArea() { it.add(content) }
 
   private ListCache cache := ListCache()
 
   private ListViewListener listener := ListViewListener(cache)
-
-  private Int? itemSize := null
 
 }
 

@@ -10,6 +10,6 @@ class Label : Control
     set { node.text = it }
   }
 
-  override internal TextNode node := TextNode()
+  override protected TextNode node := TextNode()
 
 }

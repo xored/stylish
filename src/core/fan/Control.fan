@@ -16,25 +16,31 @@ abstract class Control
     set { node.style = it }
   }
 
+  GroupControl? parent { private set }
+
   LayoutHints hints := LayoutHints()
 
-  internal virtual Void attach(GroupControl? parent)
+  internal Void doAttach(GroupControl? parent, Group? content)
   {
     this.parent = parent
-    if (parent != null) parent.node.add(node)
+    if (content != null) content.add(node)
+    attach()
   }
 
-  internal virtual Void detach(GroupControl? parent)
+  internal Void doDetach()
   {
     if (parent != null)
     {
-      parent.node.remove(node)
+      detach()
+      node.parent?.remove(node)
       this.parent = null
     }
   }
 
-  internal GroupControl? parent
+  virtual protected Void attach() {}
 
-  abstract internal Node node()
+  virtual protected Void detach() {}
+
+  abstract protected Node node()
 
 }

@@ -4,20 +4,20 @@ using kawhyScene
 class GroupControl : Control
 {
 
-  override Void attach(GroupControl? parent)
+  override protected Void attach()
   {
-    super.attach(parent)
-    kids.each { it.attach(this) }
+    super.attach()
+    kids.each { it.doAttach(this, this.node) }
   }
 
-  override Void detach(GroupControl? parent)
+  override protected Void detach()
   {
-    kids.each { it.detach(this) }
-    super.detach(parent)
+    kids.each { it.doDetach() }
+    super.detach()
   }
 
   protected Control[] kids := [,]
 
-  override internal Group node := Group()
+  override protected Group node := Group()
 
 }
