@@ -2,7 +2,14 @@ fan.kawhyScene.NodePeer = fan.sys.Obj.$extend(fan.sys.Obj);
 fan.kawhyScene.NodePeer.prototype.$ctor = function(self) {}
 
 fan.kawhyScene.NodePeer.prototype.m_parent = null
-fan.kawhyScene.NodePeer.prototype.parent   = function(self) { return this.parent; }
+fan.kawhyScene.NodePeer.prototype.parent   = function(self) { return this.m_parent; }
+
+fan.kawhyScene.NodePeer.prototype.scene    = function(self)
+{
+  if (this.m_parent == null) return null;
+  return this.m_parent.scene();
+}
+
 fan.kawhyScene.NodePeer.prototype.attach   = function(self, parent)
 {
   this.m_parent = parent;
@@ -32,21 +39,31 @@ fan.kawhyScene.NodePeer.prototype.pos$  = function(self, pos)
   this.resetAbsPos();
 }
 
-fan.kawhyScene.NodePeer.prototype.m_absPos = null;
-fan.kawhyScene.NodePeer.prototype.absPos   = function(self)
+fan.kawhyScene.NodePeer.prototype.m_posOnScene = null;
+fan.kawhyScene.NodePeer.prototype.posOnScene   = function(self)
 {
-  if (this.m_absPos == null)
+  if (this.m_posOnScene == null)
   {
     if (this.m_parent == null) return this.m_pos;
-    this.m_absPos = this.m_parent.kidAbsPos(this);
+    var p = this.m_parent.m_elem;
+    var op = this.m_elem;
+    var x = 0, y = 0;
+    do
+    {
+      x += op.offsetLeft - op.scrollLeft;
+      y += op.offsetTop - op.scrollTop;
+    }
+    while(op != p && (op = op.offsetParent) != null)
+    var pos = this.m_parent.posOnScene();
+    this.m_posOnScene = fan.gfx.Point.make(pos.m_x + x, pos.m_y + y);
   }
-  return this.m_absPos;
+  return this.m_posOnScene;
 }
 fan.kawhyScene.NodePeer.prototype.resetAbsPos = function()
 {
-  if (this.m_absPos != null)
+  if (this.m_posOnScene != null)
   {
-    this.m_absPos = null;
+    this.m_posOnScene = null;
     return true;
   }
   return false;

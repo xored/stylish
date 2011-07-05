@@ -22,5 +22,9 @@ fan.kawhyScene.ScenePanePeer.prototype.attachTo = function(self, elem)
         s.peer.relayout(s, e);
       }
     }
+    this.m_scene.peer.posOnScreen = function(s)
+    {
+      return self.posOnDisplay();
+    }
   }
 }

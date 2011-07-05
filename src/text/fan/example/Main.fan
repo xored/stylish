@@ -8,6 +8,7 @@ using kawhyScene
 @Js
 class Main
 {
+
   static Void main()
   {
     doc := TestDoc()

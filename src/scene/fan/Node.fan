@@ -8,6 +8,8 @@ class Node : Notifier
 
   native Group? parent()
 
+  native Scene? scene()
+
   native Point pos
 
   native Size size
@@ -16,7 +18,12 @@ class Node : Notifier
 
   native Bool hover()
 
-  native Point absPos()
+  native Point posOnScene()
+
+  Point posOnScreen()
+  {
+    posOnScene.translate(scene?.posOnScreen ?: Point.defVal)
+  }
 
   Str:Obj data := [:]
 

@@ -40,14 +40,6 @@ fan.kawhyScene.ScrollAreaPeer.prototype.onScroll$ = function(self, f)
 }
 fan.kawhyScene.ScrollAreaPeer.prototype.m_onScroll = null;
 
-fan.kawhyScene.ScrollAreaPeer.prototype.kidAbsPos = function(kid)
-{
-  var pos = this.absPos();
-  var x = pos.m_x + kid.m_pos.m_x - this.m_elem.scrollLeft;
-  var y = pos.m_y + kid.m_pos.m_y - this.m_elem.scrollTop;
-  return fan.gfx.Point.make(x, y);
-}
-
 fan.kawhyScene.ScrollAreaPeer.prototype.initStyle = function()
 {
   fan.kawhyScene.NodePeer.prototype.initStyle.call(this);

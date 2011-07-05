@@ -34,6 +34,11 @@ class TextEdit : ListView
     TextNode
     {
       it.data[lineData] = LineListener(it, source[i])
+      node := it
+      it.onHover.add
+      {
+        echo(node.posOnScreen())
+      }
     }
   }
 

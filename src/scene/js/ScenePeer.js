@@ -78,8 +78,14 @@ fan.kawhyScene.ScenePeer.prototype.root = function(self) { return this.m_root; }
 fan.kawhyScene.ScenePeer.prototype.root$ = function(self, root)
 {
   this.m_root = root;
+  root.peer.scene = function() { return self; }
 }
 fan.kawhyScene.ScenePeer.prototype.m_root = null;
 
 fan.kawhyScene.ScenePeer.prototype.m_lastClickTime = null;
 fan.kawhyScene.ScenePeer.prototype.m_lastClickButton = null;
+
+fan.kawhyScene.ScenePeer.prototype.posOnScreen = function(self)
+{
+  return fan.gfx.Point.m_defVal;
+}

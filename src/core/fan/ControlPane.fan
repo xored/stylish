@@ -12,7 +12,7 @@ class ControlPane : Pane
     {
       &control = it
       if (pane != null) remove(pane)
-      node := it?.node
+      node := it?.getNode()
       pane = ScenePane
       {
         it.scene = Scene { root = node }

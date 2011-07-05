@@ -43,4 +43,6 @@ abstract class Control
 
   abstract protected Node node()
 
+  internal Node getNode() { node() }
+
 }
