@@ -2,9 +2,9 @@ fan.kawhyScene.ScenePeer = fan.sys.Obj.$extend(fan.sys.Obj);
 fan.kawhyScene.ScenePeer.prototype.$ctor = function()
 {
   var $this = this;
-  window.addEventListener("mousemove", function(e) { $this.handleMove(e); }, false);
-  window.addEventListener("mousedown", function(e) { $this.handleDown(e); }, false);
-  window.addEventListener("mouseup",   function(e) { $this.handleUp(e);   }, false);
+  window.addEventListener("mousemove", function(e) { return $this.handleMove(e); }, false);
+  window.addEventListener("mousedown", function(e) { return $this.handleDown(e); }, false);
+  window.addEventListener("mouseup",   function(e) { return $this.handleUp(e); }, false);
   this.m_mouse = fan.kawhyScene.Mouse.make();
 }
 
@@ -20,11 +20,20 @@ fan.kawhyScene.ScenePeer.prototype.mouse = function(self)
 fan.kawhyScene.ScenePeer.prototype.handleMove = function(e)
 {
   this.m_mouse.pos$(fan.gfx.Point.make(e.clientX, e.clientY));
+  return this.preventDefault(e);
 }
 
-fan.kawhyScene.ScenePeer.prototype.handleDown = function(e) { this.handleClick(e, true); }
+fan.kawhyScene.ScenePeer.prototype.handleDown = function(e)
+{
+  this.handleClick(e, true);
+  return this.preventDefault(e);
+}
 
-fan.kawhyScene.ScenePeer.prototype.handleUp = function(e) { this.handleClick(e, false); }
+fan.kawhyScene.ScenePeer.prototype.handleUp = function(e)
+{
+  this.handleClick(e, false);
+  return this.preventDefault(e);
+}
 
 fan.kawhyScene.ScenePeer.prototype.handleClick = function(e, down)
 {
@@ -57,6 +66,15 @@ fan.kawhyScene.ScenePeer.prototype.handleClick = function(e, down)
   var slot = fan.kawhyScene.ScenePeer.buttonSlot(e);
   var button = slot.get(this.m_mouse);
   button.onClick(down, this.clicks.count);
+}
+
+fan.kawhyScene.ScenePeer.prototype.preventDefault = function(e)
+{
+  // prevent bubbling
+  e.stopPropagation();
+  if (e.preventDefault) e.preventDefault();
+  e.returnValue = false; //  IE
+  return false;
 }
 
 fan.kawhyScene.ScenePeer.buttonSlot = function(e)

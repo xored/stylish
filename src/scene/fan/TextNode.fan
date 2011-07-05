@@ -1,4 +1,5 @@
 using kawhyCss
+using kawhyMath
 
 @Js
 class TextNode : Node
@@ -8,7 +9,7 @@ class TextNode : Node
 
   native Int? offsetAt(Int pos)
 
-  native Range charRange(Int index)
+  native Region charRegion(Int index)
 
   native StyleRange[] styles
 

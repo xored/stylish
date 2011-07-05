@@ -20,6 +20,14 @@ abstract class Control
 
   LayoutHints hints := LayoutHints()
 
+  Void onMouseMove(|Point| f) { mouseListener.onMove(f) }
+
+  Void rmMouseMove(|Point| f) { mouseListener.rmMove(f) }
+
+  Void onMouseClick(|Bool down, Int count| f) { mouseListener.onClick(f) }
+
+  Void rmMouseClick(|Bool down, Int count| f) { mouseListener.rmClick(f) }
+
   internal Void doAttach(GroupControl? parent, Group? content)
   {
     this.parent = parent
@@ -44,5 +52,7 @@ abstract class Control
   abstract protected Node node()
 
   internal Node getNode() { node() }
+
+  private once MouseListener mouseListener() { MouseListener(node) }
 
 }

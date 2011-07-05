@@ -46,6 +46,8 @@ const class Region
 
   Int end() { start + size }
 
+  Int first() { start }
+
   Int last() { end - 1 }
 
   Range toRange() { start..<end }

@@ -20,12 +20,30 @@ class TextEdit : ListView
   Selection selection := Selection(this)
 
 //////////////////////////////////////////////////////////////////////////
+// Mertics
+//////////////////////////////////////////////////////////////////////////
+
+  Int? colByPos(Int row, Int pos)
+  {
+    x := scroll.x + pos
+    node := itemByIndex(row) as TextNode
+    return node.offsetAt(x)
+  }
+
+  Region colRegion(Int row, Int col)
+  {
+    node := itemByIndex(row) as TextNode
+    return node.charRegion(col)
+  }
+
+//////////////////////////////////////////////////////////////////////////
 // Implementation
 //////////////////////////////////////////////////////////////////////////
 
   override protected Void attach()
   {
     content.add(selectionNode)
+    p := SelectionPolicy.make(this)
     super.attach()
   }
 
@@ -34,11 +52,6 @@ class TextEdit : ListView
     TextNode
     {
       it.data[lineData] = LineListener(it, source[i])
-      node := it
-      it.onHover.add
-      {
-        echo(node.posOnScreen())
-      }
     }
   }
 
@@ -53,7 +66,7 @@ class TextEdit : ListView
     syncSelection()
   }
 
-  protected Void syncSelection()
+  internal Void syncSelection()
   {
     content.remove(selectionNode)
     content.add(selectionNode)
@@ -62,45 +75,48 @@ class TextEdit : ListView
     sel := visibleSelection
     if (sel != null)
     {
+      w := content.size.w
       if (sel.start.row == sel.end.row)
       {
         if (sel.start.col < sel.end.col)
-          selectionNode.add(createSelectPart(sel.start.row, sel.start.col, sel.end.col - sel.start.col, 1))
+        {
+          selectionNode.add(createSelectPart(sel.start.row, 1, sel.start.col, sel.end.col))
+        }
       }
       else
       {
-        selectionNode.add(createSelectPart(sel.start.row, sel.start.col, 1000, 1))
+        selectionNode.add(createSelectPart(sel.start.row, 1, sel.start.col))
         size := sel.end.row - sel.start.row - 1
         if (size > 0)
-          selectionNode.add(createSelectPart(sel.start.row + 1, 0, 1000, size))
-        selectionNode.add(createSelectPart(sel.end.row, 0, sel.end.col, 1))
+          selectionNode.add(createSelectPart(sel.start.row + 1, size, 0))
+        if (sel.end.col > 0)
+          selectionNode.add(createSelectPart(sel.end.row, 1, 0, sel.end.col))
       }
     }
   }
 
-  private Group createSelectPart(Int row, Int col, Int w, Int h)
+  private Group createSelectPart(Int row, Int h, Int from, Int? to := null)
   {
     Group
     {
+      from = colRegion(row, from).first
+      if (to == null) to = content.size.w
+      else to = colRegion(row + h - 1, to - 1).last
       it.style = BgStyle(Color.makeArgb(100, 51, 153, 255))
-      it.pos = charPos(row, col)
-      it.size = Size(10 * w, h * itemSize)
+      it.pos = Point(from, row * itemSize)
+      it.size = Size(to - from + 1, h * itemSize)
     }
   }
 
   private GridRange? visibleSelection()
   {
-    range := selection.range
-    lines := visibleLines
-    if (lines.start > range.end.row || lines.last < range.start.row) return null
-    start := lines.start > range.start.row ? GridPos(lines.start, 0) : range.start
-    end := lines.last < range.end.row ? GridPos(lines.last, 100) : range.end
-    return GridRange(start, end)
-  }
-
-  private Point charPos(Int row, Int col)
-  {
-    Point(10 * col, row * itemSize - scroll.y)
+    range := selection.range.norm
+    raws := visibleRaws()
+    if (raws.start > range.end.row || raws.last < range.start.row) return null
+    start := raws.start > range.start.row ? GridPos(raws.start, 0) : range.start
+    end := raws.last < range.end.row ? GridPos(raws.last + 1, 0) : range.end
+    res := GridRange(start, end)
+    return res
   }
 
   private Group selectionNode := Group()

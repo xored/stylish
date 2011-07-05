@@ -7,6 +7,18 @@ class Selection
   new make(TextEdit edit) { this.edit = edit }
 
   GridRange range := GridRange.defVal
+  {
+    set
+    {
+      &range = it
+      edit.syncSelection()
+    }
+  }
+
+  Void extend(GridPos pos)
+  {
+    range = GridRange(range.start, pos)
+  }
 
   Str text() { throw UnsupportedErr() }
 

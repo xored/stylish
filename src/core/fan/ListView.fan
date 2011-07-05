@@ -13,6 +13,18 @@ abstract class ListView : Control
     set { node.scroll = it }
   }
 
+  Int? rowByPos(Int pos)
+  {
+    row := (scroll.y + pos) / itemSize
+    if (row < source.size) return row
+    return null
+  }
+
+  Region visibleRaws()
+  {
+    cache.region
+  }
+
   abstract protected ListNotifier source()
 
   abstract protected Node createItem(Int i)
@@ -50,6 +62,19 @@ abstract class ListView : Control
     1000
   }
 
+  protected Node itemByIndex(Int i)
+  {
+    node := cache[i] as Node
+    if (node == null)
+    {
+      node = createItem(i)
+      content.add(node)
+      cache[i] = node
+    }
+    node.pos = Point(0, i * itemSize)
+    return node
+  }
+
   virtual protected Void sync()
   {
     if (source.size == 0)
@@ -60,21 +85,11 @@ abstract class ListView : Control
     else
     {
       start := scroll.y / itemSize
-      size := (node.clientArea.h.toFloat / itemSize.toFloat).ceil.toInt
-      cache.moveRegion(Region(start, size))
+      end := ((scroll.y + node.clientArea.h).toFloat / itemSize).ceil.toInt
+      cache.moveRegion(Region(start, end - start))
       height := source.size * itemSize
       content.size = Size(maxWidth(), height)
-      for(i := start; i < start + size; i++)
-      {
-        node := cache[i] as Node
-        if (node == null)
-        {
-          node = createItem(i)
-          content.add(node)
-          cache[i] = node
-        }
-        node.pos = Point(0, i * itemSize)
-      }
+      for(i := start; i < end; i++) itemByIndex(i)
     }
     cache.trash.each
     {
@@ -83,8 +98,6 @@ abstract class ListView : Control
     }
     cache.clearTrash()
   }
-
-  protected Region visibleLines() { cache.region }
 
   protected Group content := Group()
 
