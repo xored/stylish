@@ -6,6 +6,12 @@ using kawhyScene
 class StrListView : ListView
 {
 
+  override protected Void attach()
+  {
+    node.add(content)
+    super.attach()
+  }
+
   Void insert(Region r)
   {
     listContent.insert(r.start, r.size)

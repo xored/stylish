@@ -20,10 +20,7 @@ abstract class ListView : Control
     return null
   }
 
-  Region visibleRaws()
-  {
-    cache.region
-  }
+  Region visibleRaws() { cache.region }
 
   abstract protected ListNotifier source()
 
@@ -34,6 +31,7 @@ abstract class ListView : Control
   override protected Void attach()
   {
     super.attach()
+    node.add(content)
     source.listen(listener)
     node.onScroll = |p| { sync() }
     sync()
@@ -49,9 +47,9 @@ abstract class ListView : Control
   once protected Int itemSize()
   {
     view := createItem(0)
-    content.add(view)
+    contentArea.add(view)
     size := view.size.h
-    content.remove(view)
+    contentArea.remove(view)
     return size
   }
 
@@ -68,7 +66,7 @@ abstract class ListView : Control
     if (node == null)
     {
       node = createItem(i)
-      content.add(node)
+      contentArea.add(node)
       cache[i] = node
     }
     node.pos = Point(0, i * itemSize)
@@ -94,14 +92,16 @@ abstract class ListView : Control
     cache.trash.each
     {
       disposeItem(it)
-      content.remove(it)
+      contentArea.remove(it)
     }
     cache.clearTrash()
   }
 
   protected Group content := Group()
 
-  override protected ScrollArea node := ScrollArea() { it.add(content) }
+  virtual protected Group contentArea() { content }
+
+  override protected ScrollArea node := ScrollArea()
 
   private ListCache cache := ListCache()
 

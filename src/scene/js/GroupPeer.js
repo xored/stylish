@@ -34,6 +34,11 @@ fan.kawhyScene.GroupPeer.prototype.remove = function(self, kid)
   kid.peer.detach(kid, this);
 }
 
+fan.kawhyScene.GroupPeer.prototype.kid = function(self, index)
+{
+  return this.m_kids.get(index);
+}
+
 fan.kawhyScene.GroupPeer.prototype.removeAll = function(self)
 {
   this.content().innerHTML = "";

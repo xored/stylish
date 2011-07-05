@@ -42,9 +42,19 @@ class TextEdit : ListView
 
   override protected Void attach()
   {
-    content.add(selectionNode)
+    content.add(contentArea)
+    attachSelection()
     p := SelectionPolicy.make(this)
     super.attach()
+  }
+
+  protected Void attachSelection()
+  {
+    selectStyle := BgStyle(Color.makeArgb(100, 51, 153, 255))
+    selectArea.add(Group { it.style = selectStyle }) 
+    selectArea.add(Group { it.style = selectStyle }) 
+    selectArea.add(Group { it.style = selectStyle })
+    content.add(selectArea)
   }
 
   override protected Node createItem(Int i)
@@ -68,29 +78,67 @@ class TextEdit : ListView
 
   internal Void syncSelection()
   {
-    content.remove(selectionNode)
-    content.add(selectionNode)
-    selectionNode.removeAll()
-    if (source.size == 0) return
+    header := selectArea.kid(0)
+    body := selectArea.kid(1)
+    footer := selectArea.kid(2)
+    if (source.size == 0)
+    {
+      header.size = Size.defVal
+      body.size = Size.defVal
+      footer.size = Size.defVal
+    }
     sel := visibleSelection
     if (sel != null)
     {
-      w := content.size.w
+      h := itemSize
+      y := sel.start.row * h
+      startRegion := colRegion(sel.start.row, sel.start.col)
+      pos := Point(startRegion.start, y)
+      header.pos = pos
+
       if (sel.start.row == sel.end.row)
       {
+        body.pos = Point.defVal
+        body.size = Size.defVal
+        footer.pos = Point.defVal
+        footer.size = Size.defVal
+
         if (sel.start.col < sel.end.col)
         {
-          selectionNode.add(createSelectPart(sel.start.row, 1, sel.start.col, sel.end.col))
+          endRegion := colRegion(sel.end.row, sel.end.col - 1)
+          header.size = Size(endRegion.last - header.pos.x, h)
+        }
+        else
+        {
+          header.size = Size.defVal
         }
       }
       else
       {
-        selectionNode.add(createSelectPart(sel.start.row, 1, sel.start.col))
+        header.size = Size(content.size.w - header.pos.x + 1, h)
+
         size := sel.end.row - sel.start.row - 1
         if (size > 0)
-          selectionNode.add(createSelectPart(sel.start.row + 1, size, 0))
+        {
+          body.pos = Point(0, y + h)
+          body.size = Size(content.size.w, size * h)
+        }
+        else
+        {
+          body.pos = Point.defVal
+          body.size = Size.defVal
+        }
         if (sel.end.col > 0)
-          selectionNode.add(createSelectPart(sel.end.row, 1, 0, sel.end.col))
+        {
+          footer.pos = Point(0, sel.end.row * h)
+          endRegion := colRegion(sel.end.row, sel.end.col - 1)
+          footer.size = Size(endRegion.last, h)
+        }
+        else
+        {
+          footer.pos = Point.defVal
+          footer.size = Size.defVal
+        }
       }
     }
   }
@@ -119,7 +167,8 @@ class TextEdit : ListView
     return res
   }
 
-  private Group selectionNode := Group()
+  private Group selectArea := Group()
+  override protected Group contentArea := Group()
 
   private static const Str lineData := "lineListener"
 
