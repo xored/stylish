@@ -16,6 +16,11 @@ abstract class Control
     set { node.style = it }
   }
 
+  internal Void resize(Size s)
+  {
+    
+  }
+
   GroupControl? parent { private set }
 
   LayoutHints hints := LayoutHints()

@@ -67,20 +67,3 @@ fan.kawhyScene.GroupPeer.prototype.position$  = function(self, position)
 }
 
 fan.kawhyScene.GroupPeer.prototype.m_kids = null;
-
-fan.kawhyScene.GroupPeer.prototype.resetAbsPos = function()
-{
-  if (fan.kawhyScene.NodePeer.prototype.resetAbsPos.call(this))
-  {
-    this.resetKidsAbsPos();
-    return true;
-  }
-  return false;
-}
-
-fan.kawhyScene.GroupPeer.prototype.resetKidsAbsPos = function()
-{
-  if (this.m_kids != null)
-    for (var i = 0; i < this.m_kids.size(); i++)
-      this.m_kids.get(i).peer.resetAbsPos();
-}

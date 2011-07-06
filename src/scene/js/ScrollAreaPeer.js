@@ -8,7 +8,6 @@ fan.kawhyScene.ScrollAreaPeer.prototype.create = function()
   scrollDiv.onscroll = function(event)
   {
     var scroll = t.scroll();
-    t.resetKidsAbsPos();
     t.m_onScroll.call(scroll);
   }
   return scrollDiv;
@@ -48,9 +47,6 @@ fan.kawhyScene.ScrollAreaPeer.prototype.initStyle = function()
   {
     width     = size.m_w + "px";
     height    = size.m_h + "px";
-    whiteSpace = "pre"
-    padding   = "0px";
-    overflowX = "scroll";
-    overflowY = "scroll";
+    overflow = "scroll";
   }
 }

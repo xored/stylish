@@ -9,12 +9,6 @@ class Main
   {
     view := StrListView()
     view.insert(Region(0, 1000))
-    Window()
-    {
-      content = ControlPane
-      {
-        it.control = view
-      }
-    }.open
+    Container(view).open
   }
 }

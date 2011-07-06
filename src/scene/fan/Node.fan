@@ -16,14 +16,13 @@ class Node : Notifier
 
   native Style? style
 
-  native Bool hover()
+  native Point posOnParent()
 
   native Point posOnScene()
 
-  Point posOnScreen()
-  {
-    posOnScene.translate(scene?.posOnScreen ?: Point.defVal)
-  }
+  native Point posOnScreen()
+
+  native Bool hover()
 
   Str:Obj data := [:]
 

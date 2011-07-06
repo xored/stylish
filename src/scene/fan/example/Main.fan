@@ -35,10 +35,7 @@ class Main
 
     Window()
     {
-      content = ScenePane
-      {
-        it.scene = scene
-      }
+      content = ScenePane(scene)
     }.open
   }
 

@@ -8,13 +8,10 @@ class FwtInt
   {
     Window()
     {
-      content = ScenePane
+      content = ScenePane(Scene
       {
-        it.scene = Scene
-        {
-          root = TextNode { it.text = "Hello world" }
-        }
-      }
+        root = TextNode { it.text = "Hello world" }
+      })
     }.open
   }
 

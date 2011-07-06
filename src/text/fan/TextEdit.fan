@@ -79,6 +79,7 @@ class TextEdit : ListView
 
   internal Void syncSelection()
   {
+    // TODO this piece of code waiting for a good refactoring
     header := selectArea.kid(0)
     body := selectArea.kid(1)
     footer := selectArea.kid(2)
@@ -116,7 +117,7 @@ class TextEdit : ListView
       }
       else
       {
-        header.size = Size(content.size.w - header.pos.x + 1, h)
+        header.size = Size(content.size.w - header.pos.x, h)
 
         size := sel.end.row - sel.start.row - 1
         if (size > 0)

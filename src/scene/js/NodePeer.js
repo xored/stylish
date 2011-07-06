@@ -1,19 +1,15 @@
 fan.kawhyScene.NodePeer = fan.sys.Obj.$extend(fan.sys.Obj);
 fan.kawhyScene.NodePeer.prototype.$ctor = function(self) {}
 
-fan.kawhyScene.NodePeer.prototype.m_parent = null
+fan.kawhyScene.NodePeer.prototype.m_parent = null;
+fan.kawhyScene.NodePeer.prototype.m_scene  = null;
 fan.kawhyScene.NodePeer.prototype.parent   = function(self) { return this.m_parent; }
-
-fan.kawhyScene.NodePeer.prototype.scene    = function(self)
-{
-  if (this.m_parent == null) return null;
-  return this.m_parent.scene();
-}
+fan.kawhyScene.NodePeer.prototype.scene    = function(self) { return this.m_scene; }
 
 fan.kawhyScene.NodePeer.prototype.attach   = function(self, parent)
 {
   this.m_parent = parent;
-  this.resetAbsPos();
+  this.m_scene = parent.scene();
 }
 
 fan.kawhyScene.NodePeer.prototype.detach   = function(self, parent)
@@ -22,11 +18,11 @@ fan.kawhyScene.NodePeer.prototype.detach   = function(self, parent)
   //TODO actually need to remove native listeners
   self.m_listeners.clear();
   this.m_parent = null;
-  this.m_absPos = null;
+  this.m_scene = null;
 }
 
 fan.kawhyScene.NodePeer.prototype.m_pos = fan.gfx.Point.m_defVal;
-fan.kawhyScene.NodePeer.prototype.pos   = function(self) { return this.m_pos }
+fan.kawhyScene.NodePeer.prototype.pos   = function(self) { return this.m_pos; }
 fan.kawhyScene.NodePeer.prototype.pos$  = function(self, pos)
 {
   if (this.m_pos.equals(pos)) return;
@@ -36,37 +32,35 @@ fan.kawhyScene.NodePeer.prototype.pos$  = function(self, pos)
     left = pos.m_x + "px";
     top  = pos.m_y + "px";
   }
-  this.resetAbsPos();
 }
 
-fan.kawhyScene.NodePeer.prototype.m_posOnScene = null;
-fan.kawhyScene.NodePeer.prototype.posOnScene   = function(self)
+fan.kawhyScene.NodePeer.prototype.posOnParent = function(self)
 {
-  if (this.m_posOnScene == null)
+  if (this.m_parent == null) return this.m_pos;
+  var p = this.m_parent.m_elem;
+  var op = this.m_elem;
+  var x = 0, y = 0;
+  do
   {
-    if (this.m_parent == null) return this.m_pos;
-    var p = this.m_parent.m_elem;
-    var op = this.m_elem;
-    var x = 0, y = 0;
-    do
-    {
-      x += op.offsetLeft - op.scrollLeft;
-      y += op.offsetTop - op.scrollTop;
-    }
-    while(op != p && (op = op.offsetParent) != null)
-    var pos = this.m_parent.posOnScene();
-    this.m_posOnScene = fan.gfx.Point.make(pos.m_x + x, pos.m_y + y);
+    x += op.offsetLeft - op.scrollLeft;
+    y += op.offsetTop - op.scrollTop;
   }
-  return this.m_posOnScene;
+  while(op != p && (op = op.offsetParent) != null);
+  return fan.gfx.Point.make(x, y);
 }
-fan.kawhyScene.NodePeer.prototype.resetAbsPos = function()
+
+fan.kawhyScene.NodePeer.prototype.posOnScene = function(self)
 {
-  if (this.m_posOnScene != null)
-  {
-    this.m_posOnScene = null;
-    return true;
-  }
-  return false;
+  if (this.m_parent == null) return this.m_pos;
+  var pp = this.posOnParent(self);
+  var ps = this.m_parent.posOnScene(self);
+  return pp.translate(ps);
+}
+
+fan.kawhyScene.NodePeer.prototype.posOnScreen = function(self)
+{
+  if (this.m_scene == null) return this.posOnScene(self);
+  return this.posOnScene(self).translate(this.m_scene.posOnScreen());
 }
 
 fan.kawhyScene.NodePeer.prototype.size   = function(self)

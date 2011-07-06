@@ -5,20 +5,15 @@ using fwt
 class ScenePane : Pane
 {
 
-  native Scene? scene
+  new make(Scene scene) { this.scene = scene }
 
-  |->| onAttach := |->| {}
+  Scene scene { private set }
 
-  override Size prefSize(Hints hints := Hints.defVal)
-  {
-    scene?.root?.size ?: Size.defVal
-  }
+  override Size prefSize(Hints hints := Hints.defVal) { Size.defVal }
 
   override Void onLayout()
   {
-    if (scene == null || scene.root == null) return
-    scene.root.pos = Point.defVal
-    scene.root.size = this.size
+    scene.onResize(this.size)
   }
 
 }

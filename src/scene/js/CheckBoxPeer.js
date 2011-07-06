@@ -13,7 +13,6 @@ fan.kawhyScene.CheckBoxPeer.prototype.create = function()
   }
 
   this.m_text = document.createTextNode("");
-
   var span = document.createElement("div");
   span.appendChild(this.m_check);
   span.appendChild(this.m_text);

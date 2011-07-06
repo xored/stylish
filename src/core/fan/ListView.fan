@@ -62,8 +62,8 @@ abstract class ListView : Control
     if (node == null)
     {
       node = createItem(i)
-      maxWidth = maxWidth.max(node.size.w)
       contentArea.add(node)
+      maxWidth = maxWidth.max(node.size.w)
       cache[i] = node
     }
     node.pos = Point(0, i * itemSize)
@@ -83,7 +83,7 @@ abstract class ListView : Control
       end := ((scroll.y + node.clientArea.h).toFloat / itemSize).ceil.toInt
       cache.moveRegion(Region(start, end - start))
       height := source.size * itemSize
-      content.size = Size(maxWidth, height)
+      content.size = Size(maxWidth.max(node.clientArea.w), height)
       for(i := start; i < end; i++) itemByIndex(i)
     }
     cache.trash.each
