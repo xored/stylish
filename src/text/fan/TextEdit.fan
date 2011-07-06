@@ -1,4 +1,5 @@
 using gfx
+using fwt
 using kawhy
 using kawhyMath
 using kawhyCss
@@ -25,9 +26,8 @@ class TextEdit : ListView
 
   Int? colByPos(Int row, Int pos)
   {
-    x := scroll.x + pos
     node := itemByIndex(row) as TextNode
-    return node.offsetAt(x)
+    return node.offsetAt(pos)
   }
 
   Region colRegion(Int row, Int col)
@@ -43,6 +43,7 @@ class TextEdit : ListView
   override protected Void attach()
   {
     content.add(contentArea)
+    content.style = CursorStyle(Cursor.text)
     attachSelection()
     p := SelectionPolicy.make(this)
     super.attach()
@@ -106,7 +107,7 @@ class TextEdit : ListView
         if (sel.start.col < sel.end.col)
         {
           endRegion := colRegion(sel.end.row, sel.end.col - 1)
-          header.size = Size(endRegion.last - header.pos.x, h)
+          header.size = Size(endRegion.end - header.pos.x, h)
         }
         else
         {
@@ -132,7 +133,7 @@ class TextEdit : ListView
         {
           footer.pos = Point(0, sel.end.row * h)
           endRegion := colRegion(sel.end.row, sel.end.col - 1)
-          footer.size = Size(endRegion.last, h)
+          footer.size = Size(endRegion.end, h)
         }
         else
         {

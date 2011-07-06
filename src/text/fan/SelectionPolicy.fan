@@ -33,9 +33,8 @@ class SelectionPolicy
     if (col == null) col = edit.source[row].size
     else
     {
-      x := edit.scroll.x + mouse.x
       region := edit.colRegion(row, col)
-      if (x - region.start >= region.size / 2) col++
+      if (mouse.x - region.start >= region.size / 2) col++
     }
     return GridPos(row, col)
   }

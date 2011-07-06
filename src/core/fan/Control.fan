@@ -53,6 +53,8 @@ abstract class Control
 
   internal Node getNode() { node() }
 
-  private once MouseListener mouseListener() { MouseListener(node) }
+  virtual protected Node listenerNode() { node() }
+
+  private once MouseListener mouseListener() { MouseListener(listenerNode) }
 
 }

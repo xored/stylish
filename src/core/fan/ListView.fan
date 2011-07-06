@@ -15,9 +15,8 @@ abstract class ListView : Control
 
   Int? rowByPos(Int pos)
   {
-    row := (scroll.y + pos) / itemSize
-    if (row < source.size) return row
-    return null
+    row := pos / itemSize
+    return row < source.size ? row : null
   }
 
   Region visibleRaws() { cache.region }
@@ -49,16 +48,13 @@ abstract class ListView : Control
     view := createItem(0)
     contentArea.add(view)
     size := view.size.h
+    maxWidth = view.size.w
     contentArea.remove(view)
     return size
   }
 
   // max width in pixels
-  protected Int maxWidth()
-  {
-    //TODO how we should calculate it?
-    1000
-  }
+  protected Int maxWidth := 0
 
   protected Node itemByIndex(Int i)
   {
@@ -66,6 +62,7 @@ abstract class ListView : Control
     if (node == null)
     {
       node = createItem(i)
+      maxWidth = maxWidth.max(node.size.w)
       contentArea.add(node)
       cache[i] = node
     }
@@ -86,7 +83,7 @@ abstract class ListView : Control
       end := ((scroll.y + node.clientArea.h).toFloat / itemSize).ceil.toInt
       cache.moveRegion(Region(start, end - start))
       height := source.size * itemSize
-      content.size = Size(maxWidth(), height)
+      content.size = Size(maxWidth, height)
       for(i := start; i < end; i++) itemByIndex(i)
     }
     cache.trash.each
@@ -100,6 +97,8 @@ abstract class ListView : Control
   protected Group content := Group()
 
   virtual protected Group contentArea() { content }
+
+  override protected Node listenerNode() { content }
 
   override protected ScrollArea node := ScrollArea()
 
