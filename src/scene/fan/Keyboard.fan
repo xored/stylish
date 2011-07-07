@@ -14,7 +14,6 @@ class Keyboard : Notifier
   {
     this.key = key
     notify(#key, key)
-    echo("key: $key")
     return true
   }
 
@@ -22,7 +21,6 @@ class Keyboard : Notifier
   {
     this.char = char
     notify(#char, char)
-    echo("char: $char")
     return true
   }
 
@@ -32,7 +30,6 @@ class Keyboard : Notifier
     this.char = char
     notify(#char, char)
     notify(#key, key)
-    echo("char: $char key: $key")
     return true
   }
 

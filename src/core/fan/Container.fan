@@ -3,39 +3,29 @@ using fwt
 using kawhyScene
 
 @Js
-class Container
+class Container : ScenePane
 {
 
-  new make(Control control)
+  Control root
+
+  new make(Control root) : super(Scene { it.root = root.getNode })
   {
-    this.root = control
-    pane = ScenePane(Scene
-    {
-      it.root = control.getNode
-      onResize = |Size size|
-      {
-        control.resize(size)
-        if (!attached)
-        {
-          control.doAttach(null, null)
-          attached = true
-        }
-      }
-    })
+    this.root = root
   }
 
   Void open()
   {
-    Window
-    {
-      content = pane
-    }.open()
+    Window { content = this }.open()
   }
 
-  Control root
+  override protected Void attach()
+  {
+    root.doAttach(null, null)
+  }
 
-  private ScenePane pane
-
-  private Bool attached := false
+  override protected Void onResize(Size s)
+  {
+    root.resize(s)
+  }
 
 }

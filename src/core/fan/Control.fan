@@ -18,8 +18,11 @@ abstract class Control
 
   internal Void resize(Size s)
   {
-    
+    node.size = s
+    onResize(s)
   }
+
+  virtual protected Void onResize(Size s) {}
 
   GroupControl? parent { private set }
 

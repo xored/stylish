@@ -94,8 +94,7 @@ class TextEdit : ListView
     {
       h := itemSize
       y := sel.start.row * h
-      startRegion := colRegion(sel.start.row, sel.start.col)
-      pos := Point(startRegion.start, y)
+      pos := Point(colStart(sel.start.row, sel.start.col), y)
       header.pos = pos
 
       if (sel.start.row == sel.end.row)
@@ -143,6 +142,15 @@ class TextEdit : ListView
         }
       }
     }
+  }
+
+  private Int colStart(Int row, Int col)
+  {
+    node := itemByIndex(row) as TextNode
+    size := node.text.size
+    if (size == 0) return 0
+    if (col < size) return node.charRegion(col).start
+    return node.charRegion(size - 1).end
   }
 
   private Group createSelectPart(Int row, Int h, Int from, Int? to := null)

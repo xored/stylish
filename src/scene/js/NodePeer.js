@@ -53,7 +53,7 @@ fan.kawhyScene.NodePeer.prototype.posOnScene = function(self)
 {
   if (this.m_parent == null) return this.m_pos;
   var pp = this.posOnParent(self);
-  var ps = this.m_parent.posOnScene(self);
+  var ps = this.m_parent.posOnScene();
   return pp.translate(ps);
 }
 
@@ -87,24 +87,47 @@ fan.kawhyScene.NodePeer.prototype.style$  = function(self, style)
 }
 
 fan.kawhyScene.NodePeer.prototype.m_hover = false;
+fan.kawhyScene.NodePeer.prototype.m_mouseOut = false;
 fan.kawhyScene.NodePeer.prototype.hover   = function(self) { return this.m_hover; }
 fan.kawhyScene.NodePeer.prototype.hover$  = function(self, hover)
 {
-  this.m_hover = hover;
-  self.notify(fan.kawhyScene.Node.$type.slot("hover"), hover);
+  if (this.m_hover != hover)
+  {
+    this.m_hover = hover;
+    self.notify(fan.kawhyScene.Node.$type.slot("hover"), hover);
+  }
+}
+fan.kawhyScene.NodePeer.prototype.mouseIn = function(self)
+{
+  this.m_mouseOut = false;
+  if (this.m_parent) this.m_parent.peer.mouseIn(this.m_parent);
+  this.hover$(self, true);
+}
+fan.kawhyScene.NodePeer.prototype.mousePreOut = function()
+{
+  this.m_mouseOut = true;
+  if (this.m_parent) this.m_parent.peer.mousePreOut();
+}
+fan.kawhyScene.NodePeer.prototype.mousePostOut = function(self)
+{
+  if (this.m_mouseOut) this.hover$(self, false);
+  if (this.m_parent) this.m_parent.peer.mousePostOut(this.m_parent);
 }
 
 fan.kawhyScene.NodePeer.prototype.init = function(self)
 {
   this.m_elem = this.create();
   this.initStyle();
-  this.m_elem.addEventListener("mouseover", function()
+  this.m_elem.addEventListener("mouseover", function(e)
   {
-  	self.peer.hover$(self, true);
+  	self.peer.mouseIn(self);
+    e.stopPropagation();
   }, false);
-  this.m_elem.addEventListener("mouseout",  function()
+  this.m_elem.addEventListener("mouseout",  function(e)
   {
-    self.peer.hover$(self, false);
+    self.peer.mousePreOut();
+    setTimeout(function() { self.peer.mousePostOut(self); }, 0);
+    e.stopPropagation();
   }, false);
 }
 

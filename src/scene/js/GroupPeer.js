@@ -9,7 +9,7 @@ fan.kawhyScene.GroupPeer.prototype.add = function(self, kid)
   this.m_kids.add(kid);
   var elem = kid.peer.m_elem;
   this.content().appendChild(elem);
-  kid.peer.attach(kid, this);
+  kid.peer.attach(kid, self);
 
   if (this.m_position == fan.kawhyScene.Position.m_horizontal)
   {
@@ -31,7 +31,7 @@ fan.kawhyScene.GroupPeer.prototype.remove = function(self, kid)
   if (this.m_kids == null) return;
   this.content().removeChild(kid.peer.m_elem);
   this.m_kids.remove(kid);
-  kid.peer.detach(kid, this);
+  kid.peer.detach(kid, self);
 }
 
 fan.kawhyScene.GroupPeer.prototype.kid = function(self, index)

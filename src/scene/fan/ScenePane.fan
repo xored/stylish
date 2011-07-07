@@ -13,7 +13,24 @@ class ScenePane : Pane
 
   override Void onLayout()
   {
-    scene.onResize(this.size)
+    if (!attached)
+    {
+      doAttach()
+      attach()
+      attached = true
+    }
+    onResize(this.size)
   }
+
+  virtual protected Void attach() {}
+
+  virtual protected Void onResize(Size s) {}
+
+  internal native Void doAttach()
+
+  // fwt haven't dispose event, so this method never call for now
+  internal native Void doDetach()
+
+  private Bool attached := false
 
 }

@@ -20,8 +20,7 @@ class MouseListener
     }
     hoverListener = |Bool hover|
     {
-      mouse := node.scene?.mouse
-      if (mouse == null) return
+      mouse := node.scene.mouse
       if (hover)
       {
         mouse.on(Mouse#pos).add(mouseListener)

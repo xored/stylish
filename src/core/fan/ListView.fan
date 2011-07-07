@@ -33,8 +33,9 @@ abstract class ListView : Control
     node.add(content)
     source.listen(listener)
     node.onScroll = |p| { sync() }
-    sync()
   }
+
+  override protected Void onResize(Size s) { sync() }
 
   override protected Void detach()
   {

@@ -14,6 +14,4 @@ class Scene
 
   native Void focus()
 
-  |Size| onResize := |Size s| {}
-
 }
