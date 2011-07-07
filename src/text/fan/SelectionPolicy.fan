@@ -29,6 +29,9 @@ class SelectionPolicy
   {
     row := edit.rowByPos(mouse.y)
     if (row == null) row = edit.source.size - 1
+    raws := edit.visibleRaws
+    if (row < raws.start) return GridPos(raws.start - 1, 0)
+    if (row > raws.last) return GridPos(raws.last + 1, 0)
     col := edit.colByPos(row, mouse.x)
     if (col == null) col = edit.source[row].size
     else

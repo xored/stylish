@@ -24,17 +24,9 @@ class TextEdit : ListView
 // Mertics
 //////////////////////////////////////////////////////////////////////////
 
-  Int? colByPos(Int row, Int pos)
-  {
-    node := itemByIndex(row) as TextNode
-    return node.offsetAt(pos)
-  }
+  Int? colByPos(Int row, Int pos) { item(row).offsetAt(pos) }
 
-  Region colRegion(Int row, Int col)
-  {
-    node := itemByIndex(row) as TextNode
-    return node.charRegion(col)
-  }
+  Region colRegion(Int row, Int col) { item(row).charRegion(col) }
 
 //////////////////////////////////////////////////////////////////////////
 // Implementation
@@ -129,7 +121,7 @@ class TextEdit : ListView
           body.pos = Point.defVal
           body.size = Size.defVal
         }
-        if (sel.end.col > 0)
+        if (sel.end.col > 0 && sel.end.row <= visibleRaws.last)
         {
           footer.pos = Point(0, sel.end.row * h)
           endRegion := colRegion(sel.end.row, sel.end.col - 1)
@@ -153,17 +145,9 @@ class TextEdit : ListView
     return node.charRegion(size - 1).end
   }
 
-  private Group createSelectPart(Int row, Int h, Int from, Int? to := null)
+  private TextNode? item(Int row)
   {
-    Group
-    {
-      from = colRegion(row, from).first
-      if (to == null) to = content.size.w
-      else to = colRegion(row + h - 1, to - 1).last
-      it.style = BgStyle(Color.makeArgb(100, 51, 153, 255))
-      it.pos = Point(from, row * itemSize)
-      it.size = Size(to - from + 1, h * itemSize)
-    }
+    cache.region.contains(row) ? (itemByIndex(row) as TextNode) : null
   }
 
   private GridRange? visibleSelection()
@@ -173,8 +157,7 @@ class TextEdit : ListView
     if (raws.start > range.end.row || raws.last < range.start.row) return null
     start := raws.start > range.start.row ? GridPos(raws.start, 0) : range.start
     end := raws.last < range.end.row ? GridPos(raws.last + 1, 0) : range.end
-    res := GridRange(start, end)
-    return res
+    return GridRange(start, end)
   }
 
   private Group selectArea := Group()

@@ -103,7 +103,7 @@ abstract class ListView : Control
 
   override protected ScrollArea node := ScrollArea()
 
-  private ListCache cache := ListCache()
+  protected ListCache cache := ListCache()
 
   private ListViewListener listener := ListViewListener(cache)
 
