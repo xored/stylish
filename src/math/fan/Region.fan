@@ -60,6 +60,8 @@ const class Region
     return Region(s, e - s)
   }
 
+  Bool contains(Int i) { i >= start && i < end }
+
   Region offset(Int offset)
   {
     if (offset == 0) return this
