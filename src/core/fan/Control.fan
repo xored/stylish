@@ -28,6 +28,8 @@ abstract class Control
 
   LayoutHints hints := LayoutHints()
 
+  Keyboard? keyboard() { node.scene?.keyboard }
+
   Void onMouseMove(|Point| f) { mouseListener.onMove(f) }
 
   Void rmMouseMove(|Point| f) { mouseListener.rmMove(f) }

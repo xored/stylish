@@ -15,10 +15,9 @@ class Selection
     }
   }
 
-  Void extend(GridPos pos)
-  {
-    range = GridRange(range.start, pos)
-  }
+  Void all() { range = GridRange(GridPos.defVal, edit.end) }
+
+  Void extend(GridPos pos) { range = GridRange(range.start, pos) }
 
   Str text() { throw UnsupportedErr() }
 

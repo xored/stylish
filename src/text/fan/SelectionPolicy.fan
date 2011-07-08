@@ -1,51 +1,60 @@
 using gfx
+using kawhy
 using kawhyMath
 
 @Js
-class SelectionPolicy
+class SelectionPolicy : Policy
 {
 
-  new make(TextEdit edit)
+  override TextEdit control { private set }
+
+  new make(TextEdit control)
   {
-    this.edit = edit
+    this.control = control
     onMove = |Point mouse|
     {
       this.mouse = mouse
-      if (pressed) edit.selection.extend(pos)
+      if (pressed) control.selection.extend(pos)
     }
     onClick = |Bool down, Int count|
     {
       if (count == 1)
       {
         pressed = down
-        if (down) edit.selection.range = GridRange(pos)
+        if (down)
+        {
+          if (control.keyboard.key.isShift)
+            control.selection.extend(pos)
+          else
+            control.selection.range = GridRange(pos)
+        }
       }
     }
-    edit.onMouseMove(onMove)
-    edit.onMouseClick(onClick)
+    control.onMouseMove(onMove)
+    control.onMouseClick(onClick)
   }
 
   private GridPos pos()
   {
-    row := edit.rowByPos(mouse.y)
-    if (row == null) row = edit.source.size - 1
-    raws := edit.visibleRaws
+    row := control.rowByPos(mouse.y)
+    if (row == null) row = control.source.size - 1
+    raws := control.visibleRaws
     if (row < raws.start) return GridPos(raws.start - 1, 0)
     if (row > raws.last) return GridPos(raws.last + 1, 0)
-    col := edit.colByPos(row, mouse.x)
-    if (col == null) col = edit.source[row].size
+    col := control.colByPos(row, mouse.x)
+    if (col == null) col = control.source[row].size
     else
     {
-      region := edit.colRegion(row, col)
+      region := control.colRegion(row, col)
       if (mouse.x - region.start >= region.size / 2) col++
     }
     return GridPos(row, col)
   }
 
-  Void dispose()
+  override Void dispose()
   {
-    edit.rmMouseMove(onMove)
-    edit.rmMouseClick(onClick)
+    control.rmMouseMove(onMove)
+    control.rmMouseClick(onClick)
   }
 
   private Point mouse := Point.defVal
@@ -53,7 +62,5 @@ class SelectionPolicy
 
   private |Point| onMove
   private |Bool, Int| onClick
-
-  private TextEdit edit
 
 }

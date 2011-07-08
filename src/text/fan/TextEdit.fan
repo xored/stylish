@@ -26,7 +26,14 @@ class TextEdit : ListView
 
   Int? colByPos(Int row, Int pos) { item(row).offsetAt(pos) }
 
+  //TODO don't like this method
   Region colRegion(Int row, Int col) { item(row).charRegion(col) }
+
+  GridPos end()
+  {
+    row := source.size - 1
+    return GridPos(row, source[row].size)
+  }
 
 //////////////////////////////////////////////////////////////////////////
 // Implementation
@@ -37,8 +44,14 @@ class TextEdit : ListView
     content.add(contentArea)
     content.style = CursorStyle(Cursor.text)
     attachSelection()
-    p := SelectionPolicy.make(this)
+    policies = [SelectionPolicy(this), SelectAllPolicy(this)]
     super.attach()
+  }
+
+  override protected Void detach()
+  {
+    policies.each { it.dispose() }
+    super.detach()
   }
 
   protected Void attachSelection()
@@ -160,6 +173,7 @@ class TextEdit : ListView
     return GridRange(start, end)
   }
 
+  private Policy[] policies := [,]
   private Group selectArea := Group()
   override protected Group contentArea := Group()
 
