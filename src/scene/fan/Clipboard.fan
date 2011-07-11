@@ -5,9 +5,9 @@ class Clipboard
 
   Void onPaste(|Str| f) { pasteListeners.add(f) }
 
-  Void rmPaste(|Str| f) { pasteListeners.remove(f) }
+  Void unPaste(|Str| f) { pasteListeners.remove(f) }
 
-  StrSource? copySource
+  native TextSource? textSource
 
   private |Str|[] pasteListeners := [,]
 
@@ -19,11 +19,15 @@ class Clipboard
 }
 
 @Js
-mixin StrSource
+mixin TextSource
 {
+
+  abstract |->|? onChange
 
   abstract Str text(Range range := 0..-1)
 
   abstract Int size()
+
+  abstract Bool isEmpty()
 
 }

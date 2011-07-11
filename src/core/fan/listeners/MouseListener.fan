@@ -8,17 +8,19 @@ class MouseListener
   new make(Node node)
   {
     this.node = node
-    mouseListener = |Point p|
+    mouseListener = |Point p->Bool|
     {
       pos := node.posOnScreen()
       fireMove(Point(p.x - pos.x, p.y - pos.y))
+      return true
     }
-    leftMouseListener = |Bool down|
+    leftMouseListener = |Bool down->Bool|
     {
       count := node.scene.mouse.left.clicks
       fireClick(down, count)
+      return true
     }
-    hoverListener = |Bool hover|
+    hoverListener = |Bool hover->Bool|
     {
       mouse := node.scene.mouse
       if (hover)
@@ -31,6 +33,7 @@ class MouseListener
         mouse.on(Mouse#pos).remove(mouseListener)
         mouse.left.on(MouseButton#down).remove(leftMouseListener)
       }
+      return true
     }
   }
 
@@ -41,7 +44,7 @@ class MouseListener
     moves.add(f)
   }
 
-  Void rmMove(|Point| f)
+  Void unMove(|Point| f)
   {
     moves.remove(f)
     if (hoverListenerCount == 0)
@@ -55,7 +58,7 @@ class MouseListener
     clicks.add(f)
   }
 
-  Void rmClick(|Bool, Int| f)
+  Void unClick(|Bool, Int| f)
   {
     if (hoverListenerCount == 0)
       node.onHover.add(hoverListener)
@@ -79,9 +82,9 @@ class MouseListener
   private |Point|[] moves := [,]
   private |Bool, Int|[] clicks := [,]
 
-  private |Bool| hoverListener
-  private |Point| mouseListener
-  private |Obj?| leftMouseListener
+  private |Bool->Bool| hoverListener
+  private |Point->Bool| mouseListener
+  private |Obj?->Bool| leftMouseListener
 
   private Node node
 

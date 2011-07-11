@@ -10,6 +10,8 @@ class Scene
 
   native Keyboard keyboard()
 
+  native Clipboard clipboard()
+
   native Point posOnScreen()
 
   native Void focus()

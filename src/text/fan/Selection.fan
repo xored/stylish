@@ -1,4 +1,5 @@
 using kawhyMath
+using kawhyUtil
 
 @Js
 class Selection
@@ -11,17 +12,35 @@ class Selection
     set
     {
       &range = it
-      edit.syncSelection()
+      listeners.each { it(&range) }
     }
   }
+
+  Void onChange(|GridRange| f) { listeners.add(f) }
+
+  Void unChange(|GridRange| f) { listeners.remove(f) }
 
   Void all() { range = GridRange(GridPos.defVal, edit.end) }
 
   Void extend(GridPos pos) { range = GridRange(range.start, pos) }
 
-  Str text() { throw UnsupportedErr() }
+  Str text(Range range := 0..-1)
+  {
+    if (isEmpty) return ""
+    line := this.range.start.row
+    ranges := this.range.split()
+    text := ranges.join("\n") |Range r, Int index->Str|
+    {
+      StrUtil.getRange(edit.source[line + index].text, r)
+    }
+    return text[range]
+  }
+
+  Int size() { text.size }
 
   Bool isEmpty() { range.isEmpty }
+
+  private |GridRange|[] listeners := [,]
 
   override Bool equals(Obj? o)
   {

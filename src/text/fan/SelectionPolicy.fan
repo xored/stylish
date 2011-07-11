@@ -53,8 +53,8 @@ class SelectionPolicy : Policy
 
   override Void dispose()
   {
-    control.rmMouseMove(onMove)
-    control.rmMouseClick(onClick)
+    control.unMouseMove(onMove)
+    control.unMouseClick(onClick)
   }
 
   private Point mouse := Point.defVal

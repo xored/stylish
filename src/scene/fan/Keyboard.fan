@@ -13,24 +13,23 @@ class Keyboard : Notifier
   internal Bool onKey(Key key)
   {
     this.key = key
-    notify(#key, key)
-    return true
+    return notify(#key, key)
   }
 
   internal Bool onChar(Int? char)
   {
     this.char = char
-    notify(#char, char)
-    return true
+    return notify(#char, char)
   }
 
   internal Bool onKeyChar(Key key, Int? char)
   {
     this.key = key
     this.char = char
-    notify(#char, char)
-    notify(#key, key)
-    return true
+    res := false
+    res = notify(#char, char) || res
+    res = notify(#key, key) || res
+    return res
   }
 
   override protected ListenerStorage listeners := ListenerStorage()

@@ -5,7 +5,7 @@ mixin Notifier
 
   Listeners on(Obj key) { listeners.on(key) }
 
-  Void notify(Obj key, Obj? val) { listeners.notify(key, val) }
+  Bool notify(Obj key, Obj? val) { listeners.notify(key, val) }
 
   abstract protected ListenerStorage listeners()
 
@@ -15,8 +15,8 @@ mixin Notifier
 mixin Listeners
 {
 
-  abstract Void add(|Obj?->Void| f)
+  abstract Void add(|Obj?->Bool| f)
 
-  abstract Void remove(|Obj?->Void| f)
+  abstract Void remove(|Obj?->Bool| f)
 
 }

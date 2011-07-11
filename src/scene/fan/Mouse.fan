@@ -25,11 +25,11 @@ class MouseButton : Notifier
 
   Int clicks { private set }
 
-  internal Void onClick(Bool down, Int clicks)
+  internal Bool onClick(Bool down, Int clicks)
   {
     this.clicks = clicks
     this.down = down
-    notify(#down, down)
+    return notify(#down, down)
   }
 
   override protected ListenerStorage listeners := ListenerStorage()

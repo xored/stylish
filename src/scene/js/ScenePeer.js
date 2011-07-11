@@ -12,16 +12,14 @@ fan.kawhyScene.ScenePeer.prototype.$ctor = function()
   }
   this.m_mouse = fan.kawhyScene.Mouse.make();
   this.m_keyboard = fan.kawhyScene.Keyboard.make();
+  this.m_clipboard = fan.kawhyScene.Clipboard.make();
+  var $this = this;
+  this.m_clipboard.peer.onSourceChange = function() { $this.handleTextSource(); }
 }
 
-fan.kawhyScene.ScenePeer.prototype.mouse    = function(self) { return this.m_mouse;    }
-fan.kawhyScene.ScenePeer.prototype.keyboard = function(self) { return this.m_keyboard; }
-
-fan.kawhyScene.ScenePeer.prototype.focus = function()
-{
-  var area = this.m_focusArea;
-  if (area != null && area !== document.activeElement) area.focus();
-}
+fan.kawhyScene.ScenePeer.prototype.mouse     = function(self) { return this.m_mouse;     }
+fan.kawhyScene.ScenePeer.prototype.keyboard  = function(self) { return this.m_keyboard;  }
+fan.kawhyScene.ScenePeer.prototype.clipboard = function(self) { return this.m_clipboard; }
 
 fan.kawhyScene.ScenePeer.prototype.attach = function(elem)
 {
@@ -31,6 +29,7 @@ fan.kawhyScene.ScenePeer.prototype.attach = function(elem)
   this.attachFocus();
   this.attachMouse();
   this.attachKeyboard();
+  this.attachClipboard();
   this.focus();
 }
 
@@ -41,6 +40,10 @@ fan.kawhyScene.ScenePeer.prototype.detach = function()
   this.removeListeners();
 }
 
+/////////////////////////
+// Mouse
+/////////////////////////
+
 fan.kawhyScene.ScenePeer.prototype.attachMouse = function()
 {
   var $this = this;
@@ -48,27 +51,6 @@ fan.kawhyScene.ScenePeer.prototype.attachMouse = function()
   this.addListener(window, "mousedown", function(e) { return $this.handleDown(e); });
   this.addListener(window, "mouseup",   function(e) { return $this.handleUp(e);   });
 }
-
-fan.kawhyScene.ScenePeer.prototype.attachFocus = function()
-{
-  var area = this.m_focusArea;
-  var $this = this;
-  this.addListener(area, "focus", function() { return $this.handleFocus(true);  });
-  this.addListener(area, "blur",  function() { return $this.handleFocus(false); });
-}
-
-fan.kawhyScene.ScenePeer.prototype.attachKeyboard = function()
-{
-  var area = this.m_focusArea;
-  var $this = this;
-  this.addListener(area, "keydown",  function(e) { return $this.handleKeyDown(e);  });
-  this.addListener(area, "keyup",    function(e) { return $this.handleKeyUp(e);    });
-  this.addListener(area, "keypress", function(e) { return $this.handleKeyPress(e); });
-}
-
-/////////////////////////
-// Events
-/////////////////////////
 
 fan.kawhyScene.ScenePeer.prototype.handleMove = function(e)
 {
@@ -86,12 +68,6 @@ fan.kawhyScene.ScenePeer.prototype.handleUp = function(e)
 {
   this.handleClick(e, false);
   return this.preventDefault(e);
-}
-
-fan.kawhyScene.ScenePeer.prototype.handleFocus = function(focus)
-{
-  //do nothing for now
-  return true;
 }
 
 fan.kawhyScene.ScenePeer.prototype.handleClick = function(e, down)
@@ -127,6 +103,9 @@ fan.kawhyScene.ScenePeer.prototype.handleClick = function(e, down)
   button.onClick(down, this.clicks.count);
 }
 
+fan.kawhyScene.ScenePeer.prototype.m_lastClickTime = null;
+fan.kawhyScene.ScenePeer.prototype.m_lastClickButton = null;
+
 fan.kawhyScene.ScenePeer.buttonSlot = function(e)
 {
   switch (e.button)
@@ -138,8 +117,42 @@ fan.kawhyScene.ScenePeer.buttonSlot = function(e)
   return null;
 }
 
-fan.kawhyScene.ScenePeer.prototype.m_lastClickTime = null;
-fan.kawhyScene.ScenePeer.prototype.m_lastClickButton = null;
+/////////////////////////
+// Focus
+/////////////////////////
+
+fan.kawhyScene.ScenePeer.prototype.focus = function()
+{
+  var area = this.m_focusArea;
+  if (area != null && area !== document.activeElement) area.focus();
+}
+
+fan.kawhyScene.ScenePeer.prototype.attachFocus = function()
+{
+  var area = this.m_focusArea;
+  var $this = this;
+  this.addListener(area, "focus", function() { return $this.handleFocus(true);  });
+  this.addListener(area, "blur",  function() { return $this.handleFocus(false); });
+}
+
+fan.kawhyScene.ScenePeer.prototype.handleFocus = function(focus)
+{
+  //do nothing for now
+  return true;
+}
+
+/////////////////////////
+// Keyboard
+/////////////////////////
+
+fan.kawhyScene.ScenePeer.prototype.attachKeyboard = function()
+{
+  var area = this.m_focusArea;
+  var $this = this;
+  this.addListener(area, "keydown",  function(e) { return $this.handleKeyDown(e);  });
+  this.addListener(area, "keyup",    function(e) { return $this.handleKeyUp(e);    });
+  this.addListener(area, "keypress", function(e) { return $this.handleKeyPress(e); });
+}
 
 fan.kawhyScene.ScenePeer.prototype.handleKeyDown = function(e)
 {
@@ -277,13 +290,53 @@ fan.kawhyScene.ScenePeer.prototype.m_char      = null;
 fan.kawhyScene.ScenePeer.prototype.m_key       = fan.fwt.Key.m_none;
 fan.kawhyScene.ScenePeer.prototype.m_modifiers = fan.fwt.Key.m_none;
 
-fan.kawhyScene.ScenePeer.prototype.preventDefault = function(e)
+/////////////////////////
+// Clipboard
+/////////////////////////
+
+fan.kawhyScene.ScenePeer.prototype.attachClipboard = function()
 {
-  // prevent bubbling
-  e.stopPropagation();
-  if (e.preventDefault) e.preventDefault();
-  e.returnValue = false; //  IE
-  return false;
+  var $this = this;
+  this.addListener(this.m_focusArea, "copy", function(e) { return $this.handleCopy(e);  });
+}
+
+fan.kawhyScene.ScenePeer.prototype.handleTextSource = function()
+{
+  if (this.m_textSource)
+  {
+    this.m_textSource.m_onChange = null;
+    this.m_textSource = null;
+  }
+  var source = this.m_clipboard.textSource();
+  if (source)
+  {
+    this.m_textSource = source;
+    var $this = this;
+    var f = function()
+    {
+      var area = $this.m_focusArea;
+      if (source.size() > 0)
+      {
+        area.value = "Copy to clipboard is not supported for this browser";
+        area.select();
+      }
+      else area.value = "";
+    }
+    this.m_textSource.m_onChange = fan.sys.Func.make(fan.sys.List.make(fan.sys.Param.$type), fan.sys.Obj.$type.toNullable(), f);
+  }
+}
+
+fan.kawhyScene.ScenePeer.prototype.m_textSource = null;
+
+fan.kawhyScene.ScenePeer.prototype.handleCopy = function(e)
+{
+  var source = this.m_clipboard.textSource();
+  if (source)
+  {
+    var area = this.m_focusArea;
+    area.value = source.text();
+    area.select();
+  }
 }
 
 /////////////////////////
@@ -310,6 +363,15 @@ fan.kawhyScene.ScenePeer.prototype.m_focusArea = null;
 /////////////////////////
 // Utils
 /////////////////////////
+
+fan.kawhyScene.ScenePeer.prototype.preventDefault = function(e)
+{
+  // prevent bubbling
+  e.stopPropagation();
+  if (e.preventDefault) e.preventDefault();
+  e.returnValue = false; //  IE
+  return false;
+}
 
 fan.kawhyScene.ScenePeer.prototype.addListener = function(t, e, f)
 {

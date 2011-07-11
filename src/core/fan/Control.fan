@@ -28,15 +28,18 @@ abstract class Control
 
   LayoutHints hints := LayoutHints()
 
+  //TODO implement :-)
+  Void focus() {}
+
   Keyboard? keyboard() { node.scene?.keyboard }
 
   Void onMouseMove(|Point| f) { mouseListener.onMove(f) }
 
-  Void rmMouseMove(|Point| f) { mouseListener.rmMove(f) }
+  Void unMouseMove(|Point| f) { mouseListener.unMove(f) }
 
   Void onMouseClick(|Bool down, Int count| f) { mouseListener.onClick(f) }
 
-  Void rmMouseClick(|Bool down, Int count| f) { mouseListener.rmClick(f) }
+  Void unMouseClick(|Bool down, Int count| f) { mouseListener.unClick(f) }
 
   internal Void doAttach(GroupControl? parent, Group? content)
   {

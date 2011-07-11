@@ -8,9 +8,9 @@ class ListenerStorage
     storage.getOrAdd(key) { PlainListeners() }
   }
 
-  Void notify(Obj key, Obj? val)
+  Bool notify(Obj key, Obj? val)
   {
-    storage[key]?.notify(val)
+    storage[key]?.notify(val) ?: false
   }
 
   Void clear() { storage = [:] }
@@ -23,15 +23,17 @@ class ListenerStorage
 internal class PlainListeners : Listeners
 {
 
-  override Void add(|Obj?->Void| f) { list.add(f) }
+  override Void add(|Obj?->Bool| f) { list.add(f) }
 
-  override Void remove(|Obj?->Void| f) { list.remove(f) }
+  override Void remove(|Obj?->Bool| f) { list.remove(f) }
 
-  Void notify(Obj o)
+  Bool notify(Obj o)
   {
-    list.each { it(o) }
+    res := false
+    list.each { res = it(o) || res }
+    return res
   }
 
-  private |Obj?->Void|[] list := [,]
+  private |Obj?->Bool|[] list := [,]
 
 }

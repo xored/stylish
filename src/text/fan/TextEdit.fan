@@ -61,10 +61,12 @@ class TextEdit : ListView
   protected Void attachSelection()
   {
     selectStyle := BgStyle(Color.makeArgb(100, 51, 153, 255))
+    node.scene.clipboard.textSource = TextEditSource(this)
     selectArea.add(Group { it.style = selectStyle }) 
     selectArea.add(Group { it.style = selectStyle }) 
     selectArea.add(Group { it.style = selectStyle })
     content.add(selectArea)
+    selection.onChange { syncSelection() }
   }
 
   override protected Node createItem(Int i)
@@ -211,5 +213,27 @@ internal class LineListener : ListListener
 
   private TextNode node
   private TextLine line
+
+}
+
+@Js
+internal class TextEditSource : TextSource
+{
+
+  new make(TextEdit edit)
+  {
+    this.edit = edit
+    edit.selection.onChange { this.onChange?.call() }
+  }
+
+  override |->|? onChange := null
+
+  override Str text(Range range := 0..-1) { edit.selection.text(range) }
+
+  override Int size() { edit.selection.size }
+
+  override Bool isEmpty() { edit.selection.isEmpty }
+
+  private TextEdit edit
 
 }

@@ -9,7 +9,7 @@ class Main
   static Void main()
   {
     scene := Scene()
-    scene.mouse.on(Mouse#pos).add { echo(it) }
+    scene.mouse.on(Mouse#pos).add |Obj? val->Bool| { echo(val); return true }
     add("left", scene.mouse.left)
     add("right", scene.mouse.right)
     add("middle", scene.mouse.middle)
@@ -41,9 +41,10 @@ class Main
 
   static Void add(Str name, MouseButton button)
   {
-    button.on(MouseButton#down).add
+    button.on(MouseButton#down).add |Obj? val->Bool|
     {
       echo("$name: $button.down $button.clicks")
+      return true
     }
   }
 
