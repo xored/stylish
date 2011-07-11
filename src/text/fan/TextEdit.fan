@@ -10,7 +10,11 @@ using kawhyNotice
 class TextEdit : ListView
 {
 
-  new make(|This|? f) { f(this) }
+  new make(|This|? f)
+  {
+    style = FontStyle.monospace
+    f(this)
+  }
 
 //////////////////////////////////////////////////////////////////////////
 // State

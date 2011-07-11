@@ -11,12 +11,7 @@ class Main
 
   static Void main()
   {
-    doc := TestDoc()
-    edit := TextEdit
-    {
-      source = doc
-      style = FontStyle.monospace/* + BoxStyle { margin = Insets(5) }*/
-    }
+    edit := TextEdit { source = TestDoc() }
     Container(edit).open
   }
 }
