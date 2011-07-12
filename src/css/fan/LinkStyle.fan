@@ -21,5 +21,5 @@ const class LinkStyle : AtomStyle
   override StyleItem[] toCss() { [,] }
 
   override Int hash() { href.hash }
-  
+
 }

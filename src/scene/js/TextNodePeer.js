@@ -27,11 +27,12 @@ fan.kawhyScene.TextNodePeer.prototype.fillContent = function()
 {
   this.m_elem.innerHTML = "";
   var textSize = this.m_text.length;
+  if (textSize == 0) return
   var offset = 0;
   for(var i = 0; i < this.m_styles.size(); i++)
   {
     var style = this.m_styles.get(i);
-    var region = fan.kawhyMath.Region.fromRange(style.m_range);
+    var region = fan.kawhyMath.Region.fromRange(style.m_range, textSize);
     if (region.m_start < offset)
       throw fan.sys.ArgErr.make("styles should be sorted and can't overlap: " + this.m_styles.toStr());
     if (region.m_start >= textSize) break;
