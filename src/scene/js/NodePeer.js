@@ -4,7 +4,7 @@ fan.kawhyScene.NodePeer.prototype.$ctor = function(self) {}
 fan.kawhyScene.NodePeer.prototype.m_parent = null;
 fan.kawhyScene.NodePeer.prototype.m_scene  = null;
 fan.kawhyScene.NodePeer.prototype.parent   = function(self) { return this.m_parent; }
-fan.kawhyScene.NodePeer.prototype.scene    = function(self) { return this.m_scene; }
+fan.kawhyScene.NodePeer.prototype.scene    = function(self) { return this.m_scene;  }
 
 fan.kawhyScene.NodePeer.prototype.attach   = function(self, parent)
 {
@@ -37,7 +37,7 @@ fan.kawhyScene.NodePeer.prototype.pos$  = function(self, pos)
 fan.kawhyScene.NodePeer.prototype.posOnParent = function(self)
 {
   if (this.m_parent == null) return this.m_pos;
-  var p = this.m_parent.m_elem;
+  var p = this.m_parent.peer.m_elem;
   var op = this.m_elem;
   var x = 0, y = 0;
   do
