@@ -29,6 +29,15 @@ class StrListView : ListView
     TextNode { text = "item num $i" }
   }
 
+  override protected once Int itemSize()
+  {
+    view := createItem(0)
+    contentArea.add(view)
+    size := view.size.h
+    contentArea.remove(view)
+    return size
+  }
+
   private StrListViewContent listContent := StrListViewContent()
 
 }

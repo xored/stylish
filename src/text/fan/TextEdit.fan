@@ -82,6 +82,15 @@ class TextEdit : ListView
     (node.data[lineData] as LineListener)?.dispose
   }
 
+  override protected once Int itemSize()
+  {
+    view := TextNode { it.text = "text" }
+    contentArea.add(view)
+    size := view.size.h
+    contentArea.remove(view)
+    return size
+  }
+
   override protected Void sync()
   {
     super.sync()

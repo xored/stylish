@@ -52,15 +52,7 @@ abstract class ListView : Control
     super.detach()
   }
 
-  once protected Int itemSize()
-  {
-    view := createItem(0)
-    contentArea.add(view)
-    size := view.size.h
-    maxWidth = view.size.w
-    contentArea.remove(view)
-    return size
-  }
+  abstract protected Int itemSize()
 
   // max width in pixels
   protected Int maxWidth := 0

@@ -6,10 +6,7 @@ using kawhyNotice
 class TestDoc : TextDoc
 {
 
-  override TextLine get(Int index)
-  {
-    TestLine(this, index)
-  }
+  override TextLine get(Int index) { TestLine(this, index) }
 
   Int clicks := 0
   {

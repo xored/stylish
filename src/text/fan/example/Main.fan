@@ -11,7 +11,18 @@ class Main
 
   static Void main()
   {
-    edit := TextEdit { source = TestDoc() }
-    Container(edit).open
+    doc := TestDoc()
+    edit := TextEdit { source = doc }
+    container := Container(edit)
+    container.scene.mouse.left.on(MouseButton#down).add |val->Bool|
+    {
+      if (val == true)
+      {
+        doc.clicks = doc.clicks + 1
+        return true
+      }
+      return false
+    }
+    container.open
   }
 }
