@@ -19,6 +19,14 @@ abstract class ListView : Control
     return row < source.size ? row : null
   }
 
+  Int posByRow(Int row)
+  {
+    size := source.size
+    if (row < size)
+      return row * itemSize
+    throw ArgErr("require row < lineCount, but row=$row and lineCount=$size")
+  }
+
   Region visibleRaws() { cache.region }
 
   abstract protected ListNotifier source()
