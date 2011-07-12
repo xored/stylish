@@ -90,6 +90,7 @@ abstract class ListView : Control
     {
       start := scroll.y / itemSize
       end := ((scroll.y + node.clientArea.h).toFloat / itemSize).ceil.toInt
+      end = end.min(source.size)
       cache.moveRegion(Region(start, end - start))
       height := source.size * itemSize
       content.size = Size(maxWidth.max(node.clientArea.w), height)
