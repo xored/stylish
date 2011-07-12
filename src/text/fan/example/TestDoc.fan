@@ -38,7 +38,7 @@ class TestLine : TextLine
     this.doc = doc
     baseText = "line number: $index clicks count: "
     text = baseText
-    styles = StyleList([StyleRange(TextStyle { color = Color.blue }, 0..3)])
+    styles = StyleList([StyleRange(TextStyle { color = Color.blue }, 0..3), StyleRange(LinkStyle(`http://google.com`), 5..10)])
     updateText()
   }
 

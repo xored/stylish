@@ -45,11 +45,18 @@ fan.kawhyScene.TextNodePeer.prototype.fillContent = function()
     if (size > 0)
     {
       var val = this.m_text.substring(region.m_start, region.m_start + size);
-      var span = document.createElement("span");
-      span.appendChild(document.createTextNode(val));
+      var linkStyle = style.m_style.findStyle(fan.kawhyCss.LinkStyle.$type);
+      var wrapper;
+      if (linkStyle)
+      {
+        wrapper = document.createElement("a");
+        wrapper.href = linkStyle.m_href.toStr();
+      }
+      else wrapper = document.createElement("span");
+      wrapper.appendChild(document.createTextNode(val));
       var str = fan.kawhyCss.StyleItem.toStyleString(style.m_style.toCss());
-      span.style.cssText = str;
-      this.m_elem.appendChild(span);
+      wrapper.style.cssText = str;
+      this.m_elem.appendChild(wrapper);
       offset = region.m_start + size;
     }
   }
