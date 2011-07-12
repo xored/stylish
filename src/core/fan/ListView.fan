@@ -27,7 +27,7 @@ abstract class ListView : Control
     throw ArgErr("require row < lineCount, but row=$row and lineCount=$size")
   }
 
-  Region visibleRaws() { cache.region }
+  Region visibleRows() { cache.region }
 
   abstract protected ListNotifier source()
 

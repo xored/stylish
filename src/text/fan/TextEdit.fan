@@ -140,7 +140,7 @@ class TextEdit : ListView
           body.pos = Point.defVal
           body.size = Size.defVal
         }
-        if (sel.end.col > 0 && sel.end.row <= visibleRaws.last)
+        if (sel.end.col > 0 && sel.end.row <= visibleRows.last)
         {
           footer.pos = Point(0, sel.end.row * h)
           endRegion := colRegion(sel.end.row, sel.end.col - 1)
@@ -172,10 +172,10 @@ class TextEdit : ListView
   private GridRange? visibleSelection()
   {
     range := selection.range.norm
-    raws := visibleRaws()
-    if (raws.start > range.end.row || raws.last < range.start.row) return null
-    start := raws.start > range.start.row ? GridPos(raws.start, 0) : range.start
-    end := raws.last < range.end.row ? GridPos(raws.last + 1, 0) : range.end
+    rows := visibleRows
+    if (rows.start > range.end.row || rows.last < range.start.row) return null
+    start := rows.start > range.start.row ? GridPos(rows.start, 0) : range.start
+    end := rows.last < range.end.row ? GridPos(rows.last + 1, 0) : range.end
     return GridRange(start, end)
   }
 

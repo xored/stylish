@@ -38,9 +38,9 @@ class SelectionPolicy : Policy
   {
     row := control.rowByPos(mouse.y)
     if (row == null) row = control.source.size - 1
-    raws := control.visibleRaws
-    if (row < raws.start) return GridPos(raws.start - 1, 0)
-    if (row > raws.last) return GridPos(raws.last + 1, 0)
+    rows := control.visibleRows
+    if (row < rows.start) return GridPos(rows.start - 1, 0)
+    if (row > rows.last) return GridPos(rows.last + 1, 0)
     col := control.colByPos(row, mouse.x)
     if (col == null) col = control.source[row].size
     else
