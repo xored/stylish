@@ -5,13 +5,11 @@ using kawhyScene
 class MouseListener
 {
 
-  new make(Node node)
+  new make()
   {
-    this.node = node
     move = |Point p->Bool|
     {
-      pos := node.posOnScreen()
-      fireMove(Point(p.x - pos.x, p.y - pos.y))
+      fireMove()
       return true
     }
     click = |Bool down->Bool|
@@ -27,37 +25,35 @@ class MouseListener
     }
   }
 
-  Void onMove(|Point| f)
+  Void attach(Control control)
   {
-    if (hoverListenerCount == 0)
-      node.onHover.add(hover)
-    moves.add(f)
+    this.control = control
+    node.onHover.add(hover)
   }
 
-  Void unMove(|Point| f)
+  Void detach()
   {
-    moves.remove(f)
-    if (hoverListenerCount == 0)
-      node.onHover.remove(hover)
+    node.onHover.remove(hover)
+    this.control = null
   }
 
-  Void onClick(|Bool, Int| f)
-  {
-    if (hoverListenerCount == 0)
-      node.onHover.add(hover)
-    clicks.add(f)
-  }
+  private Node node() { control.getNode }
 
-  Void unClick(|Bool, Int| f)
-  {
-    if (hoverListenerCount == 0)
-      node.onHover.add(hover)
-    clicks.add(f)
-  }
+  Void onMove(|Point| f) { moves.add(f) }
 
-  protected Void fireMove(Point p)
+  Void unMove(|Point| f) { moves.remove(f) }
+
+  Void onClick(|Bool, Int| f) { clicks.add(f) }
+
+  Void unClick(|Bool, Int| f) { clicks.add(f) }
+
+  protected Void fireMove()
   {
-    moves.each { it(p) }
+    np := node.posOnScreen()
+    mp := node.scene.mouse.pos
+    pos := Point(mp.x - np.x, mp.y - np.y)
+    control.mouse = pos
+    moves.each { it(pos) }
   }
 
   protected Void fireClick(Bool down, Int count)
@@ -76,6 +72,7 @@ class MouseListener
       mouse.on(Mouse#pos).add(move)
       mouse.left.on(MouseButton#down).add(click)
       lookForMouse = true
+      fireMove()
       return true
     }
     if (!lfm && lookForMouse)
@@ -90,8 +87,6 @@ class MouseListener
 
   private Bool lookForMouse := false
 
-  private Int hoverListenerCount() { moves.size + clickListenerCount }
-
   private Int clickListenerCount() { clicks.size }
 
   private |Point|[] moves := [,]
@@ -101,6 +96,6 @@ class MouseListener
   private |Point->Bool| move
   private |Obj?->Bool| click
 
-  private Node node
+  private Control? control
 
 }

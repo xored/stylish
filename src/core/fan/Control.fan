@@ -33,6 +33,8 @@ abstract class Control
 
   Keyboard? keyboard() { node.scene?.keyboard }
 
+  Point? mouse := null
+
   Void onMouseMove(|Point| f) { mouseListener.onMove(f) }
 
   Void unMouseMove(|Point| f) { mouseListener.unMove(f) }
@@ -45,6 +47,7 @@ abstract class Control
   {
     this.parent = parent
     if (content != null) content.add(node)
+    mouseListener.attach(this)
     attach()
   }
 
@@ -53,6 +56,7 @@ abstract class Control
     if (parent != null)
     {
       detach()
+      mouseListener.detach()
       node.parent?.remove(node)
       this.parent = null
     }
@@ -68,6 +72,6 @@ abstract class Control
 
   virtual protected Node listenerNode() { node() }
 
-  private once MouseListener mouseListener() { MouseListener(listenerNode) }
+  private MouseListener mouseListener := MouseListener()
 
 }
