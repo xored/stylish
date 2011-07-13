@@ -8,39 +8,29 @@ class MouseListener
   new make(Node node)
   {
     this.node = node
-    mouseListener = |Point p->Bool|
+    move = |Point p->Bool|
     {
       pos := node.posOnScreen()
       fireMove(Point(p.x - pos.x, p.y - pos.y))
       return true
     }
-    leftMouseListener = |Bool down->Bool|
+    click = |Bool down->Bool|
     {
       count := node.scene.mouse.left.clicks
       fireClick(down, count)
+      updateListeners()
       return true
     }
-    hoverListener = |Bool hover->Bool|
+    hover = |Bool hover->Bool|
     {
-      mouse := node.scene.mouse
-      if (hover)
-      {
-        mouse.on(Mouse#pos).add(mouseListener)
-        mouse.left.on(MouseButton#down).add(leftMouseListener)
-      }
-      else
-      {
-        mouse.on(Mouse#pos).remove(mouseListener)
-        mouse.left.on(MouseButton#down).remove(leftMouseListener)
-      }
-      return true
+      updateListeners()
     }
   }
 
   Void onMove(|Point| f)
   {
     if (hoverListenerCount == 0)
-      node.onHover.add(hoverListener)
+      node.onHover.add(hover)
     moves.add(f)
   }
 
@@ -48,20 +38,20 @@ class MouseListener
   {
     moves.remove(f)
     if (hoverListenerCount == 0)
-      node.onHover.remove(hoverListener)
+      node.onHover.remove(hover)
   }
 
   Void onClick(|Bool, Int| f)
   {
     if (hoverListenerCount == 0)
-      node.onHover.add(hoverListener)
+      node.onHover.add(hover)
     clicks.add(f)
   }
 
   Void unClick(|Bool, Int| f)
   {
     if (hoverListenerCount == 0)
-      node.onHover.add(hoverListener)
+      node.onHover.add(hover)
     clicks.add(f)
   }
 
@@ -75,6 +65,31 @@ class MouseListener
     clicks.each { it(down, count) }
   }
 
+  private Bool updateListeners()
+  {
+    hover := node.hover
+    mouse := node.scene.mouse
+    down := mouse.left.down
+    lfm := hover || down
+    if (lfm && !lookForMouse)
+    {
+      mouse.on(Mouse#pos).add(move)
+      mouse.left.on(MouseButton#down).add(click)
+      lookForMouse = true
+      return true
+    }
+    if (!lfm && lookForMouse)
+    {
+      mouse.on(Mouse#pos).remove(move)
+      mouse.left.on(MouseButton#down).remove(click)
+      lookForMouse = false
+      return true
+    }
+    return false
+  }
+
+  private Bool lookForMouse := false
+
   private Int hoverListenerCount() { moves.size + clickListenerCount }
 
   private Int clickListenerCount() { clicks.size }
@@ -82,9 +97,9 @@ class MouseListener
   private |Point|[] moves := [,]
   private |Bool, Int|[] clicks := [,]
 
-  private |Bool->Bool| hoverListener
-  private |Point->Bool| mouseListener
-  private |Obj?->Bool| leftMouseListener
+  private |Bool->Bool| hover
+  private |Point->Bool| move
+  private |Obj?->Bool| click
 
   private Node node
 
