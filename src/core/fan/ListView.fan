@@ -10,7 +10,14 @@ abstract class ListView : Control
   Point scroll
   {
     get { node.scroll }
-    set { node.scroll = it }
+    set
+    {
+      x := it.x.max(0).min(content.size.w - clientArea.w)
+      y := it.y.max(0).min(content.size.h - clientArea.h)
+      if (x != it.x || y != it.y)
+        it = Point(x, y)
+      node.scroll = it
+    }
   }
 
   Int? rowByPos(Int pos)
@@ -29,11 +36,26 @@ abstract class ListView : Control
 
   Region visibleRows() { cache.region }
 
+  Region fullyVisibleRows()
+  {
+    region := cache.region
+    dropFirst := region.start * itemSize < scroll.y
+    dropLast := region.end * itemSize > scroll.y + node.clientArea.h
+    if (!dropFirst || !dropLast) return region
+    first := dropFirst ? 1 : 0
+    last := dropLast ? 1 : 0
+    start := region.start + first
+    size := region.size - first - last
+    return Region(start, size)
+  }
+
   abstract protected ListNotifier source()
 
   abstract protected Node createItem(Int i)
 
   virtual protected Void disposeItem(Node node) {}
+
+  Size clientArea() { node.clientArea }
 
   override protected Void attach()
   {
@@ -41,7 +63,7 @@ abstract class ListView : Control
     node.add(content)
     source.listen(listener)
     node.onScroll = |p| { sync() }
-    content.size = node.clientArea
+    content.size = clientArea()
   }
 
   override protected Void onResize(Size s) { sync() }
@@ -53,7 +75,7 @@ abstract class ListView : Control
     super.detach()
   }
 
-  abstract protected Int itemSize()
+  abstract Int itemSize()
 
   // max width in pixels
   protected Int maxWidth := 0
@@ -77,7 +99,7 @@ abstract class ListView : Control
     if (source.size == 0)
     {
       cache.moveRegion(Region.defVal)
-      content.size = Size.defVal
+      content.size = clientArea()
     }
     else
     {

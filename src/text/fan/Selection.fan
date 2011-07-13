@@ -1,3 +1,4 @@
+using gfx
 using kawhyMath
 using kawhyUtil
 
@@ -22,7 +23,23 @@ class Selection
 
   Void all() { range = GridRange(GridPos.defVal, edit.end) }
 
-  Void extend(GridPos pos) { range = GridRange(range.start, pos) }
+  Void extend(GridPos pos, Bool reveal := true)
+  {
+    range = GridRange(range.start, pos)
+    if (reveal)
+    {
+      yRow := edit.posByRow(pos.row)
+      yScroll := edit.scroll.y
+      if (yRow < yScroll)
+      {
+        edit.scroll = Point(0, yRow)
+      }
+      else if (yRow + edit.itemSize > yScroll + edit.clientArea.h)
+      {
+        edit.scroll = Point(0, yRow + edit.itemSize - edit.clientArea.h)
+      }
+    }
+  }
 
   Str text(Range range := 0..-1)
   {

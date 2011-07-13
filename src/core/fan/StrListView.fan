@@ -29,7 +29,7 @@ class StrListView : ListView
     TextNode { text = "item num $i" }
   }
 
-  override protected once Int itemSize()
+  override once Int itemSize()
   {
     view := createItem(0)
     contentArea.add(view)
