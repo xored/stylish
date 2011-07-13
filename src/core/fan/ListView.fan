@@ -85,8 +85,8 @@ abstract class ListView : Control
       end = end.min(source.size)
       cache.moveRegion(Region(start, end - start))
       height := source.size * itemSize
-      content.size = Size(maxWidth.max(node.clientArea.w), height)
       for(i := start; i < end; i++) itemByIndex(i)
+      content.size = Size(maxWidth.max(node.clientArea.w), height)
     }
     cache.trash.each
     {
