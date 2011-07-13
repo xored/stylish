@@ -41,6 +41,7 @@ abstract class ListView : Control
     node.add(content)
     source.listen(listener)
     node.onScroll = |p| { sync() }
+    content.size = node.clientArea
   }
 
   override protected Void onResize(Size s) { sync() }
@@ -64,8 +65,8 @@ abstract class ListView : Control
     {
       node = createItem(i)
       contentArea.add(node)
-      maxWidth = maxWidth.max(node.size.w)
       cache[i] = node
+      nodeUpdate(node)
     }
     node.pos = Point(0, i * itemSize)
     return node
@@ -84,9 +85,9 @@ abstract class ListView : Control
       end := ((scroll.y + node.clientArea.h).toFloat / itemSize).ceil.toInt
       end = end.min(source.size)
       cache.moveRegion(Region(start, end - start))
-      height := source.size * itemSize
       for(i := start; i < end; i++) itemByIndex(i)
-      content.size = Size(maxWidth.max(node.clientArea.w), height)
+      syncContentHeight
+      syncContentWidth
     }
     cache.trash.each
     {
@@ -94,6 +95,25 @@ abstract class ListView : Control
       contentArea.remove(it)
     }
     cache.clearTrash()
+  }
+
+  protected Void nodeUpdate(Node node)
+  {
+    if (maxWidth < node.size.w)
+    {
+      maxWidth = node.size.w
+      syncContentWidth
+    }
+  }
+
+  private Void syncContentWidth()
+  {
+    content.size = Size(maxWidth.max(this.node.clientArea.w), content.size.h)
+  }
+
+  private Void syncContentHeight()
+  {
+    content.size = Size(content.size.w, source.size * itemSize)
   }
 
   protected Group content := Group()

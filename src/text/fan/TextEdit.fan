@@ -73,7 +73,7 @@ class TextEdit : ListView
   {
     TextNode
     {
-      it.data[lineData] = LineListener(it, source[i])
+      it.data[lineData] = LineListener(this, it, source[i])
     }
   }
 
@@ -96,6 +96,8 @@ class TextEdit : ListView
     super.sync()
     syncSelection()
   }
+
+  internal Void doNodeUpdate(Node node) { nodeUpdate(node) }
 
   internal Void syncSelection()
   {
@@ -200,8 +202,9 @@ class TextEdit : ListView
 internal class LineListener : ListListener
 {
 
-  new make(TextNode node, TextLine line)
+  new make(TextEdit edit, TextNode node, TextLine line)
   {
+    this.edit = edit
     this.node = node
     this.line = line
     line.listen(this)
@@ -216,12 +219,14 @@ internal class LineListener : ListListener
     node.text = ""
     node.styles = line.styles.ranges
     node.text = line.text
+    edit.doNodeUpdate(node)
   }
 
   Void dispose() { line.discard(this) }
 
   private TextNode node
   private TextLine line
+  private TextEdit edit
 
 }
 
