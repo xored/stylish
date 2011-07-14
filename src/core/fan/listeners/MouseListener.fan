@@ -25,9 +25,10 @@ class MouseListener
     }
   }
 
-  Void attach(Control control)
+  Void attach(Control control, Node node)
   {
     this.control = control
+    this.node = node
     node.onHover.add(hover)
   }
 
@@ -35,9 +36,8 @@ class MouseListener
   {
     node.onHover.remove(hover)
     this.control = null
+    this.node = null
   }
-
-  private Node node() { control.getNode }
 
   Void onMove(|Point| f) { moves.add(f) }
 
@@ -97,5 +97,6 @@ class MouseListener
   private |Obj?->Bool| click
 
   private Control? control
+  private Node? node
 
 }

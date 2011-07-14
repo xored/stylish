@@ -47,7 +47,7 @@ abstract class Control
   {
     this.parent = parent
     if (content != null) content.add(node)
-    mouseListener.attach(this)
+    mouseListener.attach(this, listenerNode)
     attach()
   }
 
