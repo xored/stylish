@@ -33,6 +33,18 @@ class TextEdit : ListView
   //TODO don't like this method
   Region colRegion(Int row, Int col) { item(row).charRegion(col) }
 
+  GridPos textPos(Point pos)
+  {
+    row := rowByPos(pos.y)
+    if (row == null) row = source.size - 1
+    rows := visibleRows
+    if (row < rows.start) return GridPos(rows.start - 1, 0)
+    if (row > rows.last) return GridPos(rows.last + 1, 0)
+    col := colByPos(row, pos.x)
+    if (col == null) col = source[row].size
+    return GridPos(row, col)
+  }
+
   GridPos end()
   {
     row := source.size - 1
@@ -48,7 +60,7 @@ class TextEdit : ListView
     content.add(contentArea)
     content.style = CursorStyle(Cursor.text)
     attachSelection()
-    policies = [SelectionPolicy(this), SelectAllPolicy(this)]
+    policies = [SelectionPolicy(this), SelectAllPolicy(this), WordSelect(this), LineSelect(this)]
     super.attach()
   }
 

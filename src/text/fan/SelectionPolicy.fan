@@ -60,19 +60,15 @@ class SelectionPolicy : Policy
 
   private GridPos pos()
   {
-    row := control.rowByPos(mouse.y)
-    if (row == null) row = control.source.size - 1
-    rows := control.visibleRows
-    if (row < rows.start) return GridPos(rows.start - 1, 0)
-    if (row > rows.last) return GridPos(rows.last + 1, 0)
-    col := control.colByPos(row, mouse.x)
-    if (col == null) col = control.source[row].size
-    else
+    pos := control.textPos(mouse)
+    size := control.source[pos.row].text.size
+    if (pos.col < size)
     {
-      region := control.colRegion(row, col)
-      if (mouse.x - region.start >= region.size / 2) col++
+      region := control.colRegion(pos.row, pos.col)
+      if (mouse.x - region.start >= region.size / 2)
+        return GridPos(pos.row, pos.col + 1)
     }
-    return GridPos(row, col)
+    return pos
   }
 
   private Void endAutoScroll() { autoScrollDirection = AutoScrollDirection.None }
