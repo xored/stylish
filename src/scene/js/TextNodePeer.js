@@ -90,12 +90,14 @@ fan.kawhyScene.TextNodePeer.prototype.charRegion = function(self, index)
   if (index >= this.m_text.length)
     throw new ArgErr("invalid index: " + index);
   var width = this.charWidth();
-  return fan.kawhyMath.Region.make(index * width, width);
+  var start = Math.round(index * width);
+  var end = Math.round((index + 1) * width);
+  return fan.kawhyMath.Region.make(start, end - start);
 }
 
 fan.kawhyScene.TextNodePeer.prototype.charWidth = function()
 {
-  return Math.floor(this.m_elem.offsetWidth / this.m_text.length);
+  return this.m_elem.offsetWidth / this.m_text.length;
 }
 
 fan.kawhyScene.TextNodePeer.prototype.textWidth = function(str)

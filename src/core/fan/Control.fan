@@ -16,6 +16,7 @@ abstract class Control
     set { node.style = it }
   }
 
+  // need to make size notifications
   internal Void resize(Size s)
   {
     node.size = s
