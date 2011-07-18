@@ -67,3 +67,24 @@ fan.kawhyScene.GroupPeer.prototype.position$  = function(self, position)
 }
 
 fan.kawhyScene.GroupPeer.prototype.m_kids = null;
+
+fan.kawhyScene.GroupPeer.prototype.m_clip = false;
+fan.kawhyScene.GroupPeer.prototype.clip   = function(self) { return this.m_clip; }
+fan.kawhyScene.GroupPeer.prototype.clip$  = function(self, clip)
+{
+  this.m_clip = clip;
+  if (clip) this.syncClip();
+  else this.m_elem.style.clip = "";
+}
+
+fan.kawhyScene.GroupPeer.prototype.size$  = function(self, size)
+{
+  fan.kawhyScene.NodePeer.prototype.size$.call(this, self, size);
+  if (this.m_clip) this.syncClip();
+}
+
+fan.kawhyScene.GroupPeer.prototype.syncClip = function()
+{
+  var size = this.size();
+  this.m_elem.style.clip = "rect(0px " + size.m_w + "px " + size.m_h + "px 0px)";
+}

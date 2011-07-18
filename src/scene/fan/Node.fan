@@ -24,6 +24,8 @@ class Node : Notifier
 
   native Bool hover()
 
+  native Bool thru
+
   Str:Obj data := [:]
 
   Listeners onMouseMove() { listeners.on(#onMouseMove) }

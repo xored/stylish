@@ -19,6 +19,8 @@ class Group : Node
 
   native Void removeAll()
 
+  native Bool clip
+
   native Position position
 
 }
