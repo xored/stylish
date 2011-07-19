@@ -34,11 +34,11 @@ abstract class ListView : Control
     throw ArgErr("require row < lineCount, but row=$row and lineCount=$size")
   }
 
-  Region visibleRows() { cache.region }
+  protected Region loadedRows() { cache.region }
 
   Region fullyVisibleRows()
   {
-    region := cache.region
+    region := visibleRows
     dropFirst := region.start * itemSize < scroll.y
     dropLast := region.end * itemSize > scroll.y + node.clientArea.h
     if (!dropFirst || !dropLast) return region
@@ -98,16 +98,15 @@ abstract class ListView : Control
   {
     if (source.size == 0)
     {
+      visibleRows = Region.defVal
       cache.moveRegion(Region.defVal)
       content.size = clientArea()
     }
     else
     {
-      start := scroll.y / itemSize
-      end := ((scroll.y + node.clientArea.h).toFloat / itemSize).ceil.toInt
-      end = end.min(source.size)
-      cache.moveRegion(Region(start, end - start))
-      for(i := start; i < end; i++) itemByIndex(i)
+      updateVisibleRegion
+      rows := loadedRows
+      for(i := rows.start; i < rows.end; i++) itemByIndex(i)
       syncContentHeight
       syncContentWidth
     }
@@ -118,6 +117,21 @@ abstract class ListView : Control
     }
     cache.clearTrash()
   }
+
+  private Void updateVisibleRegion()
+  {
+    start := scroll.y / itemSize
+    end := ((scroll.y + node.clientArea.h).toFloat / itemSize).ceil.toInt
+    end = end.min(source.size)
+    visibleRows = Region(start, end - start)
+    
+    size := (end - start).max(1)
+    start = 0.max(start - 20)
+    end = source.size.min(end + 20)
+    cache.moveRegion(Region(start, end - start))
+  }
+
+  Region visibleRows := Region.defVal { private set }
 
   protected Void nodeUpdate(Node node)
   {
@@ -146,7 +160,7 @@ abstract class ListView : Control
 
   override protected ScrollArea node := ScrollArea()
 
-  protected ListCache cache := ListCache()
+  private ListCache cache := ListCache()
 
   private ListViewListener listener := ListViewListener(cache)
 

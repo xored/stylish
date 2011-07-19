@@ -163,7 +163,7 @@ class TextEdit : ListView
           body.pos = Point.defVal
           body.size = Size.defVal
         }
-        if (sel.end.col > 0 && sel.end.row <= visibleRows.last)
+        if (sel.end.col > 0 && sel.end.row <= loadedRows.last)
         {
           footer.pos = Point(0, sel.end.row * h)
           endRegion := colRegion(sel.end.row, sel.end.col - 1)
@@ -189,13 +189,13 @@ class TextEdit : ListView
 
   private TextNode? item(Int row)
   {
-    cache.region.contains(row) ? (itemByIndex(row) as TextNode) : null
+    loadedRows.contains(row) ? (itemByIndex(row) as TextNode) : null
   }
 
   private GridRange? visibleSelection()
   {
     range := selection.range.norm
-    rows := visibleRows
+    rows := loadedRows
     if (rows.start > range.end.row || rows.last < range.start.row) return null
     start := rows.start > range.start.row ? GridPos(rows.start, 0) : range.start
     end := rows.last < range.end.row ? GridPos(rows.last + 1, 0) : range.end

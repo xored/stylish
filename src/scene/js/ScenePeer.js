@@ -315,7 +315,7 @@ fan.kawhyScene.ScenePeer.prototype.handleTextSource = function()
     var f = function()
     {
       var area = $this.m_focusArea;
-      if (source.size() > 0)
+      if (!source.isEmpty())
       {
         area.value = "Copy to clipboard is not supported for this browser";
         area.select();
