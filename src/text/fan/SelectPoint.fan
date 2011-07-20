@@ -4,36 +4,23 @@ using kawhy
 using kawhyMath
 
 @Js
-class SelectionPolicy : Policy
+class SelectPoint : Policy
 {
 
-  override TextEdit control { private set }
+  override TextEdit control
 
-  new make(TextEdit control)
+  new make(|This| f) { f(this) }
+
+  override Void attach()
   {
-    this.control = control
-    onMove = |Point mouse|
-    {
-      this.mouse = mouse
-      if (pressed) move()
-    }
-    onClick = |Bool down, Int count|
-    {
-      if (count == 1)
-      {
-        pressed = down
-        if (down)
-        {
-          if (control.keyboard.key.isShift)
-            control.selection.extend(pos)
-          else
-            control.selection.range = GridRange(pos)
-        }
-        else endAutoScroll()
-      }
-    }
     control.onMouseMove(onMove)
     control.onMouseClick(onClick)
+  }
+
+  override Void detach()
+  {
+    control.unMouseMove(onMove)
+    control.unMouseClick(onClick)
   }
 
   private Void move()
@@ -98,10 +85,26 @@ class SelectionPolicy : Policy
     }
   }
 
-  override Void dispose()
+  private |Point| onMove := |Point mouse|
   {
-    control.unMouseMove(onMove)
-    control.unMouseClick(onClick)
+    this.mouse = mouse
+    if (pressed) move()
+  }
+
+  private |Bool, Int| onClick := |Bool down, Int count|
+  {
+    if (count == 1)
+    {
+      pressed = down
+      if (down)
+      {
+        if (control.keyboard.key.isShift)
+          control.selection.extend(pos)
+        else
+          control.selection.range = GridRange(pos)
+      }
+      else endAutoScroll()
+    }
   }
 
   private Point mouse := Point.defVal
@@ -110,9 +113,6 @@ class SelectionPolicy : Policy
   private Int autoScrollDistance := 0
   private AutoScrollDirection autoScrollDirection := AutoScrollDirection.None
   private static const Duration delay := Duration(50 * 1000 * 1000)
-
-  private |Point| onMove
-  private |Bool, Int| onClick
 
 }
 

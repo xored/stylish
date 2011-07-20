@@ -1,10 +1,18 @@
 
 @Js
-mixin Policy
+abstract class Policy
 {
+
+  const Type[] before := [,]
+
+  const Type[] after := [,]
+
+  const Float gravity := 0.5f
 
   abstract Control control()
 
-  abstract Void dispose()
+  abstract Void attach()
+
+  abstract Void detach()
 
 }

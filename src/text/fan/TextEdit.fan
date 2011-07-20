@@ -60,13 +60,20 @@ class TextEdit : ListView
     content.add(contentArea)
     content.style = CursorStyle(Cursor.text)
     attachSelection()
-    policies = [SelectionPolicy(this), SelectAllPolicy(this), WordSelect(this), LineSelect(this)]
+    policies =
+    [
+      SelectPoint { control = this },
+      SelectAll   { control = this },
+      SelectWord  { control = this },
+      SelectLine  { control = this }
+    ]
+    policies.each { it.attach() }
     super.attach()
   }
 
   override protected Void detach()
   {
-    policies.each { it.dispose() }
+    policies.each { it.detach() }
     super.detach()
   }
 
