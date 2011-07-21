@@ -14,6 +14,14 @@ class LineNums : Ruler, ListListener
     f?.call(this)
   }
 
+  virtual protected Node createLineNode(Int i)
+  {
+    TextNode
+    {
+      it.text = (i + 1).toStr
+    }
+  }
+
   protected Void update()
   {
     y := text.scroll.y
@@ -22,11 +30,8 @@ class LineNums : Ruler, ListListener
     node.removeAll()
     for(i := y / size; i <= (y + h) / size; i++)
     {
-      text := TextNode
-      {
-        it.text = (i + 1).toStr
-        it.pos = Point(0, i * size - y)
-      }
+      text := createLineNode(i)
+      text.pos = Point(0, i * size - y)
       node.add(text)
     }
   }
