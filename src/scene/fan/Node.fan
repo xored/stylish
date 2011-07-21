@@ -6,6 +6,8 @@ using kawhyNotice
 class Node : Notifier
 {
 
+  native Str? id
+
   native Group? parent()
 
   native Scene? scene()

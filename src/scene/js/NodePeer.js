@@ -34,18 +34,25 @@ fan.kawhyScene.NodePeer.prototype.pos$  = function(self, pos)
   }
 }
 
+fan.kawhyScene.NodePeer.prototype.id   = function(self) { return this.m_elem.id; }
+fan.kawhyScene.NodePeer.prototype.id$  = function(self, id)
+{
+  this.m_elem.id = id;
+}
+
 fan.kawhyScene.NodePeer.prototype.posOnParent = function(self)
 {
   if (this.m_parent == null) return this.m_pos;
-  var p = this.m_parent.peer.m_elem;
-  var op = this.m_elem;
+  var parent = this.m_parent.peer.m_elem;
+  var current = this.m_elem;
   var x = 0, y = 0;
   do
   {
-    x += op.offsetLeft - op.scrollLeft;
-    y += op.offsetTop - op.scrollTop;
+    x += current.offsetLeft - current.scrollLeft;
+    y += current.offsetTop - current.scrollTop;
+    current = current.offsetParent;
   }
-  while(op != p && (op = op.offsetParent) != null);
+  while(current != parent && current != null);
   return fan.gfx.Point.make(x, y);
 }
 
