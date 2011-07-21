@@ -10,10 +10,10 @@ using kawhyNotice
 class TextEdit : ListView
 {
 
-  new make(|This|? f)
+  new make(|This|? f := null)
   {
     style = FontStyle.monospace
-    f(this)
+    f?.call(this)
   }
 
 //////////////////////////////////////////////////////////////////////////

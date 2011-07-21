@@ -1,7 +1,7 @@
 using kawhyScene
 
 @Js
-class GroupControl : Control
+abstract class GroupControl : Control
 {
 
   override protected Void attach()
@@ -16,8 +16,8 @@ class GroupControl : Control
     super.detach()
   }
 
-  protected Control[] kids := [,]
+  abstract protected Control[] kids()
 
-  override protected Group node := Group()
+  override Group node := Group()
 
 }

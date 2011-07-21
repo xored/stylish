@@ -20,6 +20,8 @@ abstract class ListView : Control
     }
   }
 
+  Notice onScroll := Notice()
+
   Int? rowByPos(Int pos)
   {
     row := pos / itemSize
@@ -62,7 +64,11 @@ abstract class ListView : Control
     super.attach()
     node.add(content)
     source.listen(listener)
-    node.onScroll = |p| { sync() }
+    node.onScroll = |p|
+    {
+      sync()
+      onScroll.push(p)
+    }
     content.size = clientArea()
   }
 
@@ -158,7 +164,7 @@ abstract class ListView : Control
 
   override protected Node listenerNode() { content }
 
-  override protected ScrollArea node := ScrollArea()
+  override ScrollArea node := ScrollArea()
 
   private ListCache cache := ListCache()
 

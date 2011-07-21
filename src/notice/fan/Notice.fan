@@ -5,7 +5,11 @@ class Notice
 
   new make() {}
 
-  internal new makeKid(Notice parent) { this.parent = parent }
+  internal new makeKid(Notice parent)
+  {
+    this.parent = parent
+    parent.add(this)
+  }
 
   This filter(|Obj?->Bool| f) { FilterNotice(this, f) }
 

@@ -8,7 +8,7 @@ class Container : ScenePane
 
   Control root
 
-  new make(Control root) : super(Scene { it.root = root.getNode })
+  new make(Control root) : super(Scene { it.root = root.node })
   {
     this.root = root
   }
@@ -18,7 +18,7 @@ class Container : ScenePane
     Window { content = this }.open()
   }
 
-  override protected Void attach()
+  override protected Void sceneAttach()
   {
     root.doAttach(null, null)
   }

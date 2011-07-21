@@ -27,6 +27,8 @@ class Composite : GroupControl
     kids.remove(kid)
   }
 
+  override protected Control[] kids := [,]
+
   private Str:Layout layouts := [RelativeLayout.id:RelativeLayout()]
 
 }

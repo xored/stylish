@@ -17,7 +17,7 @@ abstract class Control
   }
 
   // need to make size notifications
-  internal Void resize(Size s)
+  Void resize(Size s)
   {
     node.size = s
     onResize(s)
@@ -67,9 +67,7 @@ abstract class Control
 
   virtual protected Void detach() {}
 
-  abstract protected Node node()
-
-  internal Node getNode() { node() }
+  abstract Node node()
 
   virtual protected Node listenerNode() { node() }
 

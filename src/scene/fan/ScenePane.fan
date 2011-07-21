@@ -16,13 +16,13 @@ class ScenePane : Pane
     if (!attached)
     {
       doAttach()
-      attach()
+      sceneAttach()
       attached = true
     }
     onResize(this.size)
   }
 
-  virtual protected Void attach() {}
+  virtual protected Void sceneAttach() {}
 
   virtual protected Void onResize(Size s) {}
 

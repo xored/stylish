@@ -13,7 +13,12 @@ class Main
   {
     doc := TestDoc()
     edit := TextEdit { source = doc }
-    container := Container(edit)
+    view := SourceView
+    {
+      text = edit
+      leftRulers = [LineNums(), SeparatorRuler()]
+    }
+    container := Container(view)
     container.scene.mouse.left.on(MouseButton#down).add |val->Bool|
     {
       if (val == true)
