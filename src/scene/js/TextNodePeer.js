@@ -74,6 +74,7 @@ fan.kawhyScene.TextNodePeer.prototype.initStyle = function()
   with (this.m_elem.style)
   {
     whiteSpace = "pre"
+    cursor = "inherit"
   }
 }
 

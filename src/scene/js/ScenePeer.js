@@ -3,10 +3,10 @@ fan.kawhyScene.ScenePeer.prototype.$ctor = function()
 {
   this.m_elem = document.createElement("div");
   this.m_elem.id = "scene";
-  this.m_elem.style.position = "absolute";
   with (this.m_elem.style)
   {
     position = "absolute";
+    cursor = "default";
     left = "0";
     top  = "0";
   }
