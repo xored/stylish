@@ -19,7 +19,7 @@ class Notice
 
   virtual Bool push(Obj? p)
   {
-    kids.reduce(false) |res, kid->Bool| { kid.push(p) || res }
+    kids.dup.reduce(false) |res, kid->Bool| { kid.push(p) || res }
   }
 
   Void discard() { parent?.remove(this) }

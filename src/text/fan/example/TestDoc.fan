@@ -35,7 +35,7 @@ class TestLine : TextLine
     this.doc = doc
     baseText = "line number: $index clicks count: "
     text = baseText
-    if (index % 5 == 0) styles = StyleList([StyleRange(TextStyle { color = Color.blue }, 0..3), StyleRange(LinkStyle(`http://google.com`), 5..10)])
+    if (index % 5 == 0) styles = StyleList([StyleRange(TextStyle { color = Color.blue }, 0..3), StyleRange(LinkStyle(`http://google.com`, LinkTarget.blank), 5..10)])
     else styles = StyleList([StyleRange(TextStyle { color = Color.blue } + TextLineStyle { under = true; over = true; strike = true }, 0..3)])
     updateText()
   }

@@ -19,9 +19,6 @@ class Main
       leftRulers = [LineNums(), SeparatorRuler()]
     }
     container := Container(view)
-    container.scene.mouse.onLeft
-      .filter { it == false || !edit.node.hover }
-      .handle { doc.clicks = doc.clicks + 1 }
     container.open
   }
 

@@ -100,8 +100,6 @@ class MouseListener
 
   private Bool lookForMouse := false
 
-  private Int clickListenerCount() { clicks.size }
-
   private |Point|[] moves := [,]
   private |Bool, Int|[] clicks := [,]
 

@@ -52,8 +52,15 @@ fan.kawhyScene.TextNodePeer.prototype.fillContent = function()
       {
         wrapper = document.createElement("a");
         wrapper.href = linkStyle.m_href.toStr();
+        if (linkStyle.m_target == fan.kawhyCss.LinkTarget.m_blank)
+        {
+          wrapper.target = "_blank";
+        }
       }
-      else wrapper = document.createElement("span");
+      else
+      {
+        wrapper = document.createElement("span");
+      }
       wrapper.appendChild(document.createTextNode(val));
       var str = fan.kawhyCss.StyleItem.toStyleString(style.m_style.toCss());
       wrapper.style.cssText = str;

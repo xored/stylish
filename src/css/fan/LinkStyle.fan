@@ -5,7 +5,13 @@ const class LinkStyle : AtomStyle
 
   const Uri href
 
-  new make(Uri href) { this.href = href }
+  const LinkTarget target
+
+  new make(Uri href, LinkTarget target := LinkTarget.auto)
+  {
+    this.href = href
+    this.target = target
+  }
 
   override AtomStyle mergeSame(AtomStyle s) { s }
 
@@ -15,11 +21,19 @@ const class LinkStyle : AtomStyle
   {
     that := o as LinkStyle
     if (that == null) return false
-    return that.href == href
+    return that.href == href && that.target == target
   }
 
   override StyleItem[] toCss() { [,] }
 
-  override Int hash() { href.hash }
+  override Int hash() { href.hash.shiftl(16).xor(target.hash) }
 
+}
+
+@Js
+enum class LinkTarget
+{
+  auto,
+  blank,
+  self
 }
