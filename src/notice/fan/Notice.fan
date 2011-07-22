@@ -15,6 +15,8 @@ class Notice
 
   This handle(|Obj?| f) { HandleNotice(this, f) }
 
+  This watch(|Obj?| f) { WatchNotice(this, f) }
+
   virtual Bool push(Obj? p)
   {
     kids.reduce(false) |res, kid->Bool| { kid.push(p) || res }
@@ -56,6 +58,21 @@ internal class HandleNotice : Notice
   }
 
   override Bool push(Obj? p) { f(p); return true }
+
+  private |Obj?| f
+
+}
+
+@Js
+internal class WatchNotice : Notice
+{
+
+  new make(Notice parent, |Obj?| f) : super.makeKid(parent)
+  {
+    this.f = f
+  }
+
+  override Bool push(Obj? p) { f(p); return false }
 
   private |Obj?| f
 

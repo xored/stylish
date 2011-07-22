@@ -2,36 +2,31 @@ using gfx
 using kawhyNotice
 
 @Js
-class Mouse : Notifier
+class Mouse
 {
 
-  Point pos := Point.defVal { internal set { &pos = it; notify(#pos, it) } }
+  Point pos   := Point.defVal { private set }
 
-  MouseButton left   := MouseButton() { private set }
+  Bool left   := false { private set }
 
-  MouseButton right  := MouseButton() { private set }
+  Bool right  := false { private set }
 
-  MouseButton middle := MouseButton() { private set }
+  Bool middle := false { private set }
 
-  override protected ListenerStorage listeners := ListenerStorage()
+  Notice onPos    := Notice()
 
-}
+  Notice onLeft   := Notice()
 
-@Js
-class MouseButton : Notifier
-{
+  Notice onRight  := Notice()
 
-  Bool down { private set }
+  Notice onMiddle := Notice()
 
-  Int clicks { private set }
+  internal Bool pushPos(Point val) { pos = val; return onPos.push(val) }
 
-  internal Bool onClick(Bool down, Int clicks)
-  {
-    this.clicks = clicks
-    this.down = down
-    return notify(#down, down)
-  }
+  internal Bool pushLeft(Bool val) { left = val; return onLeft.push(val) }
 
-  override protected ListenerStorage listeners := ListenerStorage()
+  internal Bool pushRight(Bool val) { right = val; return onRight.push(val) }
+
+  internal Bool pushMiddle(Bool val) { middle = val; return onMiddle.push(val) }
 
 }

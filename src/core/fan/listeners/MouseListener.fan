@@ -1,5 +1,6 @@
 using gfx
 using kawhyScene
+using kawhyNotice
 
 @Js
 class MouseListener
@@ -7,18 +8,6 @@ class MouseListener
 
   new make()
   {
-    move = |Point p->Bool|
-    {
-      fireMove()
-      return true
-    }
-    click = |Bool down->Bool|
-    {
-      count := node.scene.mouse.left.clicks
-      fireClick(down, count)
-      updateListeners()
-      return true
-    }
     hover = |Bool hover->Bool|
     {
       updateListeners()
@@ -56,34 +45,58 @@ class MouseListener
     moves.each { it(pos) }
   }
 
-  protected Void fireClick(Bool down, Int count)
-  {
-    clicks.each { it(down, count) }
-  }
-
   private Bool updateListeners()
   {
     hover := node.hover
     mouse := node.scene.mouse
-    down := mouse.left.down
+    down := mouse.left
     lfm := hover || down
     if (lfm && !lookForMouse)
     {
-      mouse.on(Mouse#pos).add(move)
-      mouse.left.on(MouseButton#down).add(click)
+      move  = mouse.onPos.handle { fireMove() }
+      click = mouse.onLeft.handle |Bool val|
+      {
+        fireClick(val)
+        updateListeners()
+      }
       lookForMouse = true
       fireMove()
       return true
     }
     if (!lfm && lookForMouse)
     {
-      mouse.on(Mouse#pos).remove(move)
-      mouse.left.on(MouseButton#down).remove(click)
+      move.discard
+      click.discard
       lookForMouse = false
       return true
     }
     return false
   }
+
+  protected Void fireClick(Bool down)
+  {
+    if (down)
+    {
+      now := DateTime.nowTicks / 1000000
+      diff := now - clickTime
+      clickTime = now
+      pos := control.mouse
+      if (diff < 600 && clickPos.equals(pos))
+      {
+        clickCount++
+      }
+      else
+      {
+        clickCount = 1
+        clickPos = pos
+      }
+    }
+    clicks.each { it(down, clickCount) }
+  }
+
+  private Int clickCount
+  private Int clickTime
+  private Point clickPos := Point.defVal
 
   private Bool lookForMouse := false
 
@@ -93,8 +106,8 @@ class MouseListener
   private |Bool, Int|[] clicks := [,]
 
   private |Bool->Bool| hover
-  private |Point->Bool| move
-  private |Obj?->Bool| click
+  private Notice? move
+  private Notice? click
 
   private Control? control
   private Node? node

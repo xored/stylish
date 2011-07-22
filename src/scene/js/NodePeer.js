@@ -94,8 +94,8 @@ fan.kawhyScene.NodePeer.prototype.style$  = function(self, style)
 }
 
 fan.kawhyScene.NodePeer.prototype.m_thru = false;
-fan.kawhyScene.NodePeer.prototype.thru = function(self) { return this.m_thru; }
-fan.kawhyScene.NodePeer.prototype.thru$ = function(self, thru)
+fan.kawhyScene.NodePeer.prototype.thru   = function(self) { return this.m_thru; }
+fan.kawhyScene.NodePeer.prototype.thru$  = function(self, thru)
 {
   this.m_thru = thru;
   this.m_elem.style.pointerEvents = thru ? "none" : "auto";

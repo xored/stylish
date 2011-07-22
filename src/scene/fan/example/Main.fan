@@ -9,10 +9,10 @@ class Main
   static Void main()
   {
     scene := Scene()
-    scene.mouse.on(Mouse#pos).add |Obj? val->Bool| { echo(val); return true }
-    add("left", scene.mouse.left)
-    add("right", scene.mouse.right)
-    add("middle", scene.mouse.middle)
+    scene.mouse.onPos.watch |val| { echo(val) }
+    scene.mouse.onLeft.watch |val| { echo("left: $val")  }
+    scene.mouse.onRight.watch |val| { echo("right: $val")  }
+    scene.mouse.onMiddle.watch |val| { echo("middle: $val")  }
 
     v := StaticVisualizer(scene)
 
@@ -37,15 +37,6 @@ class Main
     {
       content = ScenePane(scene)
     }.open
-  }
-
-  static Void add(Str name, MouseButton button)
-  {
-    button.on(MouseButton#down).add |Obj? val->Bool|
-    {
-      echo("$name: $button.down $button.clicks")
-      return true
-    }
   }
 
   static Group create(Scene scene)
