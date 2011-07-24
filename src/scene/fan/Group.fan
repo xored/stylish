@@ -13,6 +13,8 @@ class Group : Node
 
   native Void add(Node kid)
 
+  native Void addAll(Node[] kids)
+
   native Void remove(Node kid)
 
   native Node kid(Int index)

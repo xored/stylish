@@ -26,6 +26,37 @@ fan.kawhyScene.GroupPeer.prototype.add = function(self, kid)
   }
 }
 
+fan.kawhyScene.GroupPeer.prototype.addAll = function(self, kids)
+{
+  if (kids.size == 0) return;
+  if (this.m_kids == null)
+    this.m_kids = fan.sys.List.make(fan.kawhyScene.Node.$type);
+  this.m_kids.addAll(kids);
+
+  var fragment = document.createDocumentFragment();
+  for(var i = 0; i < kids.size(); i++)
+  {
+    var kid = kids.get(i);
+    var elem = kid.peer.m_elem;
+    fragment.appendChild(elem);
+    kid.peer.attach(kid, self);
+    if (this.m_position == fan.kawhyScene.Position.m_horizontal)
+    {
+      elem.style.display = "inline";
+      elem.style.position = "relative";
+    }
+    else
+    {
+      elem.style.display = "block";
+      if (this.m_position == fan.kawhyScene.Position.m_vertical)
+        elem.style.position = "relative";
+      else
+        elem.style.position = "absolute";
+    }
+  }
+  this.content().appendChild(fragment);
+}
+
 fan.kawhyScene.GroupPeer.prototype.remove = function(self, kid)
 {
   if (this.m_kids == null) return;
