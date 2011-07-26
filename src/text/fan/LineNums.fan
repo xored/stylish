@@ -28,11 +28,12 @@ class LineNums : Ruler, ListListener
     h := text.clientArea.h
     size := text.itemSize
     node.removeAll()
-    for(i := y / size; i <= (y + h) / size; i++)
+    end := (text.source.size - 1).min((y + h) / size)
+    for(i := y / size; i <= end; i++)
     {
       text := createLineNode(i)
-      text.pos = Point(0, i * size - y)
       node.add(text)
+      text.pos = Point(width - text.size.w, i * size - y)
     }
   }
 
