@@ -2,6 +2,7 @@ using gfx
 using fwt
 using kawhy
 using kawhyMath
+using kawhyNotice
 
 @Js
 class SelectPoint : Policy
@@ -13,30 +14,31 @@ class SelectPoint : Policy
 
   override Void attach()
   {
-    control.onMouseMove(onMove)
+    onMove = control.onMouseMove.handle { if (pressed) move() }
     control.onMouseClick(onClick)
   }
 
   override Void detach()
   {
-    control.unMouseMove(onMove)
+    onMove.discard
     control.unMouseClick(onClick)
   }
 
   private Void move()
   {
-    row := control.rowByPos(mouse.y)
+    y := control.mouse.y
+    row := control.rowByPos(y)
     if (row == null) row = control.source.size - 1
     rows := control.visibleRows
     if (row < rows.start)
     {
       pos := control.posByRow(rows.start)
-      doAutoScroll(AutoScrollDirection.Up, pos - mouse.y)
+      doAutoScroll(AutoScrollDirection.Up, pos - y)
     }
     else if (row > rows.last)
     {
       pos := control.posByRow(rows.last)
-      doAutoScroll(AutoScrollDirection.Down, mouse.y - pos)
+      doAutoScroll(AutoScrollDirection.Down, y - pos)
     }
     else
     {
@@ -47,12 +49,12 @@ class SelectPoint : Policy
 
   private GridPos pos()
   {
-    pos := control.textPos(mouse)
+    pos := control.textPos(control.mouse)
     size := control.source[pos.row].text.size
     if (pos.col < size)
     {
       region := control.colRegion(pos.row, pos.col)
-      if (mouse.x - region.start >= region.size / 2)
+      if (control.mouse.x - region.start >= region.size / 2)
         return GridPos(pos.row, pos.col + 1)
     }
     return pos
@@ -85,11 +87,7 @@ class SelectPoint : Policy
     }
   }
 
-  private |Point| onMove := |Point mouse|
-  {
-    this.mouse = mouse
-    if (pressed) move()
-  }
+  private Notice? onMove
 
   private |Bool, Int| onClick := |Bool down, Int count|
   {
@@ -107,7 +105,6 @@ class SelectPoint : Policy
     }
   }
 
-  private Point mouse := Point.defVal
   private Bool pressed := false
 
   private Int autoScrollDistance := 0

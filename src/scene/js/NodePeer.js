@@ -16,7 +16,7 @@ fan.kawhyScene.NodePeer.prototype.detach   = function(self, parent)
 {
   if (this.m_hover) this.hover$(self, false);
   //TODO actually need to remove native listeners
-  self.m_listeners.clear();
+  self.m_onHover.discard();
   this.m_parent = null;
   this.m_scene = null;
 }
@@ -39,6 +39,15 @@ fan.kawhyScene.NodePeer.prototype.id$  = function(self, id)
 {
   this.m_elem.id = id;
 }
+
+fan.kawhyScene.NodePeer.prototype.tooltip = function(self) { return m_tooltip; }
+fan.kawhyScene.NodePeer.prototype.tooltip$ = function(self, tooltip)
+{
+  this.m_tooltip = tooltip;
+  if (tooltip == null) tooltip = "";
+  this.m_elem.title = tooltip;
+}
+fan.kawhyScene.NodePeer.prototype.m_tooltip = null;
 
 fan.kawhyScene.NodePeer.prototype.posOnParent = function(self)
 {
@@ -109,7 +118,7 @@ fan.kawhyScene.NodePeer.prototype.hover$  = function(self, hover)
   if (this.m_hover != hover)
   {
     this.m_hover = hover;
-    self.notify(fan.kawhyScene.Node.$type.slot("hover"), hover);
+    self.m_onHover.push(hover);
   }
 }
 fan.kawhyScene.NodePeer.prototype.mouseIn = function(self)

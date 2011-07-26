@@ -1,6 +1,7 @@
 using gfx
 using kawhyCss
 using kawhyScene
+using kawhyNotice
 
 @Js
 abstract class Control
@@ -32,24 +33,30 @@ abstract class Control
   //TODO implement :-)
   Void focus() {}
 
+  Point? mouse := null { private set }
+
+  Notice onMouseMove := Notice()
+
   Keyboard? keyboard() { node.scene?.keyboard }
 
-  Point? mouse := null
+  Void onMouseClick(|Bool down, Int count| f) { clicks.add(f) }
 
-  Void onMouseMove(|Point| f) { mouseListener.onMove(f) }
+  Void unMouseClick(|Bool down, Int count| f) { clicks.remove(f) }
 
-  Void unMouseMove(|Point| f) { mouseListener.unMove(f) }
-
-  Void onMouseClick(|Bool down, Int count| f) { mouseListener.onClick(f) }
-
-  Void unMouseClick(|Bool down, Int count| f) { mouseListener.unClick(f) }
+  private |Bool down, Int count|[] clicks := [,]
 
   internal Void doAttach(GroupControl? parent, Group? content)
   {
     this.parent = parent
     if (content != null) content.add(node)
-    mouseListener.attach(this, listenerNode)
     attach()
+
+    mouseListener = MouseListener
+    {
+      it.node = this.node
+      onMove = |Point p| { onMouseMove.push(mouse = p) }
+      onClick = |Bool down, Int count| { this.clicks.each { it.call(down, count) } }
+    }
   }
 
   internal Void doDetach()
@@ -57,7 +64,8 @@ abstract class Control
     if (parent != null)
     {
       detach()
-      mouseListener.detach()
+      mouseListener?.detach
+      mouseListener = null
       node.parent?.remove(node)
       this.parent = null
     }
@@ -71,6 +79,6 @@ abstract class Control
 
   virtual protected Node listenerNode() { node() }
 
-  private MouseListener mouseListener := MouseListener()
+  private MouseListener? mouseListener
 
 }

@@ -26,18 +26,20 @@ class Selection
   Void extend(GridPos pos, Bool reveal := true)
   {
     range = GridRange(range.start, pos)
-    if (reveal)
+    if (reveal) this.reveal()
+  }
+
+  Void reveal()
+  {
+    yRow := edit.posByRow(range.end.row)
+    yScroll := edit.scroll.y
+    if (yRow < yScroll)
     {
-      yRow := edit.posByRow(pos.row)
-      yScroll := edit.scroll.y
-      if (yRow < yScroll)
-      {
-        edit.scroll = Point(0, yRow)
-      }
-      else if (yRow + edit.itemSize > yScroll + edit.clientArea.h)
-      {
-        edit.scroll = Point(0, yRow + edit.itemSize - edit.clientArea.h)
-      }
+      edit.scroll = Point(0, yRow)
+    }
+    else if (yRow + edit.itemSize > yScroll + edit.clientArea.h)
+    {
+      edit.scroll = Point(0, yRow + edit.itemSize - edit.clientArea.h)
     }
   }
 

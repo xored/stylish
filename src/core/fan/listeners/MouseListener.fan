@@ -6,43 +6,26 @@ using kawhyNotice
 class MouseListener
 {
 
-  new make()
+  |Point|? onMove
+
+  |Bool, Int|? onClick
+
+  Node node
+
+  new make(|This| f)
   {
-    hover = |Bool hover->Bool|
-    {
-      updateListeners()
-    }
+    f.call(this)
+    hover = node.onHover.handle { updateListeners() }
   }
 
-  Void attach(Control control, Node node)
-  {
-    this.control = control
-    this.node = node
-    node.onHover.add(hover)
-  }
-
-  Void detach()
-  {
-    node.onHover.remove(hover)
-    this.control = null
-    this.node = null
-  }
-
-  Void onMove(|Point| f) { moves.add(f) }
-
-  Void unMove(|Point| f) { moves.remove(f) }
-
-  Void onClick(|Bool, Int| f) { clicks.add(f) }
-
-  Void unClick(|Bool, Int| f) { clicks.add(f) }
+  Void detach() { hover.discard }
 
   protected Void fireMove()
   {
     np := node.posOnScreen()
     mp := node.scene.mouse.pos
-    pos := Point(mp.x - np.x, mp.y - np.y)
-    control.mouse = pos
-    moves.each { it(pos) }
+    pos = Point(mp.x - np.x, mp.y - np.y)
+    onMove?.call(pos)
   }
 
   private Bool updateListeners()
@@ -51,7 +34,7 @@ class MouseListener
     mouse := node.scene.mouse
     down := mouse.left
     lfm := hover || down
-    if (lfm && !lookForMouse)
+    if (lfm && pos == null)
     {
       move  = mouse.onPos.handle { fireMove() }
       click = mouse.onLeft.handle |Bool val|
@@ -59,15 +42,14 @@ class MouseListener
         fireClick(val)
         updateListeners()
       }
-      lookForMouse = true
       fireMove()
       return true
     }
-    if (!lfm && lookForMouse)
+    if (!lfm && pos != null)
     {
       move.discard
       click.discard
-      lookForMouse = false
+      pos = null
       return true
     }
     return false
@@ -80,7 +62,6 @@ class MouseListener
       now := DateTime.nowTicks / 1000000
       diff := now - clickTime
       clickTime = now
-      pos := control.mouse
       if (diff < 600 && clickPos.equals(pos))
       {
         clickCount++
@@ -91,23 +72,16 @@ class MouseListener
         clickPos = pos
       }
     }
-    clicks.each { it(down, clickCount) }
+    onClick?.call(down, clickCount)
   }
 
   private Int clickCount
   private Int clickTime
+  private Point? pos
   private Point clickPos := Point.defVal
 
-  private Bool lookForMouse := false
-
-  private |Point|[] moves := [,]
-  private |Bool, Int|[] clicks := [,]
-
-  private |Bool->Bool| hover
+  private Notice hover
   private Notice? move
   private Notice? click
-
-  private Control? control
-  private Node? node
 
 }

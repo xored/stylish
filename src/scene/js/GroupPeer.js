@@ -76,6 +76,20 @@ fan.kawhyScene.GroupPeer.prototype.removeAll = function(self)
   this.m_kids = null;
 }
 
+fan.kawhyScene.GroupPeer.prototype.attach = function(self, parent)
+{
+  fan.kawhyScene.NodePeer.prototype.attach.call(this, self, parent);
+  var kids = this.m_kids;
+  if (kids)
+  {
+    for(var i = 0; i < kids.size(); i++)
+    {
+      var kid = kids.get(i);
+      kid.peer.attach(kid, self);
+    }
+  }
+}
+
 fan.kawhyScene.GroupPeer.prototype.content = function() { return this.m_elem; }
 
 fan.kawhyScene.GroupPeer.prototype.m_position = fan.kawhyScene.Position.m_horizontal;

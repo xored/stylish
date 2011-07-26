@@ -6,6 +6,10 @@ using kawhyNotice
 class TestDoc : TextDoc
 {
 
+  const override Int size
+
+  new make(Int size) { this.size = size }
+
   override TextLine get(Int index) { TestLine(this, index) }
 
   Int clicks := 0
@@ -16,8 +20,6 @@ class TestDoc : TextDoc
       lines.each { it.updateText }
     }
   }
-
-  override Int size() { 1000 }
 
   internal TestLine[] lines := [,]
 

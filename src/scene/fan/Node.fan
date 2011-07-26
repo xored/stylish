@@ -3,10 +3,8 @@ using kawhyCss
 using kawhyNotice
 
 @Js
-class Node : Notifier
+class Node
 {
-
-  native Str? id
 
   native Group? parent()
 
@@ -24,16 +22,16 @@ class Node : Notifier
 
   native Point posOnScreen()
 
+  native Str? tooltip
+
+  native Str? id
+
   native Bool hover()
+
+  Notice onHover := Notice()
 
   native Bool thru
 
   Str:Obj data := [:]
-
-  Listeners onMouseMove() { listeners.on(#onMouseMove) }
-
-  Listeners onHover() { listeners.on(#hover) }
-
-  override protected ListenerStorage listeners := ListenerStorage()
 
 }
