@@ -62,6 +62,9 @@ const class Region
 
   Bool contains(Int i) { i >= start && i < end }
 
+  ** return true if this region includes specified region
+  Bool includes(Region r) { start <= r.start && end >= r.end }
+
   Region offset(Int offset)
   {
     if (offset == 0) return this

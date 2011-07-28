@@ -28,6 +28,12 @@ class Main
     })
     overview.add(Marker
     {
+      range = GridRange(GridPos(600, 5), GridPos(700, 5))
+      color = Color.makeRgb(244, 190, 150)
+      tooltip = "Warning"
+    })
+    overview.add(Marker
+    {
       range = GridRange(GridPos(500, 5), GridPos(502, 0))
       color = Color.makeRgb(45, 150, 252)
       tooltip = "Info"

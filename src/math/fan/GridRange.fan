@@ -40,6 +40,14 @@ const class GridRange
     return GridRange(norm1.start.max(norm2.start), norm1.end.min(norm2.end))
   }
 
+  Region rows()
+  {
+    start := norm.start.row
+    end := norm.end.row
+    if (end < start) { temp := start; start = end; end = temp }
+    return Region(start, end - start + 1)
+  }
+
   Range[] split()
   {
     norm := norm()

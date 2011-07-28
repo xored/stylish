@@ -26,21 +26,27 @@ class Selection
   Void extend(GridPos pos, Bool reveal := true)
   {
     range = GridRange(range.start, pos)
-    if (reveal) this.reveal()
+    if (reveal)
+    {
+      yRow := edit.posByRow(range.end.row)
+      yScroll := edit.scroll.y
+      if (yRow < yScroll)
+        edit.scroll = Point(0, yRow)
+      else if (yRow + edit.itemSize > yScroll + edit.clientArea.h)
+        edit.scroll = Point(0, yRow + edit.itemSize - edit.clientArea.h)
+    }
   }
 
+  // TODO This part should be customizable
   Void reveal()
   {
-    yRow := edit.posByRow(range.end.row)
-    yScroll := edit.scroll.y
-    if (yRow < yScroll)
-    {
-      edit.scroll = Point(0, yRow)
-    }
-    else if (yRow + edit.itemSize > yScroll + edit.clientArea.h)
-    {
-      edit.scroll = Point(0, yRow + edit.itemSize - edit.clientArea.h)
-    }
+    visible := edit.fullyVisibleRows
+    select  := range.rows
+    if (visible.includes(select)) return
+    itemSize := edit.itemSize
+    capacity := edit.clientArea.h / itemSize
+    shift := select.size > capacity ? 0 : (capacity - select.size) / 2
+    edit.scroll = Point(0, (select.start - shift) * itemSize)
   }
 
   Str text(Range range := 0..-1)
