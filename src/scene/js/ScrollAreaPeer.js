@@ -1,7 +1,7 @@
 fan.kawhyScene.ScrollAreaPeer = fan.sys.Obj.$extend(fan.kawhyScene.GroupPeer);
 fan.kawhyScene.ScrollAreaPeer.prototype.$ctor = function(self) { this.init(self); }
 
-fan.kawhyScene.ScrollAreaPeer.prototype.create = function()
+fan.kawhyScene.ScrollAreaPeer.prototype.create = function(self)
 {
   var scrollDiv = document.createElement("div");
   var t = this;
@@ -10,7 +10,25 @@ fan.kawhyScene.ScrollAreaPeer.prototype.create = function()
     var scroll = t.scroll();
     t.m_onScroll.call(scroll);
   }
+  scrollDiv.addEventListener("mousedown", function(e)
+  {
+    if (t.isScrollArea(self, e.clientX, e.clientY))
+    {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  }, false);
   return scrollDiv;
+}
+
+fan.kawhyScene.ScrollAreaPeer.prototype.isScrollArea = function(self, x, y)
+{
+  var pos = this.posOnScreen(self);
+  var size = this.size(self);
+  var area = this.clientArea(self);
+  var xpos = x - pos.m_x;
+  var ypos = y - pos.m_y;
+  return (xpos >= area.m_w && xpos <= size.m_w) || (ypos >= area.m_h && ypos <= size.m_h);
 }
 
 fan.kawhyScene.ScrollAreaPeer.prototype.scroll = function(self)

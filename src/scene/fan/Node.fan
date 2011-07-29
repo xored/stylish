@@ -16,6 +16,10 @@ class Node
 
   native Style? style
 
+  **
+  ** TODO node.pos != node.posOnParent because we can have margin/padding for node.
+  ** However I think we need to avoid it
+  ** 
   native Point posOnParent()
 
   native Point posOnScene()

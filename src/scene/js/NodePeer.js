@@ -57,8 +57,8 @@ fan.kawhyScene.NodePeer.prototype.posOnParent = function(self)
   var x = 0, y = 0;
   do
   {
-    x += current.offsetLeft - current.scrollLeft;
-    y += current.offsetTop - current.scrollTop;
+    x += current.offsetLeft;
+    y += current.offsetTop;
     current = current.offsetParent;
   }
   while(current != parent && current != null);
@@ -69,8 +69,11 @@ fan.kawhyScene.NodePeer.prototype.posOnScene = function(self)
 {
   if (this.m_parent == null) return this.m_pos;
   var pp = this.posOnParent(self);
-  var ps = this.m_parent.posOnScene();
-  return pp.translate(ps);
+  var ps = this.m_parent.posOnScene(self);
+  var pe = this.m_parent.peer.m_elem;
+  var x = pp.m_x + ps.m_x - pe.scrollLeft;
+  var y = pp.m_y + ps.m_y - pe.scrollTop;
+  return fan.gfx.Point.make(x, y);
 }
 
 fan.kawhyScene.NodePeer.prototype.posOnScreen = function(self)
@@ -140,7 +143,7 @@ fan.kawhyScene.NodePeer.prototype.mousePostOut = function(self)
 
 fan.kawhyScene.NodePeer.prototype.init = function(self)
 {
-  this.m_elem = this.create();
+  this.m_elem = this.create(self);
   this.initStyle();
   this.m_elem.addEventListener("mouseover", function(e)
   {
@@ -165,7 +168,7 @@ fan.kawhyScene.NodePeer.prototype.initStyle = function()
   }
 }
 
-fan.kawhyScene.NodePeer.prototype.create = function()
+fan.kawhyScene.NodePeer.prototype.create = function(self)
 {
   return document.createElement("span");
 }

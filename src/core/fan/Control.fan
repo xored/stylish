@@ -53,7 +53,7 @@ abstract class Control
 
     mouseListener = MouseListener
     {
-      it.node = this.node
+      it.node = this.listenerNode
       onMove = |Point p| { onMouseMove.push(mouse = p) }
       onClick = |Bool down, Int count| { this.clicks.each { it.call(down, count) } }
     }

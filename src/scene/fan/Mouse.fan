@@ -23,10 +23,34 @@ class Mouse
 
   internal Bool pushPos(Point val) { pos = val; return onPos.push(val) }
 
-  internal Bool pushLeft(Bool val) { left = val; return onLeft.push(val) }
+  internal Bool pushLeft(Bool val)
+  {
+    if (left != val)
+    {
+      left = val
+      return onLeft.push(val)
+    }
+    return false
+  }
 
-  internal Bool pushRight(Bool val) { right = val; return onRight.push(val) }
+  internal Bool pushRight(Bool val)
+  {
+    if (right != val)
+    {
+      right = val
+      return onRight.push(val)
+    }
+    return false
+  }
 
-  internal Bool pushMiddle(Bool val) { middle = val; return onMiddle.push(val) }
+  internal Bool pushMiddle(Bool val)
+  {
+    if (middle != val)
+    {
+      middle = val
+      return onMiddle.push(val)
+    }
+    return false
+  }
 
 }

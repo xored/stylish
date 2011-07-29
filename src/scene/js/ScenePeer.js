@@ -54,20 +54,18 @@ fan.kawhyScene.ScenePeer.prototype.attachMouse = function()
 
 fan.kawhyScene.ScenePeer.prototype.handleMove = function(e)
 {
-  if (this.m_mouse.pushPos(fan.gfx.Point.make(e.clientX, e.clientY)))
-    return this.preventDefault(e);
+  var p = fan.gfx.Point.make(e.clientX, e.clientY);
+  if (this.m_mouse.pushPos(p)) this.preventDefault(e);
 }
 
 fan.kawhyScene.ScenePeer.prototype.handleDown = function(e)
 {
-  if (this.handleClick(e, true))
-    return this.preventDefault(e);
+  if (this.handleClick(e, true)) this.preventDefault(e);
 }
 
 fan.kawhyScene.ScenePeer.prototype.handleUp = function(e)
 {
-  if (this.handleClick(e, false))
-    return this.preventDefault(e);
+  if (this.handleClick(e, false)) this.preventDefault(e);
 }
 
 fan.kawhyScene.ScenePeer.prototype.handleClick = function(e, down)
@@ -331,11 +329,8 @@ fan.kawhyScene.ScenePeer.prototype.m_focusArea = null;
 
 fan.kawhyScene.ScenePeer.prototype.preventDefault = function(e)
 {
-  // prevent bubbling
   e.stopPropagation();
-  if (e.preventDefault) e.preventDefault();
-  e.returnValue = false; //  IE
-  return false;
+  e.preventDefault();
 }
 
 fan.kawhyScene.ScenePeer.prototype.addListener = function(t, e, f)
