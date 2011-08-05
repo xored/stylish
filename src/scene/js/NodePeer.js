@@ -102,7 +102,7 @@ fan.kawhyScene.NodePeer.prototype.style$  = function(self, style)
   this.m_style = style;
   var str = fan.kawhyCss.StyleItem.toStyleString(style.toCss());
   this.m_elem.style.cssText = str;
-  this.initStyle();
+  this.initStyle(self);
 }
 
 fan.kawhyScene.NodePeer.prototype.m_thru = false;
@@ -144,7 +144,7 @@ fan.kawhyScene.NodePeer.prototype.mousePostOut = function(self)
 fan.kawhyScene.NodePeer.prototype.init = function(self)
 {
   this.m_elem = this.create(self);
-  this.initStyle();
+  this.initStyle(self);
   this.m_elem.addEventListener("mouseover", function(e)
   {
   	self.peer.mouseIn(self);
@@ -158,7 +158,7 @@ fan.kawhyScene.NodePeer.prototype.init = function(self)
   }, false);
 }
 
-fan.kawhyScene.NodePeer.prototype.initStyle = function()
+fan.kawhyScene.NodePeer.prototype.initStyle = function(self)
 {
   with (this.m_elem.style)
   {

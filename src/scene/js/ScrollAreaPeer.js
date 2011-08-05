@@ -57,14 +57,15 @@ fan.kawhyScene.ScrollAreaPeer.prototype.onScroll$ = function(self, f)
 }
 fan.kawhyScene.ScrollAreaPeer.prototype.m_onScroll = null;
 
-fan.kawhyScene.ScrollAreaPeer.prototype.initStyle = function()
+fan.kawhyScene.ScrollAreaPeer.prototype.initStyle = function(self)
 {
-  fan.kawhyScene.NodePeer.prototype.initStyle.call(this);
+  fan.kawhyScene.NodePeer.prototype.initStyle.call(this, self);
   var size = this.size();
   with (this.m_elem.style)
   {
     width     = size.m_w + "px";
     height    = size.m_h + "px";
-    overflow = "scroll";
+    overflowX = self.m_horizontal ? "scroll" : "hidden";
+    overflowY = self.m_vertical ? "scroll" : "hidden";
   }
 }

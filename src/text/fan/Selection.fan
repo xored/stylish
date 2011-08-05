@@ -37,9 +37,9 @@ class Selection
     }
   }
 
-  // TODO This part should be customizable
   Void reveal()
   {
+    // TODO This part should be customizable
     visible := edit.fullyVisibleRows
     select  := range.rows
     if (visible.includes(select)) return
