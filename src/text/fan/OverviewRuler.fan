@@ -33,6 +33,12 @@ class OverviewRuler : Ruler, ListListener
     }
   }
 
+  Void clear()
+  {
+    views.each { it.detach }
+    views.clear
+  }
+
   override Void fire(ListNotice notice) { update() }
 
   override protected Void onResize(Size s) { update() }
