@@ -1,3 +1,4 @@
+using kawhyNotice
 
 @Js
 class BaseTextDoc : TextDoc
@@ -10,5 +11,7 @@ class BaseTextDoc : TextDoc
   override Int size := 0
 
   private TextLine[] lines := [,]
+
+  override protected ListListener[] listeners := [,]
 
 }

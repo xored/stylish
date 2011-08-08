@@ -6,7 +6,7 @@ using kawhyNotice
 class TestDoc : TextDoc
 {
 
-  const override Int size
+  override Int size
 
   new make(Int size) { this.size = size }
 
@@ -21,7 +21,16 @@ class TestDoc : TextDoc
     }
   }
 
+  Void addLines(Int size)
+  {
+    oldSize := this.size
+    this.size = oldSize + size
+    fire(AddNotice(oldSize, size))
+  }
+
   internal TestLine[] lines := [,]
+
+  override protected ListListener[] listeners := [,]
 
 }
 

@@ -44,7 +44,7 @@ class Main
       leftRulers = [LineNums(), SeparatorRuler()]
       rightRulers = [overview]
     }
-    container := Container(view)
+    container := Container(ModTextView())
     container.open
   }
 

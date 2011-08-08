@@ -168,7 +168,7 @@ abstract class ListView : Control
 
   private ListCache cache := ListCache()
 
-  private ListViewListener listener := ListViewListener(cache)
+  private ListViewListener listener := ListViewListener(cache, |->| { this.sync() })
 
 }
 
@@ -176,18 +176,25 @@ abstract class ListView : Control
 internal class ListViewListener : ListListener
 {
 
-  new make(ListCache cache) { this.cache = cache }
+  new make(ListCache cache, |->| onChange)
+  {
+    this.cache = cache
+    this.onChange = onChange
+  }
 
   override Void onAdd(Int index, Int size)
   {
     cache.add(index, size)
+    onChange()
   }
 
   override Void onRemove(Int index, Int size)
   {
     cache.remove(index, size)
+    onChange()
   }
 
   private ListCache cache
+  private |->| onChange
 
 }
