@@ -14,6 +14,7 @@ class Build : BuildGroup
       `scene/build.fan`,
       `core/build.fan`,
       `text/build.fan`,
+      `compare/build.fan`,
     ]
   }
 
