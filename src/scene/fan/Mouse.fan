@@ -21,6 +21,8 @@ class Mouse
 
   Notice onMiddle := Notice()
 
+  Notice/*<Point>*/ onWheel := Notice/*<Point>*/()
+
   internal Bool pushPos(Point val) { pos = val; return onPos.push(val) }
 
   internal Bool pushLeft(Bool val)

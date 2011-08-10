@@ -47,9 +47,10 @@ fan.kawhyScene.ScenePeer.prototype.detach = function()
 fan.kawhyScene.ScenePeer.prototype.attachMouse = function()
 {
   var $this = this;
-  this.addListener(window, "mousemove", function(e) { return $this.handleMove(e); });
-  this.addListener(window, "mousedown", function(e) { return $this.handleDown(e); });
-  this.addListener(window, "mouseup",   function(e) { return $this.handleUp(e);   });
+  this.addListener(window, "mousemove",  function(e) { return $this.handleMove(e);  });
+  this.addListener(window, "mousedown",  function(e) { return $this.handleDown(e);  });
+  this.addListener(window, "mouseup",    function(e) { return $this.handleUp(e);    });
+  this.addListener(window, "mousewheel", function(e) { return $this.handleWheel(e); });
 }
 
 fan.kawhyScene.ScenePeer.prototype.handleMove = function(e)
@@ -78,6 +79,46 @@ fan.kawhyScene.ScenePeer.prototype.handleClick = function(e, down)
     case 2: return mouse.pushRight(down);
   }
   return false;
+}
+
+fan.kawhyScene.ScenePeer.prototype.handleWheel = function(e)
+{
+  var p = fan.kawhyScene.ScenePeer.toWheelDelta(e);
+  if (this.m_mouse.m_onWheel.push(p)) this.preventDefault(e);
+}
+
+fan.kawhyScene.ScenePeer.toWheelDelta = function(e)
+{
+  var wx = 0;
+  var wy = 0;
+
+  if (e.wheelDeltaX != null)
+  {
+    // WebKit
+    wx = -e.wheelDeltaX;
+    wy = -e.wheelDeltaY;
+
+    // Safari
+    if (wx % 40 == 0) wx = wx / 40;
+    if (wy % 40 == 0) wy = wy / 40;
+  }
+  else if (e.wheelDelta != null)
+  {
+    // IE
+    wy = -e.wheelDelta;
+    if (wy % 40 == 0) wy = wy / 40;
+  }
+  else if (e.detail != null)
+  {
+    // Firefox
+    wx = e.axis == 1 ? e.detail : 0;
+    wy = e.axis == 2 ? e.detail : 0;
+  }
+
+  // make sure we have ints and return
+  wx = wx > 0 ? Math.ceil(wx) : Math.floor(wx);
+  wy = wy > 0 ? Math.ceil(wy) : Math.floor(wy);
+  return fan.gfx.Point.make(wx, wy);
 }
 
 /////////////////////////

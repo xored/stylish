@@ -10,6 +10,8 @@ class MouseListener
 
   |Bool, Int|? onClick
 
+  |Point|? onWheel
+
   Node node
 
   new make(|This| f)
@@ -42,6 +44,10 @@ class MouseListener
         fireClick(val)
         updateListeners()
       }
+      wheel = mouse.onWheel.handle |Point val|
+      {
+        onWheel?.call(val)
+      }
       fireMove()
       return true
     }
@@ -49,6 +55,7 @@ class MouseListener
     {
       move.discard
       click.discard
+      wheel.discard
       pos = null
       return true
     }
@@ -83,5 +90,6 @@ class MouseListener
   private Notice hover
   private Notice? move
   private Notice? click
+  private Notice? wheel
 
 }

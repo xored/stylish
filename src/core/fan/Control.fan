@@ -43,7 +43,13 @@ abstract class Control
 
   Void unMouseClick(|Bool down, Int count| f) { clicks.remove(f) }
 
+  Void onMouseWheel(|Point| f) { wheels.add(f) }
+
+  Void unMouseWheel(|Point| f) { wheels.remove(f) }
+
   private |Bool down, Int count|[] clicks := [,]
+
+  private |Point|[] wheels := [,]
 
   internal Void doAttach(GroupControl? parent, Group? content)
   {
@@ -56,6 +62,7 @@ abstract class Control
       it.node = this.listenerNode
       onMove = |Point p| { onMouseMove.push(mouse = p) }
       onClick = |Bool down, Int count| { this.clicks.each { it.call(down, count) } }
+      onWheel = |Point p| { this.wheels.each { it.call(p) } }
     }
   }
 

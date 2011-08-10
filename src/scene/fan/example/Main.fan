@@ -13,6 +13,7 @@ class Main
     scene.mouse.onLeft.watch |val| { echo("left: $val")  }
     scene.mouse.onRight.watch |val| { echo("right: $val")  }
     scene.mouse.onMiddle.watch |val| { echo("middle: $val")  }
+    scene.mouse.onWheel.watch |val| { echo("wheel: $val")  }
 
     v := StaticVisualizer(scene)
 
