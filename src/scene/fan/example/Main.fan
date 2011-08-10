@@ -29,7 +29,7 @@ class Main
     shape.size = Size(100, 100)
     shape.figures = 
     [
-      Polyline { points = [Point(100, 30), Point(150, 0), Point(200, 30)]; brush = Color.blue },
+      Polyline { points = [Point(50, 30), Point(60, 0), Point(70, 30)]; brush = Color.blue },
       Polygon  { points = [Point(10, 10), Point(40, 10), Point(40, 40), Point(10, 40)]; brush = Color.red }
     ]
 

@@ -25,6 +25,8 @@ fan.kawhyScene.ShapePeer.prototype.draw = function()
   var g = new fan.fwt.Graphics();
   var figures = this.figures();
   var bounds = fan.gfx.Rect.makePosSize(fan.gfx.Point.m_defVal, this.size());
+  this.m_elem.width = bounds.m_w;
+  this.m_elem.height = bounds.m_h;
   g.paint(this.m_elem, bounds, function()
   {
     for(var i = 0; i < figures.size(); i++)
