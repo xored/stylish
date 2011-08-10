@@ -41,10 +41,10 @@ class Main
     view := SourceView
     {
       text = edit
-      leftRulers = [LineNums(), SeparatorRuler()]
+      leftRulers = [LineNums(), FoldRuler(), SeparatorRuler()]
       rightRulers = [overview]
     }
-    container := Container(ModTextView())
+    container := Container(view)
     container.open
   }
 
