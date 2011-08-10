@@ -13,7 +13,10 @@ class ScrollBar : Node
   {
     this.orientation = orientation
     f?.call(this)
+    doInit()
   }
+
+  native internal Void doInit()
 
   native Int val
 

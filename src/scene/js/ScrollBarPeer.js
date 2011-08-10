@@ -7,7 +7,7 @@ fan.kawhyScene.ScrollBarPeer.prototype.val$  = function(self, val)
   if (val < 0) val = 0;
   if (val > this.m_max) val = this.m_max;
   this.m_val = val;
-  if (this.m_elem != null) this.sync(self);
+  this.sync(self);
 }
 fan.kawhyScene.ScrollBarPeer.prototype.m_val = 0;
 
@@ -16,7 +16,7 @@ fan.kawhyScene.ScrollBarPeer.prototype.max$  = function(self, val)
 { 
   if (val < 0) return;
   this.m_max = val;
-  if (this.m_elem != null) this.sync(self);
+  this.sync(self);
 }
 fan.kawhyScene.ScrollBarPeer.prototype.m_max = 100;
 
@@ -24,7 +24,7 @@ fan.kawhyScene.ScrollBarPeer.prototype.thumb  = function(self) { return this.m_t
 fan.kawhyScene.ScrollBarPeer.prototype.thumb$ = function(self, val)
 {
   this.m_thumb = val;
-  if (this.m_elem != null) this.sync(self);
+  this.sync(self);
 }
 fan.kawhyScene.ScrollBarPeer.prototype.m_thumb = 10;
 
@@ -33,7 +33,7 @@ fan.kawhyScene.ScrollBarPeer.prototype.enabled = function(self) { return this.m_
 fan.kawhyScene.ScrollBarPeer.prototype.enabled$ = function(self, val)
 {
   this.m_enabled = val;
-  if (this.m_elem != null) this.sync(self);
+  this.sync(self);
 }
 
 fan.kawhyScene.ScrollBarPeer.prototype.m_orientation = fan.gfx.Orientation.m_horizontal;
@@ -43,6 +43,15 @@ fan.kawhyScene.ScrollBarPeer.prototype.orientation$ = function(self, val)
   this.m_orientation = val;
 }
 
+fan.kawhyScene.ScrollBarPeer.prototype.attach = function(self, parent)
+{
+  fan.kawhyScene.NodePeer.prototype.attach.call(this, self, parent);
+  this.m_attached = true;
+  this.sync(self);
+}
+
+fan.kawhyScene.ScrollBarPeer.prototype.m_attached = false;
+
 fan.kawhyScene.ScrollBarPeer.prototype.create = function(self)
 {
   var scrollDiv = document.createElement("div");
@@ -50,27 +59,12 @@ fan.kawhyScene.ScrollBarPeer.prototype.create = function(self)
   var scrollContent = document.createElement("div");
   scrollDiv.appendChild(scrollContent);
 
-  var vertical = this.m_orientation == fan.gfx.Orientation.m_vertical;
-  if (vertical)
-  {
-    scrollDiv.style.width = fan.kawhyScene.ScrollBarPeer.thickness() + "px";
-    scrollDiv.style.overflowX = "hidden";
-    scrollDiv.style.overflowY = "scroll";
-    scrollContent.style.width = "1px";
-  }
-  else
-  {
-    scrollDiv.style.height = fan.kawhyScene.ScrollBarPeer.thickness() + "px";
-    scrollDiv.style.overflowX = "scroll";
-    scrollDiv.style.overflowY = "hidden";
-    scrollContent.style.height = "1px";
-  }
-
   scrollDiv.onscroll = function(event)
   { 
     var scrollIndent = 0;
     var scrollSize = 0;
-    if (this.m_orientation == fan.gfx.Orientation.m_vertical)
+    var peer = self.peer;
+    if (peer.m_orientation == fan.gfx.Orientation.m_vertical)
     {
       scrollSize = scrollDiv.scrollHeight - scrollDiv.clientHeight;
       scrollIndent = scrollDiv.scrollTop;
@@ -80,7 +74,6 @@ fan.kawhyScene.ScrollBarPeer.prototype.create = function(self)
       scrollSize = scrollDiv.scrollWidth - scrollDiv.clientWidth;
       scrollIndent = scrollDiv.scrollLeft;
     }
-    var peer = self.peer;
     var newVal = Math.round(scrollIndent * (peer.m_max - peer.m_thumb) / scrollSize);
     if (peer.m_val == newVal)
       return
@@ -100,12 +93,9 @@ fan.kawhyScene.ScrollBarPeer.prototype.size$  = function(self, size)
 
 fan.kawhyScene.ScrollBarPeer.prototype.m_size = fan.gfx.Size.defVal;
 
-
 fan.kawhyScene.ScrollBarPeer.prototype.initStyle = function(self)
 {
   fan.kawhyScene.NodePeer.prototype.initStyle.call(this, self);
-  this.size$(self, this.prefSize(self, fan.gfx.Size.make(100, 100)));
-  this.sync(self);
 }
 
 fan.kawhyScene.ScrollBarPeer.prototype.prefSize = function(self, hints)
@@ -115,6 +105,12 @@ fan.kawhyScene.ScrollBarPeer.prototype.prefSize = function(self, hints)
     return fan.gfx.Size.make(thickness, hints.m_h);
   else
     return fan.gfx.Size.make(hints.m_w, thickness);
+}
+
+fan.kawhyScene.ScrollBarPeer.prototype.doInit = function(self)
+{
+  this.size$(self, this.prefSize(self, fan.gfx.Size.make(100, 100)));
+  this.sync(self);
 }
 
 fan.kawhyScene.ScrollBarPeer.prototype.sync = function(self)
@@ -129,8 +125,13 @@ fan.kawhyScene.ScrollBarPeer.prototype.sync = function(self)
   var maxRatio = this.m_max / this.m_thumb;
   var valRatio = this.m_val / this.m_thumb;
 
+  var vertical = this.m_orientation == fan.gfx.Orientation.m_vertical;
   if (vert)
   {
+    scrollDiv.style.width = fan.kawhyScene.ScrollBarPeer.thickness() + "px";
+    scrollDiv.style.overflowX = "hidden";
+    scrollDiv.style.overflowY = "scroll";
+    scrollContent.style.width = "1px";
     scrollDiv.style.height = h + "px";
     if (this.m_enabled)
     {
@@ -145,6 +146,10 @@ fan.kawhyScene.ScrollBarPeer.prototype.sync = function(self)
   }
   else
   {
+    scrollDiv.style.height = fan.kawhyScene.ScrollBarPeer.thickness() + "px";
+    scrollDiv.style.overflowX = "scroll";
+    scrollDiv.style.overflowY = "hidden";
+    scrollContent.style.height = "1px";
     scrollDiv.style.width = w + "px";
     if (this.m_enabled)
     {
