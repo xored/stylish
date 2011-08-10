@@ -62,7 +62,15 @@ abstract class Control
       it.node = this.listenerNode
       onMove = |Point p| { onMouseMove.push(mouse = p) }
       onClick = |Bool down, Int count| { this.clicks.each { it.call(down, count) } }
-      onWheel = |Point p| { this.wheels.each { it.call(p) } }
+      onWheel = |Point p->Bool|
+      {
+        if (this.wheels.size > 0)
+        {
+          this.wheels.each { it.call(p) }
+          return true
+        }
+        return false
+      }
     }
   }
 

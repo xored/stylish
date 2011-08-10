@@ -17,6 +17,8 @@ class Notice
 
   This watch(|Obj?| f) { WatchNotice(this, f) }
 
+  This process(|Obj?->Bool| f) { ProcessNotice(this, f) }
+
   virtual Bool push(Obj? p)
   {
     kids.dup.reduce(false) |res, kid->Bool| { kid.push(p) || res }
@@ -75,5 +77,20 @@ internal class WatchNotice : Notice
   override Bool push(Obj? p) { f(p); return false }
 
   private |Obj?| f
+
+}
+
+@Js
+internal class ProcessNotice : Notice
+{
+
+  new make(Notice parent, |Obj?->Bool| f) : super.makeKid(parent)
+  {
+    this.f = f
+  }
+
+  override Bool push(Obj? p) { f(p) }
+
+  private |Obj?->Bool| f
 
 }

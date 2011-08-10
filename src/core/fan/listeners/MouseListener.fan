@@ -10,7 +10,7 @@ class MouseListener
 
   |Bool, Int|? onClick
 
-  |Point|? onWheel
+  |Point->Bool|? onWheel
 
   Node node
 
@@ -44,9 +44,10 @@ class MouseListener
         fireClick(val)
         updateListeners()
       }
-      wheel = mouse.onWheel.handle |Point val|
+      wheel = mouse.onWheel.process |Point val->Bool|
       {
-        onWheel?.call(val)
+        if (onWheel == null) return false
+        return onWheel.call(val)
       }
       fireMove()
       return true
