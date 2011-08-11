@@ -20,7 +20,11 @@ class MouseListener
     hover = node.onHover.handle { updateListeners() }
   }
 
-  Void detach() { hover.discard }
+  Void detach()
+  {
+    discardAll()
+    hover.discard
+  }
 
   protected Void fireMove()
   {
@@ -54,13 +58,21 @@ class MouseListener
     }
     if (!lfm && pos != null)
     {
-      move.discard
-      click.discard
-      wheel.discard
+      discardAll()
       pos = null
       return true
     }
     return false
+  }
+
+  private Void discardAll()
+  {
+    move?.discard
+    move = null
+    click?.discard
+    click = null
+    wheel?.discard
+    wheel = null
   }
 
   protected Void fireClick(Bool down)

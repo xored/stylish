@@ -23,6 +23,7 @@ class FoldRuler : Ruler
 
   protected Void update()
   {
+    node.kids.each { (it.data["ml"] as MouseListener)?.detach }
     node.removeAll()
 
     y := text.scroll.y
@@ -31,12 +32,18 @@ class FoldRuler : Ruler
     start := y / size
     end := (text.source.size - 1).min((y + h) / size)
     folds := findFolds(start..end)
-    folds.each
+    folds.each |fold|
     {
-      fold := it
       shape := Shape
       {
-        it.size = Size(width, size)
+        itShape := it
+        itShape.size = Size(width, size)
+        listener := MouseListener
+        {
+          it.node = itShape
+          onClick = |Bool down| { if (!down) fold.toggle }
+        }
+        itShape.data["ml"] = listener
       }
       shape.style = CursorStyle(Cursor.pointer)
       node.add(shape)
@@ -112,6 +119,8 @@ const class Fold
     this.range = range
     this.collapsed = collapsed
   }
+
+  Void toggle() { echo("toggle!") }
 
   override Int compare(Obj fold)
   {
