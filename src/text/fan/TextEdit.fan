@@ -121,9 +121,10 @@ class TextEdit : ListView
   internal Void syncSelection()
   {
     // TODO this piece of code waiting for a good refactoring
-    header := selectArea.kid(0)
-    body := selectArea.kid(1)
-    footer := selectArea.kid(2)
+    kids := selectArea.kids
+    header := kids[0]
+    body := kids[1]
+    footer := kids[2]
     if (source.size == 0)
     {
       header.size = Size.defVal

@@ -65,9 +65,11 @@ fan.kawhyScene.GroupPeer.prototype.remove = function(self, kid)
   kid.peer.detach(kid, self);
 }
 
-fan.kawhyScene.GroupPeer.prototype.kid = function(self, index)
+fan.kawhyScene.GroupPeer.prototype.kids = function(self)
 {
-  return this.m_kids.get(index);
+  if (this.m_kids == null)
+    this.m_kids = fan.sys.List.make(fan.kawhyScene.Node.$type);
+  return this.m_kids;
 }
 
 fan.kawhyScene.GroupPeer.prototype.removeAll = function(self)

@@ -17,7 +17,7 @@ class Group : Node
 
   native Void remove(Node kid)
 
-  native Node kid(Int index)
+  native Node[] kids()
 
   native Void removeAll()
 
