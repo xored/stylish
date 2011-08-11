@@ -9,7 +9,7 @@ using kawhyCss
 class FoldRuler : Ruler
 {
 
-  const Size iconSize := Size(8, 8)
+  const Size iconSize := Size(7, 7)
   const Int iconIndent := 2
   const Color iconColor := Color(0x797979)
   const Color rangeColor := Color.makeRgb(192, 192, 192)
@@ -25,6 +25,9 @@ class FoldRuler : Ruler
   {
     node.kids.each { (it.data["ml"] as MouseListener)?.detach }
     node.removeAll()
+    bg.size = node.size
+    bg.pos = Point.defVal
+    node.add(bg)
 
     y := text.scroll.y
     h := text.clientArea.h
@@ -52,6 +55,33 @@ class FoldRuler : Ruler
     }
   }
 
+  private Void drawRange(Point mouse)
+  {
+    item := text.itemSize
+    scroll := text.scroll.y
+    line := (mouse.y + scroll) / item
+    range := findFold(line)
+    if (range == null) bg.figures = [,]
+    else
+    {
+      start := 0.max(range.start * item - scroll + item / 2)
+      end := range.end * item - scroll + item / 2
+      w := bg.size.w / 2
+
+      points := [Point(w, start)]
+      if (end < bg.size.h)
+      {
+        points.add(Point(w, end))
+        points.add(Point(w + iconSize.w / 2, end))
+      }
+      else
+      {
+        points.add(Point(w, bg.size.h))
+      }
+      bg.figures = [Polyline { brush = rangeColor; it.points = points }]
+    }
+  }
+
   private Figure createFold(Bool folded)
   {
     points := Point[,]
@@ -75,6 +105,14 @@ class FoldRuler : Ruler
     }
   }
 
+  protected Range? findFold(Int line)
+  {
+    start := 5 * (line / 5)
+    if (start % 2 == 0) return null
+    range := start..start + 2
+    return range.contains(line) ? range : null
+  }
+
   protected Fold[] findFolds(Range lines)
   {
     result := Fold[,]
@@ -91,18 +129,26 @@ class FoldRuler : Ruler
   {
     super.attach()
     notice = text.onScroll.handle |Point p| { update() }
+    mouseMove = onMouseMove.handle |Point p| { drawRange(p) }
+    hover = onHover.handle |hover| { if (!hover) bg.figures = [,] }
   }
 
   override Void detach()
   {
     notice?.discard
+    mouseMove?.discard
+    hover?.discard
   }
 
   override protected Void onResize(Size s) { update() }
 
+  private Shape bg := Shape()
+
   override Group node := Group { clip = true }
 
   private Notice? notice
+  private Notice? mouseMove
+  private Notice? hover
 
 }
 
