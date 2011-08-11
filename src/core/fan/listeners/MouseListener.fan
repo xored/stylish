@@ -12,6 +12,8 @@ class MouseListener
 
   |Point->Bool|? onWheel
 
+  |Bool|? onHover
+
   Node node
 
   new make(|This| f)
@@ -42,6 +44,7 @@ class MouseListener
     lfm := hover || down
     if (lfm && pos == null)
     {
+      onHover?.call(true)
       move  = mouse.onPos.handle { fireMove() }
       click = mouse.onLeft.handle |Bool val|
       {
@@ -58,6 +61,7 @@ class MouseListener
     }
     if (!lfm && pos != null)
     {
+      onHover?.call(false)
       discardAll()
       pos = null
       return true

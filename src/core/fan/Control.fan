@@ -37,6 +37,8 @@ abstract class Control
 
   Notice onMouseMove := Notice()
 
+  Notice onHover := Notice()
+
   Keyboard? keyboard() { node.scene?.keyboard }
 
   Void onMouseClick(|Bool down, Int count| f) { clicks.add(f) }
@@ -60,6 +62,7 @@ abstract class Control
     mouseListener = MouseListener
     {
       it.node = this.listenerNode
+      it.onHover = |Bool hover| { this.onHover.push(hover) }
       onMove = |Point p| { onMouseMove.push(mouse = p) }
       onClick = |Bool down, Int count| { this.clicks.each { it.call(down, count) } }
       onWheel = |Point p->Bool|
