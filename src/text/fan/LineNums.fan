@@ -18,9 +18,11 @@ class LineNums : Ruler, ListListener
   {
     TextNode
     {
-      it.text = (i + 1).toStr
+      it.text = lineNum(i).toStr
     }
   }
+
+  virtual protected Int lineNum(Int index) { index + 1 }
 
   protected Void update()
   {
