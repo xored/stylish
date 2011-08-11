@@ -52,8 +52,9 @@ class Selection
   Str text(Range range := 0..-1)
   {
     if (isEmpty) return ""
-    line := this.range.start.row
-    ranges := this.range.split()
+    norm := this.range.norm
+    line := norm.start.row
+    ranges := norm.split()
     text := ranges.join("\n") |Range r, Int index->Str|
     {
       StrUtil.getRange(edit.source[line + index].text, r)
