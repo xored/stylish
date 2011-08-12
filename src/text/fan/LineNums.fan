@@ -62,7 +62,7 @@ class LineNums : Ruler, ListListener
     notice?.discard
   }
 
-  override Void fire(ListNotice notice) { updateWidth() }
+  override Void fire(ListNotice notice) { updateWidth(); update() }
 
   override protected Void onResize(Size s) { update() }
 

@@ -100,7 +100,7 @@ fan.kawhyScene.NodePeer.prototype.style   = function(self) { return this.m_style
 fan.kawhyScene.NodePeer.prototype.style$  = function(self, style)
 {
   this.m_style = style;
-  var str = fan.kawhyCss.StyleItem.toStyleString(style.toCss());
+  var str = style != null ? fan.kawhyCss.StyleItem.toStyleString(style.toCss()) : "";
   this.m_elem.style.cssText = str;
   this.initStyle(self);
 }
