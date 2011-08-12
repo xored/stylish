@@ -118,7 +118,7 @@ class TextEdit : ListView
 
   internal Void doNodeUpdate(Node node) { nodeUpdate(node) }
 
-  internal Void syncSelection()
+  virtual protected Void syncSelection()
   {
     // TODO this piece of code waiting for a good refactoring
     kids := selectArea.kids
