@@ -21,6 +21,8 @@ class BaseTextLine : TextLine
 
   override StyleList styles := StyleList([,])
 
+  override Style? style
+
   override protected ListListener[] listeners() { [,] }
 
 }

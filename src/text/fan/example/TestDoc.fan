@@ -46,6 +46,7 @@ class TestLine : TextLine
     this.doc = doc
     baseText = "line number: $index clicks count: "
     text = baseText
+    style = BgStyle(Color.orange)
     if (index % 5 == 0) styles = StyleList([StyleRange(TextStyle { color = Color.blue }, 0..3), StyleRange(LinkStyle(`http://google.com`, LinkTarget.blank), 5..10)])
     else styles = StyleList([StyleRange(TextStyle { color = Color.blue } + TextLineStyle { under = true; over = true; strike = true }, 0..3)])
     updateText()
@@ -71,6 +72,8 @@ class TestLine : TextLine
   override Str text := ""
 
   override StyleList styles := StyleList([,])
+
+  override Style? style
 
   override protected ListListener[] listeners := [,]
 

@@ -1,4 +1,5 @@
 using gfx
+using kawhyCss
 using kawhyMath
 using kawhyNotice
 using kawhyScene
@@ -55,6 +56,8 @@ abstract class ListView : Control
 
   abstract protected Node createItem(Int i)
 
+  virtual protected Style? itemStyle(Int i) { null }
+
   virtual protected Void disposeItem(Node node) {}
 
   Size clientArea() { node.clientArea }
@@ -88,16 +91,20 @@ abstract class ListView : Control
 
   protected Node itemByIndex(Int i)
   {
-    node := cache[i] as Node
+    node := cache[i] as Group
     if (node == null)
     {
-      node = createItem(i)
+      item := createItem(i)
+      node = Group { it.add(item) }
+      node.style = itemStyle(i)
       contentArea.add(node)
       cache[i] = node
       nodeUpdate(node)
     }
     node.pos = Point(0, i * itemSize)
-    return node
+    size := node.kids[0].size
+    node.size = Size(size.w.max(this.node.clientArea.w), size.h)
+    return node.kids[0]
   }
 
   virtual protected Void sync()
@@ -139,11 +146,12 @@ abstract class ListView : Control
 
   Region visibleRows := Region.defVal { private set }
 
-  protected Void nodeUpdate(Node node)
+  protected Void nodeUpdate(Group node)
   {
-    if (maxWidth < node.size.w)
+    size := node.kids[0].size
+    if (maxWidth < size.w)
     {
-      maxWidth = node.size.w
+      maxWidth = size.w
       syncContentWidth
     }
   }

@@ -11,6 +11,8 @@ mixin TextLine : ListNotifier
 
   abstract StyleList styles
 
+  abstract Style? style
+
   override Int size() { text.size }
 
   @Operator Int get(Int i) { text[i] }

@@ -96,6 +96,8 @@ class TextEdit : ListView
     }
   }
 
+  override protected Style? itemStyle(Int i) { source[i].style }
+
   override protected Void disposeItem(Node node)
   {
     (node.data[lineData] as LineListener)?.dispose
@@ -116,7 +118,7 @@ class TextEdit : ListView
     syncSelection()
   }
 
-  internal Void doNodeUpdate(Node node) { nodeUpdate(node) }
+  internal Void doNodeUpdate(Group node) { nodeUpdate(node) }
 
   virtual protected Void syncSelection()
   {
@@ -239,7 +241,8 @@ internal class LineListener : ListListener
     node.text = ""
     node.styles = line.styles.ranges
     node.text = line.text
-    edit.doNodeUpdate(node)
+    parent := node.parent
+    if (parent != null) edit.doNodeUpdate(parent)
   }
 
   Void dispose() { line.discard(this) }
