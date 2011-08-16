@@ -33,6 +33,20 @@ class OverviewRuler : Ruler, ListListener
     }
   }
 
+  Void replace(Marker[] markers)
+  {
+    clear()
+    markers.sort()
+    size := markers.size
+    for(i := 0; i < size; i++)
+    {
+      view := MarkerView(markers[i])
+      views.add(view)
+      this.node.add(view.node)
+    }
+    if (text != null) update()
+  }
+
   Void clear()
   {
     views.each { it.detach }
@@ -45,7 +59,8 @@ class OverviewRuler : Ruler, ListListener
 
   private Void update()
   {
-    views.each { it.updatePos(size.h, this.text) }
+    h := size.h
+    views.each { it.updatePos(h, this.text) }
   }
 
   override Void attach()

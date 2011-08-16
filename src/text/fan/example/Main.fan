@@ -11,33 +11,23 @@ class Main
 
   static Void main()
   {
-    doc := TestDoc(1000)
+    doc := TestDoc(10000)
     edit := TextEdit { source = doc }
     overview := OverviewRuler()
-    overview.add(Marker
+
+    markers := Marker[,]
+    for(i := 0; i < 1000; i++)
     {
-      range = GridRange(GridPos.defVal, GridPos(3, 5))
-      color = Color.makeRgb(252, 45, 150)
-      tooltip = "Error"
-    })
-    overview.add(Marker
-    {
-      range = GridRange(GridPos(999, 0), GridPos(999, 4))
-      color = Color.makeRgb(244, 190, 150)
-      tooltip = "Warning"
-    })
-    overview.add(Marker
-    {
-      range = GridRange(GridPos(600, 5), GridPos(700, 5))
-      color = Color.makeRgb(244, 190, 150)
-      tooltip = "Warning"
-    })
-    overview.add(Marker
-    {
-      range = GridRange(GridPos(500, 5), GridPos(502, 0))
-      color = Color.makeRgb(45, 150, 252)
-      tooltip = "Info"
-    })
+      val := i % 3
+      MarkerType type := val == 0 ? MarkerType.info : (val == 1 ? MarkerType.warning : MarkerType.error)
+      markers.add(marker(GridRange(GridPos(i, 0), GridPos(i + 1, 0)), type))
+    }
+
+    overview.replace(markers)
+    overview.add(marker(GridRange(GridPos(2999, 0), GridPos(2999, 4)), MarkerType.error))
+    overview.add(marker(GridRange(GridPos(3600, 5), GridPos(3700, 5)), MarkerType.warning))
+    overview.add(marker(GridRange(GridPos(4500, 5), GridPos(4502, 0)), MarkerType.info))
+
     view := SourceView
     {
       text = edit
@@ -48,4 +38,31 @@ class Main
     container.open
   }
 
+  private static Marker marker(GridRange range, MarkerType type)
+  {
+    Marker
+    {
+      it.range = range
+      color = type.color
+      tooltip = type.tooltip
+    }    
+  }
+
+}
+
+@Js
+enum class MarkerType
+{
+  info("Info", Color.makeRgb(45, 150, 252)), 
+  warning("Warning", Color.makeRgb(244, 190, 150)), 
+  error("Error", Color.makeRgb(252, 45, 150)) 
+
+  private new make(Str tooltip, Color color)
+  {
+    this.tooltip = tooltip
+    this.color = color
+  }
+
+  const Str tooltip
+  const Color color
 }
