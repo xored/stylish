@@ -31,7 +31,7 @@ class Main
     view := SourceView
     {
       text = edit
-      leftRulers = [LineNums(), FoldRuler(), SeparatorRuler()]
+      leftRulers = [LineNums(), /*FoldRuler(), */SeparatorRuler()]
       rightRulers = [overview]
     }
     container := Container(view)
