@@ -9,50 +9,62 @@ using kawhyCss
 class FoldRuler : Ruler
 {
 
-  const Size iconSize := Size(7, 7)
-  const Int iconIndent := 2
-  const Color iconColor := Color(0x797979)
-  const Color rangeColor := Color.makeRgb(192, 192, 192)
+  static const Size iconSize := Size(7, 7)
+  static const Int iconIndent := 2
+  static const Color iconColor := Color(0x797979)
+  static const Color rangeColor := Color.makeRgb(192, 192, 192)
+
+  internal static Int foldWidth() { iconSize.w + iconIndent * 2 }
 
   new make(|This|? f := null)
   {
     style = FontStyle.monospace + TextStyle { color = Color.gray }
     f?.call(this)
-    width = iconSize.w + iconIndent * 2
+    width = foldWidth
   }
 
   protected Void update()
   {
-    node.kids.each { (it.data["ml"] as MouseListener)?.detach }
-    node.removeAll()
-    bg.size = node.size
-    bg.pos = Point.defVal
-    node.add(bg)
-
     y := text.scroll.y
     h := text.clientArea.h
     size := text.itemSize
     start := y / size
     end := (text.source.size - 1).min((y + h) / size)
     folds := findFolds(start..end)
+
+    collapsed := this.collapsed.dup
+    expanded := this.expanded.dup
     folds.each |fold|
     {
-      shape := Shape
+      FoldShape? shape := null
+      if (fold.collapsed)
       {
-        itShape := it
-        itShape.size = Size(width, size)
-        listener := MouseListener
+        if (collapsed.size > 0)
         {
-          it.node = itShape
-          onClick = |Bool down| { if (!down) fold.toggle }
+          shape = collapsed.removeAt(expanded.size - 1)
         }
-        itShape.data["ml"] = listener
+        else
+        {
+          shape = FoldShape(node, true, size)
+          this.collapsed.add(shape)
+        }
       }
-      shape.style = CursorStyle(Cursor.pointer)
-      node.add(shape)
-      shape.pos = Point(width - shape.size.w, fold.range.start * size - y)
-      shape.figures = [createFold(fold.collapsed)]
+      else
+      {
+        if (expanded.size > 0)
+        {
+          shape = expanded.removeAt(expanded.size - 1)
+        }
+        else
+        {
+          shape = FoldShape(node, false, size)
+          this.expanded.add(shape)
+        }
+      }
+      shape.attach(fold, fold.range.start * size - y)
     }
+    collapsed.each { it.hide }
+    expanded.each { it.hide }
   }
 
   private Void drawRange(Point mouse)
@@ -82,29 +94,6 @@ class FoldRuler : Ruler
     }
   }
 
-  private Figure createFold(Bool folded)
-  {
-    points := Point[,]
-    pos := Point(iconIndent, (text.itemSize - iconSize.h) / 2)
-    if (folded)
-    {
-      points.add(pos)
-      points.add(pos.translate(Point(0, iconSize.h)))
-      points.add(pos.translate(Point(iconSize.w, iconSize.h / 2)))
-    }
-    else
-    {
-      points.add(pos)
-      points.add(pos.translate(Point(iconSize.w, 0)))
-      points.add(pos.translate(Point(iconSize.w / 2, iconSize.h)))
-    }
-    return Polygon
-    {
-      brush = iconColor
-      it.points = points
-    }
-  }
-
   protected Range? findFold(Int line)
   {
     start := 5 * (line / 5)
@@ -128,6 +117,7 @@ class FoldRuler : Ruler
   override Void attach()
   {
     super.attach()
+    node.add(bg)
     notice = text.onScroll.handle |Point p| { update() }
     mouseMove = onMouseMove.handle |Point p| { drawRange(p) }
     hover = onHover.handle |hover| { if (!hover) bg.figures = [,] }
@@ -138,17 +128,97 @@ class FoldRuler : Ruler
     notice?.discard
     mouseMove?.discard
     hover?.discard
+    collapsed.each { it.detach }
+    expanded.each { it.detach }
+    collapsed = [,]
+    expanded = [,]
   }
 
-  override protected Void onResize(Size s) { update() }
+  override protected Void onResize(Size s)
+  {
+    bg.size = node.size
+    update()
+  }
 
   private Shape bg := Shape()
 
   override Group node := Group { clip = true }
 
+  private FoldShape[] collapsed := [,]
+  private FoldShape[] expanded := [,]
+
   private Notice? notice
   private Notice? mouseMove
   private Notice? hover
+
+}
+
+@Js
+internal class FoldShape
+{
+
+  Bool folded
+
+  private Int h
+  private MouseListener listener
+  private Shape shape
+
+  new make(Group node, Bool folded, Int h)
+  {
+    this.folded = folded
+    this.h = h
+    shape = Shape
+    {
+      it.style = CursorStyle(Cursor.pointer)
+      it.size = Size(FoldRuler.foldWidth, h)
+      it.figures = [createFold(folded)]
+    }
+    listener = MouseListener { it.node = shape }
+    node.add(shape)
+    hide()
+  }
+
+  Void attach(Fold fold, Int y)
+  {
+    shape.pos = Point(0, y)
+    listener.onClick = |Bool down| { if (!down) fold.toggle }
+  }
+
+  Void hide()
+  {
+    listener.onClick = null
+    shape.pos = Point(0, -h)
+  }
+
+  Void detach()
+  {
+    shape.parent.remove(shape)
+    listener.detach
+  }
+
+  private Figure createFold(Bool folded)
+  {
+    points := Point[,]
+    size := FoldRuler.iconSize
+    pos := Point(FoldRuler.iconIndent, (h - size.h) / 2)
+    if (folded)
+    {
+      points.add(pos)
+      points.add(pos.translate(Point(0, size.h)))
+      points.add(pos.translate(Point(size.w, size.h / 2)))
+    }
+    else
+    {
+      points.add(pos)
+      points.add(pos.translate(Point(size.w, 0)))
+      points.add(pos.translate(Point(size.w / 2, size.h)))
+    }
+    return Polygon
+    {
+      brush = FoldRuler.iconColor
+      it.points = points
+    }
+  }
 
 }
 

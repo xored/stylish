@@ -15,6 +15,10 @@ class LineNums : Ruler, ListListener
     f?.call(this)
   }
 
+  virtual protected Int lineNum(Int index) { index + 1 }
+
+  virtual protected StyleRange[] lineStyles(Int index) { [,] }
+
   protected TextNode createLineNode(Int i)
   {
     TextNode
@@ -23,10 +27,6 @@ class LineNums : Ruler, ListListener
       it.styles = lineStyles(i)
     }
   }
-
-  virtual protected Int lineNum(Int index) { index + 1 }
-
-  virtual protected StyleRange[] lineStyles(Int index) { [,] }
 
   protected Void update()
   {
@@ -50,23 +50,25 @@ class LineNums : Ruler, ListListener
         }
         else
         {
-          text = createLineNode(i)
+          text = TextNode
+          {
+            it.text = lineNum(i).toStr
+            it.styles = lineStyles(i)
+          }
         }
         cache[i] = text
         node.add(text)
       }
-      text.pos = Point(width - charSize * text.text.size, i * size - y)
+      index := text.text.size - 1
+      textSize := sizes[index]
+      if (textSize == null)
+      {
+        textSize = text.size.w
+        sizes[index] = textSize
+      }
+      text.pos = Point(width - textSize, i * size - y)
     }
-  }
-
-  internal Void updateWidth()
-  {
-    text := TextNode { it.text = this.text.source.size.toStr }
-    node.add(text)
-    w := text.size.w
-    node.remove(text)
-    width = w
-    charSize = width / text.size.w
+    trash.each { node.remove(it) }
   }
 
   override Void attach()
@@ -92,10 +94,31 @@ class LineNums : Ruler, ListListener
     update()
   }
 
+  private Void updateWidth()
+  {
+    size := lineNumSize
+    if (sizes.size < size) sizes.size = size
+    if (sizes[size - 1] == null)
+    {
+      text := TextNode { it.text = "".padl(size, '0') }
+      node.add(text)
+      sizes[size - 1] = text.size.w
+      node.remove(text)
+    }
+    width = sizes.last
+  }
+
+  private Int lineNumSize()
+  {
+    size := this.text.source.size
+    if (size == 0) return 1
+    return lineNum(size - 1).toStr.size
+  }
+
   override Group node := Group { clip = true }
 
   private Notice? notice
   private ListCache cache := ListCache()
-  private Int charSize := 1
+  private Int?[] sizes := [,]
 
 }
