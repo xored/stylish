@@ -47,6 +47,7 @@ class LineNums : Ruler, ListListener
         {
           text = trash.removeAt(trash.size - 1)
           text.text = lineNum(i).toStr
+          text.styles = lineStyles(i)
         }
         else
         {
