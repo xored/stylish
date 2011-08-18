@@ -16,6 +16,8 @@ class FoldRuler : Ruler
 
   internal static Int foldWidth() { iconSize.w + iconIndent * 2 }
 
+  ProjDoc doc
+
   new make(|This|? f := null)
   {
     style = FontStyle.monospace + TextStyle { color = Color.gray }
@@ -23,7 +25,7 @@ class FoldRuler : Ruler
     width = foldWidth
   }
 
-  protected Void update()
+  internal Void update()
   {
     y := text.scroll.y
     h := text.clientArea.h
@@ -45,7 +47,7 @@ class FoldRuler : Ruler
         }
         else
         {
-          shape = FoldShape(node, true, size)
+          shape = FoldShape(this, node, true, size)
           this.collapsed.add(shape)
         }
       }
@@ -57,7 +59,7 @@ class FoldRuler : Ruler
         }
         else
         {
-          shape = FoldShape(node, false, size)
+          shape = FoldShape(this, node, false, size)
           this.expanded.add(shape)
         }
       }
@@ -96,31 +98,33 @@ class FoldRuler : Ruler
 
   protected Range? findFold(Int line)
   {
-    start := 5 * (line / 5)
-    if (start % 2 == 0) return null
-    range := start..start + 2
-    return range.contains(line) ? range : null
+    Fold? fold := doc.find(line)
+    return fold == null ? null : (fold.collapsed ? null : fold.range)
   }
 
   protected Fold[] findFolds(Range lines)
   {
-    result := Fold[,]
-    start := lines.start / 5
-    end := lines.end / 5
-    for(i := start; i <= end; i++)
+    res := Fold[,]
+    lines.each |line|
     {
-      result.add(Fold(i * 5..i * 5 + 2, i % 2 == 0))
+      Fold? fold := doc.find(line)
+      if (fold != null)
+        res.add(fold)
     }
-    return result
+    return res
   }
 
   override Void attach()
   {
     super.attach()
+    if (text.source as ProjDoc == null)
+      throw Err("Unable to attach to TextEdit that isn't based on the ProjDoc.")
+    doc = (ProjDoc)text.source
     node.add(bg)
     notice = text.onScroll.handle |Point p| { update() }
     mouseMove = onMouseMove.handle |Point p| { drawRange(p) }
     hover = onHover.handle |hover| { if (!hover) bg.figures = [,] }
+    doc.addFoldListener(foldListener)
   }
 
   override Void detach()
@@ -128,6 +132,7 @@ class FoldRuler : Ruler
     notice?.discard
     mouseMove?.discard
     hover?.discard
+    doc.removeFoldListener(foldListener)
     collapsed.each { it.detach }
     expanded.each { it.detach }
     collapsed = [,]
@@ -140,9 +145,10 @@ class FoldRuler : Ruler
     update()
   }
 
-  private Shape bg := Shape()
-
   override Group node := Group { clip = true }
+
+  private Shape bg := Shape()
+  private |->| foldListener := |->| { update }
 
   private FoldShape[] collapsed := [,]
   private FoldShape[] expanded := [,]
@@ -162,9 +168,11 @@ internal class FoldShape
   private Int h
   private MouseListener listener
   private Shape shape
+  private FoldRuler ruler
 
-  new make(Group node, Bool folded, Int h)
+  new make(FoldRuler ruler, Group node, Bool folded, Int h)
   {
+    this.ruler = ruler
     this.folded = folded
     this.h = h
     shape = Shape
@@ -181,7 +189,14 @@ internal class FoldShape
   Void attach(Fold fold, Int y)
   {
     shape.pos = Point(0, y)
-    listener.onClick = |Bool down| { if (!down) fold.toggle }
+    listener.onClick = |Bool down|
+    {
+      if (!down)
+      {
+        fold.toggle
+        ruler.update()
+      }
+    }
   }
 
   Void hide()
@@ -220,26 +235,4 @@ internal class FoldShape
     }
   }
 
-}
-
-@Js
-const class Fold
-{
-
-  const Range range
-
-  const Bool collapsed
-
-  new make(Range range, Bool collapsed)
-  {
-    this.range = range
-    this.collapsed = collapsed
-  }
-
-  Void toggle() { echo("toggle!") }
-
-  override Int compare(Obj fold)
-  {
-    range.start - (fold as Fold).range.start
-  }
 }
