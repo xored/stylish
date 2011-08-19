@@ -12,7 +12,9 @@ class Main
   static Void main()
   {
     doc := TestDoc(10000)
-    edit := TextEdit { source = doc }
+    projDoc := BaseProjDoc(doc)
+    projDoc.makeFold(5..10)
+    edit := TextEdit { source = projDoc }
     overview := OverviewRuler()
 
     markers := Marker[,]
