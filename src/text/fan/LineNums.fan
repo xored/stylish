@@ -19,15 +19,6 @@ class LineNums : Ruler, ListListener
 
   virtual protected StyleRange[] lineStyles(Int index) { [,] }
 
-  protected TextNode createLineNode(Int i)
-  {
-    TextNode
-    {
-      it.text = lineNum(i).toStr
-      it.styles = lineStyles(i)
-    }
-  }
-
   protected Void update()
   {
     y := text.scroll.y
@@ -91,6 +82,8 @@ class LineNums : Ruler, ListListener
   override Void fire(ListNotice notice)
   {
     updateWidth()
+    cache.moveRegion(Region.defVal)
+    cache.clearTrash()
     node.removeAll
     update()
   }
