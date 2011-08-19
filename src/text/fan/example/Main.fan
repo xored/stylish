@@ -14,6 +14,8 @@ class Main
     doc := TestDoc(10000)
     projDoc := BaseProjDoc(doc)
     projDoc.makeFold(5..10)
+    projDoc.makeFold(15..20)
+    projDoc.makeFold(30..50)
     edit := TextEdit { source = projDoc }
     overview := OverviewRuler()
 
@@ -33,7 +35,7 @@ class Main
     view := SourceView
     {
       text = edit
-      leftRulers = [LineNums(), FoldRuler(), SeparatorRuler()]
+      leftRulers = [ProjLineNums(), FoldRuler(), SeparatorRuler()]
       rightRulers = [overview]
     }
     container := Container(view)
