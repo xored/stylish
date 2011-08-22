@@ -13,7 +13,8 @@ class ProjLineNums : LineNums
 
   override protected Int lineNum(Int index) { doc != null ? doc.toMasterLine(index) + 1 : super.lineNum(index) }
 
-  override Void attach() {
+  override Void attach()
+  {
     super.attach
     if (text.source as ProjDoc == null)
       throw Err("Unable to attach to text edit without ProjDoc.")

@@ -17,7 +17,7 @@ class BaseProjDoc : ProjDoc
     return res
   }
   
-  private |->|[] foldListeners := [,]
+  private |Fold[]|[] foldListeners := [,]
   
   override TextDoc master { private set }
   
@@ -131,7 +131,7 @@ class BaseProjDoc : ProjDoc
     else
       fold.markedByUser = true
     
-    fireFoldChange
+    fireFoldsChange([fold])
     return fold
   }
   
@@ -165,9 +165,9 @@ class BaseProjDoc : ProjDoc
     lines.each |line| { if (line.decorated) line.refresh }
   }
   
-  override Void addFoldListener(|->| listener) { foldListeners.add(listener) }
+  override Void addFoldListener(|Fold[]| listener) { foldListeners.add(listener) }
   
-  override Void removeFoldListener(|->| listener) { foldListeners.remove(listener) } 
+  override Void removeFoldListener(|Fold[]| listener) { foldListeners.remove(listener) } 
   
   **
   ** Change folding state for the given fold.
@@ -186,7 +186,7 @@ class BaseProjDoc : ProjDoc
       handleHideLines(proj.hideAll(getRangesToFold(fold)))
       fold.setCollapsedDirectly(true)
     }
-    fireFoldChange
+    fireFoldsChange([fold])
   }
   
   internal Void addToCache(DecoratedTextLine line)
@@ -213,7 +213,6 @@ class BaseProjDoc : ProjDoc
   {
     handleHideLines(proj.hide(fold.masterRange))
     fold.visible = false
-    fireFoldChange
   }
   
   **
@@ -229,7 +228,6 @@ class BaseProjDoc : ProjDoc
     if (!fold.markedByUser) {
       tree.remove(fold)
     }
-    fireFoldChange
   }
   
   **
@@ -277,7 +275,7 @@ class BaseProjDoc : ProjDoc
     return [res.toRange,]
   }
   
-  private Void fireFoldChange() { foldListeners.each { it.call } }
+  private Void fireFoldsChange(Fold[] folds) { foldListeners.each { it.call(folds) } }
 }
 
 **
@@ -424,7 +422,7 @@ internal class FoldTree
   private TreeElement getUserMarkedElementByLine(TreeElement parent, Int line)
   {
     index := findByLine(parent.children, line)
-    TreeElement? el := parent.children.getSafe(index)
+    TreeElement? el := index >= 0 ? parent.children.getSafe(index) : null
     TreeElement? canditate :=  el != null ? getUserMarkedElementByLine(el, line) : null
     return canditate != null && canditate.fold.markedByUser ? canditate : parent
   }

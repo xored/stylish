@@ -113,7 +113,7 @@ internal class SimpleArrayProj : ArrayProj
     Region region := Region.fromRange(range)
     
     fragmentIndexBegin := findFragmentIndexByMasterIndex(region.start)
-    fragmentIndexEnd := findFragmentIndexByMasterIndex(region.end)
+    fragmentIndexEnd := findFragmentIndexByMasterIndex(region.last)
     if (fragmentIndexBegin < 0) fragmentIndexBegin = -(fragmentIndexBegin + 1)
     if (fragmentIndexEnd < 0)
       fragmentIndexEnd = -(fragmentIndexEnd + 1) - 1
@@ -138,7 +138,6 @@ internal class SimpleArrayProj : ArrayProj
       rangeEnd = projRangeStart + indexDiff
     }
 
-    // we still may get the empty range (rangeStart == rangeEnd) and should return null in this case
     return rangeStart < rangeEnd || region.isEmpty ? rangeStart..<rangeEnd : null 
   }
   

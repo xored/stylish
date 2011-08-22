@@ -78,14 +78,15 @@ mixin ProjDoc : TextDoc
   abstract Void removeLineDecorator(|TextLine, Int->StrReplacement[]| decorator)
   
   **
-  ** Add listener that will be notified when state of folds is changed.
+  ** Add listener that will be notified when state of folds is changed or folds added/removed.
+  ** Listener accepts a list of modified/added/removed folds.
   ** 
-  abstract Void addFoldListener(|->| listener)
+  abstract Void addFoldListener(|Fold[]| listener)
   
   **
   ** Remove fold listener.
   ** 
-  abstract Void removeFoldListener(|->| listener)
+  abstract Void removeFoldListener(|Fold[]| listener)
 }
 
 **

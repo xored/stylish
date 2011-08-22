@@ -8,6 +8,7 @@ class SimpleArrayProjectionTest : Test
     verifyEq(proj.getState(0..<10), RangeState.visible)
     verifyEq(proj.toMasterIndex(0), 0)
     verifyEq(proj.toMaster(0..9), [0..9,])
+    verifyEq(proj.fromMaster(1..3), 1..<4)
     verifyEq(proj.size, 10)
     
     proj.hide(1..2)

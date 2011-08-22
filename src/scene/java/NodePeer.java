@@ -3,13 +3,13 @@ package fan.kawhyScene;
 import fan.sys.*;
 import fan.gfx.*;
 
-class Node {
+class NodePeer {
 
-  public static Node make() {
-    return new Node();
+  public static NodePeer make() {
+    return new NodePeer();
   }
 
-  public Node() {
+  public NodePeer() {
   }
 
   public Point pos() { return null; }

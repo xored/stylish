@@ -16,6 +16,8 @@ class FoldRuler : Ruler
 
   internal static Int foldWidth() { iconSize.w + iconIndent * 2 }
 
+  private Int lastMouseY := -1 
+  
   ProjDoc doc
 
   new make(|This|? f := null)
@@ -47,7 +49,7 @@ class FoldRuler : Ruler
         }
         else
         {
-          shape = FoldShape(this, node, true, size)
+          shape = FoldShape(node, true, size)
           this.collapsed.add(shape)
         }
       }
@@ -59,7 +61,7 @@ class FoldRuler : Ruler
         }
         else
         {
-          shape = FoldShape(this, node, false, size)
+          shape = FoldShape(node, false, size)
           this.expanded.add(shape)
         }
       }
@@ -67,19 +69,27 @@ class FoldRuler : Ruler
     }
     collapsed.each { it.hide }
     expanded.each { it.hide }
+    
+    drawRange(lastMouseY)
   }
 
-  private Void drawRange(Point mouse)
+  private Void drawRange(Int mouseY)
   {
+    if (mouseY < 0)
+    {
+      bg.figures = [,]
+      return
+    }
+    
     item := text.itemSize
     scroll := text.scroll.y
-    line := (mouse.y + scroll) / item
+    line := (mouseY + scroll) / item
     range := findFold(line)
     if (range == null) bg.figures = [,]
     else
     {
       start := 0.max(range.start * item - scroll + item / 2)
-      end := range.end * item - scroll + item / 2
+      end := range.last * item - scroll + item / 2
       w := bg.size.w / 2
 
       points := [Point(w, start)]
@@ -122,8 +132,9 @@ class FoldRuler : Ruler
     doc = (ProjDoc)text.source
     node.add(bg)
     notice = text.onScroll.handle |Point p| { update() }
-    mouseMove = onMouseMove.handle |Point p| { drawRange(p) }
-    hover = onHover.handle |hover| { if (!hover) bg.figures = [,] }
+    mouseMove = onMouseMove.handle |Point p| { lastMouseY = p.y; drawRange(lastMouseY) }
+    hover = onHover.handle |hover| { if (!hover) { lastMouseY = -1; bg.figures = [,] } }
+    doc.listen(docListener)
     doc.addFoldListener(foldListener)
   }
 
@@ -132,6 +143,7 @@ class FoldRuler : Ruler
     notice?.discard
     mouseMove?.discard
     hover?.discard
+    doc.discard(docListener)
     doc.removeFoldListener(foldListener)
     collapsed.each { it.detach }
     expanded.each { it.detach }
@@ -148,7 +160,6 @@ class FoldRuler : Ruler
   override Group node := Group { clip = true }
 
   private Shape bg := Shape()
-  private |->| foldListener := |->| { update }
 
   private FoldShape[] collapsed := [,]
   private FoldShape[] expanded := [,]
@@ -157,6 +168,12 @@ class FoldRuler : Ruler
   private Notice? mouseMove
   private Notice? hover
 
+  private |Fold[]| foldListener := |Fold[] folds| { update }
+  private DocListener docListener := DocListener
+  {
+    onAddCallback = |->| { update }
+    onRemoveCallback = |->| { update }
+  }
 }
 
 @Js
@@ -168,11 +185,9 @@ internal class FoldShape
   private Int h
   private MouseListener listener
   private Shape shape
-  private FoldRuler ruler
 
-  new make(FoldRuler ruler, Group node, Bool folded, Int h)
+  new make(Group node, Bool folded, Int h)
   {
-    this.ruler = ruler
     this.folded = folded
     this.h = h
     shape = Shape
@@ -194,7 +209,6 @@ internal class FoldShape
       if (!down)
       {
         fold.toggle
-        ruler.update()
       }
     }
   }
@@ -234,5 +248,17 @@ internal class FoldShape
       it.points = points
     }
   }
+
+}
+
+@Js
+internal class DocListener : ListListener
+{
+
+  |Int index, Int size| onAddCallback := |index| {}
+  |Int index, Int size| onRemoveCallback := |index| {}
+
+  override Void onAdd(Int index, Int size) { onAddCallback(index, size) }
+  override Void onRemove(Int index, Int size) { onRemoveCallback(index, size) }
 
 }
