@@ -23,6 +23,6 @@ class BaseTextLine : TextLine
 
   override Style? style
 
-  override protected ListListener[] listeners() { [,] }
+  override protected ListListener[] listeners := [,]
 
 }
