@@ -31,7 +31,7 @@ class BaseProjDoc : ProjDoc
     {
       onAddCallback = |Int index, Int size|
       {
-        Range? inserted := proj.insert(Region(index, size).toRange)
+        Range? inserted := proj.insertMaster(Region(index, size).toRange)
 
         [Int:DecoratedTextLine] newLines := [:]
         lines.each |line|
@@ -57,7 +57,7 @@ class BaseProjDoc : ProjDoc
       onRemoveCallback = |Int index, Int size|
       {
         region := Region(index, size)
-        Range? removed := proj.delete(region.toRange)
+        Range? removed := proj.deleteMaster(region.toRange)
         
         [Int:DecoratedTextLine] newLines := [:]
         lines.each |line|
@@ -143,7 +143,15 @@ class BaseProjDoc : ProjDoc
     return null
   }
   
-  override Int toMasterLine(Int lineNum) { proj.toMasterIndex(lineNum) }
+  override Int toMasterLine(Int lineNum)
+  {
+    Int? masterIndex := proj.toMasterIndex(lineNum)
+    if (masterIndex == null)
+      throw Err("Illegal state: in this version BaseProjDoc doesn't support line insertions, " + 
+        "so all projection lines must have the corresponding master line, " +
+        "but seems that this requirement was broken.")
+    return masterIndex
+  }
 
   override Range? fromMasterLines(Range lines) { proj.fromMaster(lines) }
   
@@ -220,9 +228,13 @@ class BaseProjDoc : ProjDoc
   ** 
   private Void internalShow(BaseFold fold)
   {
-    handleShowLines(proj.show(fold.masterRange))
     fold.visible = true
-    restoreChildrenState(fold)
+    
+    if (!tree.isParentHidden(fold)) // doesn't show the fold, if one of it's parent hidden
+    {
+      handleShowLines(proj.show(fold.masterRange))
+      restoreChildrenState(fold)
+    }
     
     // remove fold, if we don't need to store it
     if (!fold.markedByUser) {
@@ -306,6 +318,21 @@ internal class FoldTree
     return res
   }
   
+  **
+  ** Return whether one of the parent folds is hidden/collapsed.
+  ** 
+  Bool isParentHidden(BaseFold fold)
+  {
+    // not efficient, but it saves tree from complexity of storing links child->parent
+    Bool res := false
+    findByRange(root, fold.masterRange)
+    {
+      if (it.fold != null)
+        res = res || (!it.fold.visible || it.fold.collapsed)
+    }
+    return res
+  }
+  
   Void remove(BaseFold fold) { delete(root, fold) }
   
   Void add(BaseFold fold) { insert(root, fold) }
@@ -317,8 +344,10 @@ internal class FoldTree
   
   Void clear() { root.children.clear }
   
-  private TreeElement? findByRange(TreeElement parent, Range range)
+  private TreeElement? findByRange(TreeElement parent, Range range, |TreeElement| parentHandler := |->| {})
   {
+    parentHandler.call(parent)
+    
     index := findByLine(parent.children, range.start)
     if (index >= 0)
     {
@@ -326,7 +355,7 @@ internal class FoldTree
       if (element.fold.masterRange == range)
         return element
       else if (Region.fromRange(element.fold.masterRange).includes(Region.fromRange(range)))
-        return findByRange(element, range)
+        return findByRange(element, range, parentHandler)
     }
     return null
   }
@@ -658,3 +687,4 @@ internal class FoldTreeElement : TreeElement
   
   new make(BaseFold fold) { this.fold = fold }
 }
+

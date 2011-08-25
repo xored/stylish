@@ -1,6 +1,6 @@
 **
-** Ruler with line numbers, that works in respect to `kawhyText:rojDoc`.
-** It may be attached only to source view, which text model inherits `kawhyText:rojDoc`,
+** Ruler with line numbers, that works in respect to `kawhyText::ProjDoc`.
+** It may be attached only to source view, which text model inherits `kawhyText::ProjDoc`,
 ** otherwise an error will occur during attaching.
 **
 @Js

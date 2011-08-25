@@ -1,6 +1,6 @@
 
 **
-** Presents the class that makes array transformations.
+** Present the class that makes array transformations.
 ** 
 @Js
 internal mixin ArrayProj
@@ -53,15 +53,20 @@ internal mixin ArrayProj
   abstract Range? fromMaster(Range range)
 
   **
-  ** By the specified projection index
-  ** return corresponding master array index.
+  ** By the specified projection index return corresponding master array index
+  ** or 'null' if there is not underlying master index (e.g. index was inserted with `ArrayProj::insert`).
   ** 
-  abstract Int toMasterIndex(Int index)
+  abstract Int? toMasterIndex(Int index)
 
   **
   ** Return the state for the given master range.
   ** 
   abstract RangeState getState(Range range)
+  
+  **
+  ** Insert range of indexes. This range doesn't have underlying master ranges.
+  ** 
+  abstract ProjInsertion insert(Range indexes)
 
   **
   ** Used to notify, that new indexes were inserted to the master array.
@@ -74,12 +79,35 @@ internal mixin ArrayProj
   **    then the given range will also become invisible.
   ** Return the range that have been added to this projection and becomes visible
   ** or 'null' if inserted range becomes invisible.
-  abstract Range? insert(Range indexes)
+  abstract Range? insertMaster(Range indexes)
 
   **
   ** Used to notify, that indexes were deleted from the master array.
   ** Return the range that were removed from projection.
   ** 
-  abstract Range? delete(Range indexes)
+  abstract Range? deleteMaster(Range indexes)
+
+}
+
+**
+** Present the range of indexes that was inserted into `ArrayProj` instance.
+** 
+@Js
+internal mixin ProjInsertion
+{
+
+  **
+  ** Current ranges of insertion in the projection array.
+  ** This method returns a list, because there is following possible scenario:
+  **  1. `ArrayProj.insert` is called to insert range [1..4] 
+  **  2. `ArrayProj.insert` is called to insert range [2..3]
+  ** After this scenarion the first insertion has two ranges: [1..2) and [4..6] 
+  ** 
+  abstract Range[] ranges()
+
+  **
+  ** Remove this insertion from the projection array.
+  ** 
+  abstract Void discard()
 
 }

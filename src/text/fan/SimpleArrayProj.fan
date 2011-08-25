@@ -1,9 +1,7 @@
 using kawhyMath
 
 **
-** Projection text model implementation.
-** Current implementation is based on assumption that master text model is static.
-** For changeable master text model (e.g. in editor) need to process model change events.
+** Basic array projection implementation.
 ** 
 @Js
 internal class SimpleArrayProj : ArrayProj 
@@ -141,7 +139,7 @@ internal class SimpleArrayProj : ArrayProj
     return rangeStart < rangeEnd || region.isEmpty ? rangeStart..<rangeEnd : null 
   }
   
-  override Int toMasterIndex(Int index) {
+  override Int? toMasterIndex(Int index) {
     Int fragmentIndex := findFragmentIndexByProjectionIndex(index)
     Int result := 0 
     if (fragmentIndex < 0) 
@@ -175,7 +173,12 @@ internal class SimpleArrayProj : ArrayProj
     }
   }
   
-  override Range? insert(Range indexes)
+  override ProjInsertion insert(Range indexes)
+  {
+    throw Err("Operation is not supported yet.")
+  }
+  
+  override Range? insertMaster(Range indexes)
   {
     Region r := Region.fromRange(indexes)
     Range? insertedRange := null
@@ -216,7 +219,7 @@ internal class SimpleArrayProj : ArrayProj
     return insertedRange
   }
   
-  override Range? delete(Range indexes)
+  override Range? deleteMaster(Range indexes)
   {
     Region r := Region.fromRange(indexes)
     Region? res := null
@@ -275,6 +278,11 @@ internal class SimpleArrayProj : ArrayProj
     masterSize = masterSize - r.size
     size = size - r.size
     return res?.toRange
+  }
+  
+  internal Void discard(InternalProjInsertion insertion)
+  {
+    throw Err("Operation is not supported yet.")
   }
   
   **
@@ -415,7 +423,9 @@ internal class SimpleArrayProj : ArrayProj
     fragment := projFragments[fragmentIndex]
     while (fragment.masterRange.start < masterRange.end)
     {
-      res.add(Region.fromRange(masterRange.start.max(fragment.masterRange.start) ..< fragment.masterRange.end.min(masterRange.end)))
+      if (fragment.isMappedToMaster)
+        res.add(Region.fromRange(masterRange.start.max(fragment.masterRange.start) ..< fragment.masterRange.end.min(masterRange.end)))
+      
       fragmentIndex++
       if (fragmentIndex >= projFragments.size) break
       fragment = projFragments[fragmentIndex]
@@ -438,12 +448,13 @@ internal class SimpleArrayProj : ArrayProj
     while (fragmentIndex < projFragments.size && currentPos < masterRange.end)
     {
       fragment := projFragments[fragmentIndex]
-      if (currentPos < fragment.masterRange.start)
+      if (fragment.isMappedToMaster && currentPos < fragment.masterRange.start)
         res.add(Region.fromRange(currentPos ..< masterRange.end.min(fragment.masterRange.start)))
-      currentPos = fragment.masterRange.end
 
+      currentPos = fragment.masterRange.end
       fragmentIndex++
     }
+    // the last fragment doesn't cover the end of master array
     if (currentPos < masterRange.end)
       res.add(Region.fromRange(currentPos ..< masterRange.end))
     
@@ -491,7 +502,7 @@ internal class SimpleArrayProj : ArrayProj
     
     while (fragment != null)
     {
-      fragment.masterRange = Region(fragment.masterRange.start + diff, fragment.masterRange.size)
+      fragment.moveMasterRange(diff)
       fragment = projFragments.getSafe(i++)
     }
   }
@@ -510,7 +521,7 @@ internal class SimpleArrayProj : ArrayProj
     
     while (fragment != null)
     {
-      fragment.projRange = Region(fragment.projRange.start + indexDiff, fragment.projRange.size)
+      fragment.moveProjRange(indexDiff)
       fragment = projFragments.getSafe(i++)
     }
   }
@@ -529,11 +540,21 @@ internal class ProjRange
 
   new make(Region projRange, Region masterRange := projRange)
   {
-    if (projRange.size != masterRange.size)
-      throw ArgErr("The sizes should be the same.")
     this.projRange = projRange
     this.masterRange = masterRange;
   }
+  
+  virtual Void moveProjRange(Int indexDiff)
+  {
+    this.projRange = Region(projRange.start + indexDiff, projRange.size)
+  }
+  
+  virtual Void moveMasterRange(Int indexDiff)
+  {
+    this.masterRange = Region(masterRange.start + indexDiff, masterRange.size)
+  }
+  
+  virtual Bool isMappedToMaster() { true }
   
   override Int hash() { 31 * projRange.hash + masterRange.hash }
 
@@ -548,5 +569,33 @@ internal class ProjRange
   {
     "[" + projRange.toStr() + "]->[" + masterRange.toStr() + "]"; 
   }
+
+}
+
+@Js
+internal class InsertedProjRange : ProjRange
+{
+
+  new make(Region projRange, Int masterIndex) : super(projRange, Region(masterIndex, 0)) {}
+
+  override Bool isMappedToMaster() { false }
+
+}
+
+@Js
+internal class InternalProjInsertion : ProjInsertion
+{
+
+  private SimpleArrayProj doc
+
+  override Range[] ranges
+
+  new make(SimpleArrayProj doc, Range[] ranges)
+  {
+    this.doc = doc
+    this.ranges = ranges
+  }
+  
+  override Void discard() { doc.discard(this) }
 
 }
