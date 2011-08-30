@@ -12,45 +12,68 @@ class OverviewRuler : Ruler, ListListener
 
   Void add(Marker marker)
   {
-    view := MarkerView(marker)
-    index := views.binarySearch(view)
-    if (index < 0) index = -index - 1
-    views.insert(index, view)
-    this.node.add(view.node)
-    if (text != null)
-    {
-      view.updatePos(size.h, text)
-    }
+    if (text == null) markers.add(marker)
+    else attachMarker(marker)
   }
 
   Void remove(Marker marker)
   {
-    index := views.findIndex |view| { view.marker == marker }
-    if (index != null)
-    {
-      view := views.removeAt(index)
-      view.detach
-    }
+    if (text == null) markers.remove(marker)
+    else detachMarker(marker)
   }
 
   Void replace(Marker[] markers)
   {
     clear()
-    markers.sort()
-    size := markers.size
-    for(i := 0; i < size; i++)
-    {
-      view := MarkerView(markers[i])
-      views.add(view)
-      this.node.add(view.node)
-    }
+    this.markers = markers
     if (text != null) update()
   }
 
   Void clear()
   {
+    markers = [,]
     views.each { it.detach }
-    views.clear
+    views = [:]
+    cache.each { it.detach }
+    cache = [,]
+  }
+
+  private Int attachMarker(Marker marker)
+  {
+    pos := markerPos(marker)
+    view := views[pos]
+    if (view == null)
+    {
+      view = getNewMarker()
+      views[pos] = view
+      view.node.pos = Point(2, pos)    
+    }
+    view.attachMarker(marker)
+    return pos
+  }
+
+  private Void detachMarker(Marker marker)
+  {
+    pos := markerPos(marker)
+    view := views[pos]
+    if (view != null && view.detachMarker(marker))
+    {
+      cache.add(view)
+    }
+  }
+
+  private MarkerView getNewMarker()
+  {
+    if (cache.size > 0)
+      return cache.removeAt(cache.size - 1)
+    view := MarkerView(text)
+    node.add(view.node)
+    return view
+  }
+
+  private Int markerPos(Marker marker)
+  {
+    (marker.range.start.row * (size.h - 5)) / text.source.size
   }
 
   override Void fire(ListNotice notice) { update() }
@@ -59,8 +82,15 @@ class OverviewRuler : Ruler, ListListener
 
   private Void update()
   {
-    h := size.h
-    views.each { it.updatePos(h, this.text) }
+    keys := Int[,]
+    views.each |val, key|
+    {
+      markers.addAll(val.clear)
+      keys.add(key)
+    }
+    markers.each { keys.remove(attachMarker(it)) }
+    keys.each { views.remove(it).detach }
+    markers = [,]
   }
 
   override Void attach()
@@ -74,11 +104,14 @@ class OverviewRuler : Ruler, ListListener
   {
     text.source.discard(this)
     super.detach()
+    clear()
   }
 
   override Group node := Group()
 
-  private MarkerView[] views := [,]
+  private Marker[] markers := [,]
+  private MarkerView[] cache := [,]
+  private Int:MarkerView views := [:]
 
 }
 
@@ -131,23 +164,22 @@ const class Marker
 internal class MarkerView
 {
 
-  Marker marker
-  Node node
+  Marker? marker
+  Group node
   MouseListener listener
-  TextEdit? text
+  TextEdit text
 
-  new make(Marker marker)
+  Marker[] stock := [,]
+
+  new make(TextEdit text)
   {
-    this.marker = marker
+    this.text = text
     node = Group
     {
-      it.style = BgStyle(marker.color) + CursorStyle(Cursor.pointer)
-      it.tooltip = marker.tooltip
       it.size = Size(9, 5)
       it.add(Group
       {
         it.pos = Point(1, 1)
-        it.style = BgStyle(lighter(marker.color))
         it.size = Size(7, 3)
       })
     }
@@ -156,7 +188,7 @@ internal class MarkerView
       it.node = this.node
       onClick = |Bool down|
       {
-        if (down)
+        if (down && marker != null)
         {
           text.selection.range = marker.range
           text.selection.reveal
@@ -165,18 +197,56 @@ internal class MarkerView
     }
   }
 
+  Marker[] clear()
+  {
+    markers := [,]
+    markers.addAll(stock)
+    stock = [,]
+    if (marker != null)
+    {
+      markers.add(marker)
+      marker = null
+    }
+    return markers
+  }
+
+  Void attachMarker(Marker marker)
+  {
+    if (this.marker != null)
+    {
+      stock.add(this.marker)
+    }
+    this.marker = marker
+    node.style = BgStyle(marker.color) + CursorStyle(Cursor.pointer)
+    node.tooltip = marker.tooltip
+    node.kids[0].style = BgStyle(lighter(marker.color))
+  }
+
+  ** return true if empty
+  Bool detachMarker(Marker marker)
+  {
+    if (this.marker == marker)
+    {
+      this.marker = null
+      if (stock.size > 0)
+      {
+        attachMarker(stock.removeAt(stock.size - 1))
+        return false
+      }
+      else
+      {
+        node.pos = Point(2, -100)
+        return true
+      }
+    }
+    stock.remove(marker)
+    return false
+  }
+
   Void detach()
   {
     listener.detach
     node.parent.remove(node)
-    text = null
-  }
-
-  Void updatePos(Int h, TextEdit text)
-  {
-    this.text = text
-    pos := (marker.range.start.row * (h - 5)) / text.source.size
-    node.pos = Point(2, pos)
   }
 
   override Int compare(Obj that)

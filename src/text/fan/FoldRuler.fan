@@ -41,7 +41,7 @@ class FoldRuler : Ruler
       {
         if (collapsed.size > 0)
         {
-          shape = collapsed.removeAt(expanded.size - 1)
+          shape = collapsed.removeAt(collapsed.size - 1)
         }
         else
         {
