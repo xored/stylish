@@ -125,8 +125,9 @@ abstract class ListView : Control
     }
     cache.trash.each
     {
-      disposeItem(it)
-      contentArea.remove(it)
+      Group node := it
+      disposeItem(node.kids[0])
+      contentArea.remove(node)
     }
     cache.clearTrash()
   }
