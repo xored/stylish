@@ -81,9 +81,9 @@ class TextEdit : ListView
   {
     selectStyle := BgStyle(Color.makeArgb(100, 51, 153, 255))
     node.scene.clipboard.textSource = TextEditSource(this)
-    selectArea.add(Group { it.style = selectStyle }) 
-    selectArea.add(Group { it.style = selectStyle }) 
-    selectArea.add(Group { it.style = selectStyle })
+    selectArea.add(Group { it.style = selectStyle; thru = true }) 
+    selectArea.add(Group { it.style = selectStyle; thru = true }) 
+    selectArea.add(Group { it.style = selectStyle; thru = true })
     content.add(selectArea)
     selection.onChange { syncSelection() }
   }
