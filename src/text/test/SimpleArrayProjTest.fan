@@ -53,4 +53,34 @@ class SimpleArrayProjectionTest : Test
     verifyEq(proj.getState(6..<10), RangeState.visible)
     verifyEq(proj.size,  9)
   }
+  
+  Void testFindPrevVisible()
+  {
+    ArrayProj proj := SimpleArrayProj(10)
+
+    proj.hide(1..5)
+    verifyEq(proj.findPrevVisible(0), 0)
+    verifyEq(proj.findPrevVisible(3), 0)
+    verifyEq(proj.findPrevVisible(6), 1)
+
+    proj.hide(0..<1)
+    verifyNull(proj.findPrevVisible(0))
+    verifyNull(proj.findPrevVisible(5))
+    verifyEq(proj.findPrevVisible(7), 1)
+  }
+  
+  Void testFindNextVisible()
+  {
+    ArrayProj proj := SimpleArrayProj(10)
+
+    proj.hide(1..5)
+    verifyEq(proj.findNextVisible(0), 0)
+    verifyEq(proj.findNextVisible(3), 1)
+    verifyEq(proj.findNextVisible(7), 2)
+
+    proj.hide(7..<10)
+    verifyNull(proj.findNextVisible(7))
+    verifyNull(proj.findNextVisible(9))
+    verifyEq(proj.findNextVisible(6), 1)
+  }
 }

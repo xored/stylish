@@ -154,11 +154,15 @@ class BaseProjDoc : ProjDoc
   }
 
   override Range? fromMasterLines(Range lines) { proj.fromMaster(lines) }
-  
+
   override Range[] toMasterLines(Range lines) { proj.toMaster(lines) }
-  
+
   override RangeState getState(Range lines) { proj.getState(lines) }
+
+  override Int? findPrevVisibleLine(Int lineOffset) { proj.findPrevVisible(lineOffset) }
   
+  override Int? findNextVisibleLine(Int lineOffset) { proj.findNextVisible(lineOffset) }
+
   override Void addLineDecorator(|TextLine, Int->StrReplacement[]| decorator)
   {
     decorators.add(decorator)

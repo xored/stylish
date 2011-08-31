@@ -59,8 +59,32 @@ mixin ProjDoc : TextDoc
   ** 
   abstract RangeState getState(Range lines)
   
+  ** 
+  ** Find the previous visible line in this document,
+  ** starting the search at the given master line offset and looking backward.
+  ** 
+  ** If a visible line occurs in this document and
+  ** the corresponding master line is no greater than 'lineOffset', then
+  ** the index of the last such occurrence is returned.
+  ** 
+  ** Return the found line index in this document or 'null' if nothing found.
+  ** 
+  abstract Int? findPrevVisibleLine(Int lineOffset)
+  
+  ** 
+  ** Find the next visible line in this document,
+  ** starting the search at the given master line offset and looking forward.
+  ** 
+  ** If a visible line occurs in this document and
+  ** the corresponding master line is no smaller than 'lineOffset', then
+  ** the index of the first such occurrence is returned.
+  ** 
+  ** Return the found line index in this document or 'null' if nothing found.
+  ** 
+  abstract Int? findNextVisibleLine(Int lineOffset)
+
   **
-  ** Return the registered with 'makeFold' fold with the mininal length of range that contains the given line
+  ** Return the registered with 'makeFold' fold with the minimal length of range that contains the given line
   ** or 'null', if there isn't such registered fold.
   **
   abstract Fold? find(Int line)

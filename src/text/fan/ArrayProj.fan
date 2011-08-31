@@ -79,6 +79,7 @@ internal mixin ArrayProj
   **    then the given range will also become invisible.
   ** Return the range that have been added to this projection and becomes visible
   ** or 'null' if inserted range becomes invisible.
+  ** 
   abstract Range? insertMaster(Range indexes)
 
   **
@@ -86,6 +87,30 @@ internal mixin ArrayProj
   ** Return the range that were removed from projection.
   ** 
   abstract Range? deleteMaster(Range indexes)
+
+  ** 
+  ** Find the previous visible index in this projection array,
+  ** starting the search at the given master index offset and looking backward.
+  ** 
+  ** If a visible index occurs in this projection array and
+  ** the corresponding master array index is no greater than 'masterOffset', then
+  ** the index of the last such occurrence is returned.
+  ** 
+  ** Return the found projection array index or 'null' if nothing found.
+  ** 
+  abstract Int? findPrevVisible(Int masterOffset)
+
+  ** 
+  ** Find the next visible index in this projection array,
+  ** starting the search at the given master index offset and looking forward.
+  ** 
+  ** If a visible index occurs in this projection array and
+  ** the corresponding master array index is no smaller than 'masterOffset', then
+  ** the index of the first such occurrence is returned.
+  ** 
+  ** Return the found projection array index or 'null' if nothing found.
+  ** 
+  abstract Int? findNextVisible(Int masterOffset)
 
 }
 

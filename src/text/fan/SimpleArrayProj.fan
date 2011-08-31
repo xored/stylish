@@ -280,6 +280,41 @@ internal class SimpleArrayProj : ArrayProj
     return res?.toRange
   }
   
+  override Int? findPrevVisible(Int masterOffset)
+  {
+    Int fragmentIndex := findFragmentIndexByMasterIndex(masterOffset)
+    if (fragmentIndex >= 0) {
+      fragment := projFragments[fragmentIndex]
+      return fragment.projRange.start + (masterOffset - fragment.masterRange.start)
+    }
+    else
+    {
+      fragmentIndex = -(fragmentIndex + 1)
+      if (fragmentIndex <= 0) return null
+      
+      fragment := projFragments[fragmentIndex - 1]
+      return fragment.projRange.last
+    }
+  }
+
+  override Int? findNextVisible(Int masterOffset)
+  {
+    Int fragmentIndex := findFragmentIndexByMasterIndex(masterOffset)
+    if (fragmentIndex >= 0) {
+      fragment := projFragments[fragmentIndex]
+      return fragment.projRange.start + (masterOffset - fragment.masterRange.start)
+    }
+    else
+    {
+      fragmentIndex = -(fragmentIndex + 1)
+      if (fragmentIndex >= projFragments.size) return null
+      
+      fragment := projFragments[fragmentIndex]
+      return fragment.projRange.first
+    }
+    
+  }
+  
   internal Void discard(InternalProjInsertion insertion)
   {
     throw Err("Operation is not supported yet.")
