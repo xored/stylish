@@ -11,7 +11,7 @@ class Main
 
   static Void main()
   {
-    doc := TestDoc(10000)
+    doc := TestDoc(20000)
     projDoc := BaseProjDoc(doc)
     projDoc.makeFold(5..10)
     projDoc.makeFold(15..20)
@@ -20,7 +20,10 @@ class Main
     overview := OverviewRuler()
 
     markers := Marker[,]
-    for(i := 0; i < 1000; i++)
+    
+    size := 5000
+    
+    for(i := 0; i < size; i++)
     {
       val := i % 3
       MarkerType type := val == 0 ? MarkerType.info : (val == 1 ? MarkerType.warning : MarkerType.error)
@@ -28,9 +31,9 @@ class Main
     }
 
     overview.replace(markers)
-    overview.add(marker(GridRange(GridPos(2999, 0), GridPos(2999, 4)), MarkerType.error))
-    overview.add(marker(GridRange(GridPos(3600, 5), GridPos(3700, 5)), MarkerType.warning))
-    overview.add(marker(GridRange(GridPos(4500, 5), GridPos(4502, 0)), MarkerType.info))
+    overview.add(marker(GridRange(GridPos(size + 999, 0), GridPos(999, 4)), MarkerType.error))
+    overview.add(marker(GridRange(GridPos(size + 1600, 5), GridPos(size + 1700, 5)), MarkerType.warning))
+    overview.add(marker(GridRange(GridPos(size + 2500, 5), GridPos(size + 2502, 0)), MarkerType.info))
 
     view := SourceView
     {

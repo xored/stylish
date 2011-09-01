@@ -91,9 +91,12 @@ fan.kawhyScene.NodePeer.prototype.size   = function(self)
 
 fan.kawhyScene.NodePeer.prototype.size$  = function(self, size)
 {
+  this.m_size = size;
   this.m_elem.style.width  = size.m_w + "px";
   this.m_elem.style.height = size.m_h + "px";
 }
+
+fan.kawhyScene.NodePeer.prototype.m_size = null;
 
 fan.kawhyScene.NodePeer.prototype.m_style = null;
 fan.kawhyScene.NodePeer.prototype.style   = function(self) { return this.m_style }
@@ -163,8 +166,13 @@ fan.kawhyScene.NodePeer.prototype.initStyle = function(self)
   with (this.m_elem.style)
   {
     position = "absolute";
-    left = this.m_pos.m_x + "px";
-    top  = this.m_pos.m_y + "px";
+    left     = this.m_pos.m_x + "px";
+    top      = this.m_pos.m_y + "px";
+    if (this.m_size != null)
+    {
+      width  = this.m_size.m_w + "px";
+      height = this.m_size.m_h + "px";
+    }
   }
 }
 
