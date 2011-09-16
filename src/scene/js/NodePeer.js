@@ -105,6 +105,22 @@ fan.kawhyScene.NodePeer.prototype.style$  = function(self, style)
   this.m_style = style;
   var str = style != null ? fan.kawhyCss.StyleItem.toStyleString(style.toCss()) : "";
   this.m_elem.style.cssText = str;
+  if (style != null)
+  {
+    var property = style.findStyle(fan.kawhyCss.PropertyStyle.$type)
+    if (property != null)
+    {
+      var elem = this.m_elem;
+      property.m_properties.each(fan.sys.Func.make(
+        fan.sys.List.make(fan.sys.Param.$type, [new fan.sys.Param("val","sys::Str",false), new fan.sys.Param("key","sys::Str",false)]),
+        fan.sys.Void.$type,
+        function(val, key)
+        {
+          elem[val] = key;
+          return;
+        }));
+    }
+  }
   this.initStyle(self);
 }
 
