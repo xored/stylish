@@ -62,8 +62,7 @@ fan.kawhyScene.TextNodePeer.prototype.fillContent = function()
         wrapper = document.createElement("span");
       }
       wrapper.appendChild(document.createTextNode(val));
-      var str = fan.kawhyCss.StyleItem.toStyleString(style.m_style.toCss());
-      wrapper.style.cssText = str;
+      fan.kawhyScene.NodePeer.setStyle(wrapper, style.m_style);
       this.m_elem.appendChild(wrapper);
       offset = region.m_start + size;
     }

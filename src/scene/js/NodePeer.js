@@ -103,25 +103,32 @@ fan.kawhyScene.NodePeer.prototype.style   = function(self) { return this.m_style
 fan.kawhyScene.NodePeer.prototype.style$  = function(self, style)
 {
   this.m_style = style;
-  var str = style != null ? fan.kawhyCss.StyleItem.toStyleString(style.toCss()) : "";
-  this.m_elem.style.cssText = str;
+  fan.kawhyScene.NodePeer.setStyle(this.m_elem, style);
+  this.initStyle(self);
+}
+
+fan.kawhyScene.NodePeer.setStyle = function(elem, style)
+{
   if (style != null)
   {
-    var property = style.findStyle(fan.kawhyCss.PropertyStyle.$type)
+    elem.style.cssText = fan.kawhyCss.StyleItem.toStyleString(style.toCss());
+    var property = style.findStyle(fan.kawhyCss.PropertyStyle.$type);
     if (property != null)
     {
-      var elem = this.m_elem;
       property.m_properties.each(fan.sys.Func.make(
         fan.sys.List.make(fan.sys.Param.$type, [new fan.sys.Param("val","sys::Str",false), new fan.sys.Param("key","sys::Str",false)]),
         fan.sys.Void.$type,
         function(val, key)
         {
-          elem[val] = key;
+          elem[key] = val;
           return;
         }));
     }
   }
-  this.initStyle(self);
+  else
+  {
+    elem.style.cssText = "";
+  }
 }
 
 fan.kawhyScene.NodePeer.prototype.m_thru = false;
