@@ -120,7 +120,11 @@ fan.kawhyScene.NodePeer.setStyle = function(elem, style)
         fan.sys.Void.$type,
         function(val, key)
         {
-          elem[key] = val;
+          var event = fan.kawhyScene.NodePeer.asEvent(key);
+          if (event)
+          {
+            elem.addEventListener(event, function(e) { return eval(val); }, false);
+          } else elem[key] = val;
           return;
         }));
     }
@@ -130,6 +134,18 @@ fan.kawhyScene.NodePeer.setStyle = function(elem, style)
     elem.style.cssText = "";
   }
 }
+
+fan.kawhyScene.NodePeer.asEvent = function(name)
+{
+  if (name.length > 2 && name.slice(0, 2) == "on")
+  {
+    var index = fan.kawhyScene.NodePeer.events.indexOf(name.slice(2));
+    if (index >= 0) return fan.kawhyScene.NodePeer.events[index];
+  }
+  return null;
+}
+
+fan.kawhyScene.NodePeer.events = ["mouseover", "mousemove", "mouseout"];
 
 fan.kawhyScene.NodePeer.prototype.m_thru = false;
 fan.kawhyScene.NodePeer.prototype.thru   = function(self) { return this.m_thru; }

@@ -47,7 +47,7 @@ class TestLine : TextLine
     baseText = "line number: $index clicks count: "
     text = baseText
     style = BgStyle(Color.orange)
-    tooltip := PropertyStyle(["title":"tooltip"])
+    tooltip := PropertyStyle(["title":"tooltip", "onmouseout":"alert(\"Hello!\")"])
     if (index % 5 == 0) styles = StyleList([StyleRange(TextStyle { color = Color.blue }, 0..3), StyleRange(LinkStyle(`http://google.com`, LinkTarget.blank), 5..10)])
     else styles = StyleList([StyleRange(TextStyle { color = Color.blue } + TextLineStyle { under = true; over = true; strike = true } + tooltip, 0..3)])
     updateText()
