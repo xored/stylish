@@ -38,14 +38,14 @@ fan.kawhyScene.TextNodePeer.prototype.fillContent = function()
     if (region.m_start >= textSize) break;
     if (region.m_start > offset)
     {
-      var val = this.m_text.substring(offset, region.m_start);
+      var val = this.textRange(offset, region.m_start);
       this.m_elem.appendChild(document.createTextNode(val));
     }
     var size = region.m_size;
     if (region.m_start + size > textSize) size = textSize - region.m_start;
     if (size > 0)
     {
-      var val = this.m_text.substring(region.m_start, region.m_start + size);
+      var val = this.textRange(region.m_start, region.m_start + size);
       var linkStyle = style.m_style.findStyle(fan.kawhyCss.LinkStyle.$type);
       var wrapper;
       if (linkStyle)
@@ -69,9 +69,15 @@ fan.kawhyScene.TextNodePeer.prototype.fillContent = function()
   }
   if (offset < textSize)
   {
-    var val = this.m_text.substring(offset);
+    var val = this.textRange(offset);
     this.m_elem.appendChild(document.createTextNode(val));
   }
+}
+
+fan.kawhyScene.TextNodePeer.prototype.textRange = function(start, end)
+{
+  var val = end ? this.m_text.substring(start, end) : this.m_text.substring(start);
+  return val.replace(/\t/g,' ');
 }
 
 fan.kawhyScene.TextNodePeer.prototype.initStyle = function()
