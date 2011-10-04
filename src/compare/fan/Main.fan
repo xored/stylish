@@ -12,16 +12,26 @@ class Main
 
   static Void main()
   {
-    doc := TestDoc(1000)
-    edit := TextEdit { source = doc }
-    view := SourceView
+    blocks := CompareBlock[,]
+    for(i := 0; i < 10; i++)
     {
-      text = edit
-      leftRulers = [LineNums(), SeparatorRuler()]
-      rightRulers = [,]
+      
+      blocks.add(asBlock([,] { fill("ccccccccccccccc", 10)}, CompareBlockType.common))
+      blocks.add(asBlock([,] { fill("aaaaaaaaaaaaaaa", 10)}, CompareBlockType.a))
+      blocks.add(asBlock([,] { fill("bbbbbbbbbbbbbbb", 10)}, CompareBlockType.b))
     }
-    container := Container(CompareView())
+
+    view := CompareView
+    {
+      doc = CompareDoc(blocks)
+    }
+    container := Container(view)
     container.open
+  }
+
+  static CompareBlock asBlock(Str[] lines, CompareBlockType type)
+  {
+    CompareBlock(lines.map |text| { BaseTextLine { it.text = text } }, type)
   }
 
 }

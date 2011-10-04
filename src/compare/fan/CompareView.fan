@@ -8,25 +8,79 @@ using kawhyText
 class CompareView : GroupControl
 {
 
-  TextDoc a := BaseTextDoc { it.size = 1000 }
+  CompareDoc doc
 
-  TextDoc b := BaseTextDoc { it.size = 1000 }
+  TextDoc a { private set }
+
+  TextDoc b { private set }
 
   new make(|This|? f := null) : super()
   {
     f?.call(this)
     aView = SourceView
     {
-      text = CompareTextEdit { source = a }
+      text := CompareTextEdit { source = doc.a }
+      it.text = text
       leftRulers = [LineNums(), SeparatorRuler()]
+      text.onScroll.handle |Point p|
+      {
+        echo("a: try (a=$aSkip b=$bSkip)")
+        if (aSkip) { aSkip = false; return }
+        echo("a: start (a=$aSkip b=$bSkip)")
+        item := text.itemSize
+        line := p.y / item
+        newY := doc.c2b(doc.a2c(line)) * item
+        scroll := bView.text.scroll
+        if (newY != scroll.y)
+        {
+          bView.text.scroll = Point(scroll.x, newY)
+          aSkip = true
+        }
+        else { bSkip = false; aSkip = false }
+        echo("a: end (a=$aSkip b=$bSkip)")
+      }
     }
     bView = SourceView
     {
-      text = CompareTextEdit { source = b }
+      text := CompareTextEdit { source = doc.b }
+      it.text = text
       leftRulers = [LineNums(), SeparatorRuler()]
+      text.onScroll.handle |Point p|
+      {
+        echo("b: try (a=$aSkip b=$bSkip)")
+        if (bSkip) { bSkip = false; return }
+        echo("b: start (a=$aSkip b=$bSkip)")
+        bSkip = true
+        item := text.itemSize
+        line := p.y / item
+        scroll := aView.text.scroll
+        newY := doc.c2a(doc.b2c(line)) * item
+        if (newY != scroll.y)
+        {
+          aView.text.scroll = Point(scroll.x, newY)
+          bSkip = true
+        }
+        else { bSkip = false; aSkip = false }
+        echo("b: end (a=$aSkip b=$bSkip)")
+      }
     }
     scroll = Slider(Orientation.vertical)
+    scale := 4
+    scroll.node.max = doc.total * scale
+    scroll.node.thumb = aView.text.visibleRows.size * scale
+    scroll.node.onScroll = |Int i|
+    {
+      item := aView.text.itemSize
+      a := doc.c2a(i / scale)
+      b := doc.c2b(i / scale)
+
+      aView.text.scroll = Point(aView.text.scroll.x, a * item)
+      bView.text.scroll = Point(bView.text.scroll.x, b * item)
+    }
   }
+
+  private Bool aSkip := false
+  private Bool bSkip := false
 
   override protected Control[] kids()
   {
