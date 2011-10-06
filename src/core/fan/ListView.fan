@@ -102,8 +102,7 @@ abstract class ListView : Control
       nodeUpdate(node)
     }
     node.pos = Point(0, i * itemSize)
-    size := node.kids[0].size
-    node.size = Size(size.w.max(this.node.clientArea.w), size.h)
+    node.size = Size(maxWidth.max(this.node.clientArea.w), itemSize)
     return node.kids[0]
   }
 
