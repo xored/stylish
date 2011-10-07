@@ -3,7 +3,7 @@ using kawhyNotice
 using kawhyCss
 
 @Js
-mixin TextDoc : ListNotifier
+abstract class TextDoc : ListNotifier
 {
 
   **

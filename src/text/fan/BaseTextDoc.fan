@@ -9,8 +9,6 @@ class BaseTextDoc : TextDoc
 
   override TextLine get(Int index) { BaseTextLine() }
 
-  override protected ListListener[] listeners := [,]
-
 }
 
 @Js
@@ -22,7 +20,5 @@ class BaseTextLine : TextLine
   override StyleList styles := StyleList([,])
 
   override Style? style
-
-  override protected ListListener[] listeners := [,]
 
 }

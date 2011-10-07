@@ -20,6 +20,8 @@ mixin ListListener : Listener
 mixin Listener
 {
 
-  virtual Void onBatch(|->| f) { f() }
+  virtual Void onBatchStart() {}
+
+  virtual Void onBatchFinish() {}
 
 }

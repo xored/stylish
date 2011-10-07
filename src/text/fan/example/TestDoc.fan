@@ -30,8 +30,6 @@ class TestDoc : TextDoc
 
   internal TestLine[] lines := [,]
 
-  override protected ListListener[] listeners := [,]
-
 }
 
 @Js
@@ -60,14 +58,14 @@ class TestLine : TextLine
 
   override Void listen(ListListener l)
   {
-    listeners.add(l)
+    super.listen(l)
     if (!doc.lines.contains(this)) doc.lines.add(this)
   }
 
   override Void discard(ListListener l)
   {
-    listeners.remove(l)
-    if (listeners.size == 0) doc.lines.remove(this)
+    super.discard(l)
+    if (doc.lines.contains(this)) doc.lines.remove(this)
   }
 
   override Str text := ""
@@ -75,7 +73,5 @@ class TestLine : TextLine
   override StyleList styles := StyleList([,])
 
   override Style? style
-
-  override protected ListListener[] listeners := [,]
 
 }

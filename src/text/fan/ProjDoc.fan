@@ -5,7 +5,7 @@ using kawhyCss
 ** This document contains transformed content.
 ** 
 @Js
-mixin ProjDoc : TextDoc
+abstract class ProjDoc : TextDoc
 {
   **
   ** Master (base) document.
