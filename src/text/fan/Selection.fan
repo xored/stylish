@@ -39,14 +39,21 @@ class Selection
 
   Void reveal()
   {
-    // TODO This part should be customizable
-    visible := edit.fullyVisibleRows
-    select  := range.rows
-    if (visible.includes(select)) return
     itemSize := edit.itemSize
-    capacity := edit.clientArea.h / itemSize
-    shift := select.size > capacity ? 0 : (capacity - select.size) / 2
-    edit.scroll = Point(0, (select.start - shift) * itemSize)
+    rows := range.rows
+    visible := Region(edit.scroll.y, edit.clientArea.h)
+    actual := Region(rows.start * itemSize, rows.size * itemSize)
+    y := findRevealPos(visible, actual)
+    if (y == null) return
+
+    edit.scroll = Point(0, y)
+  }
+
+  static Int? findRevealPos(Region visible, Region actual)
+  {
+    if (visible.includes(actual)) return null
+    diff := visible.size - actual.size
+    return actual.start - (diff > 0 ? diff / 2 : diff)
   }
 
   Str text(Range range := 0..-1)
