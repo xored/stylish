@@ -93,7 +93,7 @@ class LineDoc : TextDoc
 
   override TextLine get(Int index) { lines[index] }
 
-  override protected ListListener[] listeners() { [,] }
+  override protected ListListener[] listeners := [,]
 
   private BaseTextLine[] lines
 
