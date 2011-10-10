@@ -4,7 +4,7 @@ using kawhyNotice
 using kawhyCss
 
 @Js
-mixin TextLine : ListNotifier
+abstract class TextLine : ListNotifier
 {
 
   abstract Str text

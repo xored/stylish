@@ -23,8 +23,6 @@ class TextNotifier : ListNotifier
 
   override Int size() { text.size }
 
-  override protected ListListener[] listeners := [,]
-
 }
 
 @Js

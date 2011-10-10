@@ -21,8 +21,6 @@ class BaseProjDoc : ProjDoc
   
   override TextDoc master { private set }
   
-  override protected ListListener[] listeners := [,]
-  
   new make(TextDoc master) {
     this.master = master
     proj = SimpleArrayProj(master.size)
@@ -497,7 +495,6 @@ internal class DecoratedTextLine : TextLine
   override Str text
   override StyleList styles
   override Style? style
-  override protected ListListener[] listeners := [,]
   
   internal Int masterIndex
   

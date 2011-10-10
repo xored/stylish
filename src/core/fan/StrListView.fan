@@ -60,6 +60,4 @@ class StrListViewContent : ListNotifier
 
   override Int size { private set }
 
-  override protected ListListener[] listeners := [,]
-
 }
