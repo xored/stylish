@@ -37,7 +37,7 @@ class Selection
     }
   }
 
-  Void reveal()
+  virtual Void reveal()
   {
     itemSize := edit.itemSize
     rows := range.rows
