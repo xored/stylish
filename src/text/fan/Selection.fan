@@ -86,6 +86,6 @@ class Selection
 
   override Str toStr() { range.toStr }
 
-  private TextEdit edit
+  protected TextEdit edit
 
 }
