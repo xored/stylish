@@ -105,7 +105,7 @@ abstract class ListView : Control
     node.size = Size(maxWidth.max(this.node.clientArea.w), itemSize)
     return node.kids[0]
   }
-
+  
   virtual protected Void sync()
   {
     if (source.size == 0)

@@ -5,12 +5,16 @@ using stylishNotice
 @Js
 class TestDoc : TextDoc
 {
-
   override Int size
 
-  new make(Int size) { this.size = size }
+  new make(Int size) { 
+    this.size = size 
+    for (i := 0; i < size; ++i) {
+      lines.add(TestLine(this, i))
+    }
+  }
 
-  override TextLine get(Int index) { TestLine(this, index) }
+  override TestLine get(Int index) { lines[index] }
 
   Int clicks := 0
   {
@@ -72,6 +76,20 @@ class TestLine : TextLine
 
   override StyleList styles := StyleList([,])
 
-  override Style? style
+  override Style? style {
+    set {
+      &style = it
+      echo("someone set style to $it")
+    }
+  }
+  
+  Void setStyle(Style st) {
+    style = st
+    batch |->| {
+      fire(RemoveNotice(0, size))
+      text = "absdfsdds"
+      fire(AddNotice(0, size))
+    }
+  }
 
 }

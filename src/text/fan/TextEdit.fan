@@ -229,6 +229,7 @@ internal class LineListener : ListListener
     this.edit = edit
     this.node = node
     this.line = line
+    this.style = line.style
     line.listen(this)
     sync()
   }
@@ -241,7 +242,12 @@ internal class LineListener : ListListener
     node.text = ""
     node.styles = line.styles.ranges
     node.text = line.text
-    parent := node.parent
+    parent := node.parent    
+    if (style != line.style) {
+      //echo("sync called for $line, new style is $line.style, old line style = $style")
+      parent.style = line.style
+      style = line.style
+    }
     if (parent != null) edit.doNodeUpdate(parent)
   }
 
@@ -250,6 +256,7 @@ internal class LineListener : ListListener
   private TextNode node
   private TextLine line
   private TextEdit edit
+  private Style? style
 
 }
 
