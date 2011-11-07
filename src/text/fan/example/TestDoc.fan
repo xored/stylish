@@ -1,6 +1,6 @@
 using gfx
-using kawhyCss
-using kawhyNotice
+using stylishCss
+using stylishNotice
 
 @Js
 class TestDoc : TextDoc

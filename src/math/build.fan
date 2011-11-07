@@ -3,7 +3,7 @@ class Build : build::BuildPod
 {
   new make()
   {
-    podName = "kawhyMath"
+    podName = "stylishMath"
     summary = ""
     srcDirs = [`test/`, `fan/`]
     depends = ["sys 1.0"]

@@ -1,6 +1,6 @@
 using gfx
-using kawhyScene
-using kawhyCss
+using stylishScene
+using stylishCss
 
 @Js
 class SeparatorRuler : Ruler

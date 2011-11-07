@@ -3,9 +3,9 @@ class Build : build::BuildPod
 {
   new make()
   {
-    podName = "kawhy"
+    podName = "stylish"
     summary = ""
     srcDirs = [`fan/`, `fan/listeners/`, `fan/example/`]
-    depends = ["sys 1.0", "gfx 1.0", "fwt 1.0", "kawhyScene 1.0", "kawhyCss 1.0", "kawhyNotice 1.0", "kawhyMath 1.0"]
+    depends = ["sys 1.0", "gfx 1.0", "fwt 1.0", "stylishScene 1.0", "stylishCss 1.0", "stylishNotice 1.0", "stylishMath 1.0"]
   }
 }

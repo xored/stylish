@@ -1,10 +1,10 @@
 using gfx
 using fwt
-using kawhy
-using kawhyCss
-using kawhyMath
-using kawhyScene
-using kawhyNotice
+using stylish
+using stylishCss
+using stylishMath
+using stylishScene
+using stylishNotice
 
 @Js
 class OverviewRuler : Ruler, ListListener

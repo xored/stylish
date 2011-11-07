@@ -1,5 +1,5 @@
-fan.kawhyScene.ScenePeer = fan.sys.Obj.$extend(fan.sys.Obj);
-fan.kawhyScene.ScenePeer.prototype.$ctor = function()
+fan.stylishScene.ScenePeer = fan.sys.Obj.$extend(fan.sys.Obj);
+fan.stylishScene.ScenePeer.prototype.$ctor = function()
 {
   this.m_elem = document.createElement("div");
   this.m_elem.id = "scene";
@@ -10,21 +10,21 @@ fan.kawhyScene.ScenePeer.prototype.$ctor = function()
     left = "0";
     top  = "0";
   }
-  this.m_mouse = fan.kawhyScene.Mouse.make();
-  this.m_keyboard = fan.kawhyScene.Keyboard.make();
-  this.m_clipboard = fan.kawhyScene.Clipboard.make();
+  this.m_mouse = fan.stylishScene.Mouse.make();
+  this.m_keyboard = fan.stylishScene.Keyboard.make();
+  this.m_clipboard = fan.stylishScene.Clipboard.make();
   var $this = this;
   this.m_clipboard.peer.onSourceChange = function() { $this.handleTextSource(); }
 }
 
-fan.kawhyScene.ScenePeer.prototype.mouse     = function(self) { return this.m_mouse;     }
-fan.kawhyScene.ScenePeer.prototype.keyboard  = function(self) { return this.m_keyboard;  }
-fan.kawhyScene.ScenePeer.prototype.clipboard = function(self) { return this.m_clipboard; }
+fan.stylishScene.ScenePeer.prototype.mouse     = function(self) { return this.m_mouse;     }
+fan.stylishScene.ScenePeer.prototype.keyboard  = function(self) { return this.m_keyboard;  }
+fan.stylishScene.ScenePeer.prototype.clipboard = function(self) { return this.m_clipboard; }
 
-fan.kawhyScene.ScenePeer.prototype.attach = function(elem)
+fan.stylishScene.ScenePeer.prototype.attach = function(elem)
 {
   elem.appendChild(this.m_elem);
-  this.m_focusArea = fan.kawhyScene.ScenePeer.createFocusArea();
+  this.m_focusArea = fan.stylishScene.ScenePeer.createFocusArea();
   document.body.appendChild(this.m_focusArea);
   this.attachFocus();
   this.attachMouse();
@@ -33,7 +33,7 @@ fan.kawhyScene.ScenePeer.prototype.attach = function(elem)
   this.focus();
 }
 
-fan.kawhyScene.ScenePeer.prototype.detach = function()
+fan.stylishScene.ScenePeer.prototype.detach = function()
 {
   document.body.removeChild(this.m_focusArea);
   this.m_elem.parentNode.removeChild(this.m_elem);
@@ -44,7 +44,7 @@ fan.kawhyScene.ScenePeer.prototype.detach = function()
 // Mouse
 /////////////////////////
 
-fan.kawhyScene.ScenePeer.prototype.attachMouse = function()
+fan.stylishScene.ScenePeer.prototype.attachMouse = function()
 {
   var $this = this;
   this.addListener(window, "mousemove",  function(e) { return $this.handleMove(e);  });
@@ -53,23 +53,23 @@ fan.kawhyScene.ScenePeer.prototype.attachMouse = function()
   this.addListener(window, "mousewheel", function(e) { return $this.handleWheel(e); });
 }
 
-fan.kawhyScene.ScenePeer.prototype.handleMove = function(e)
+fan.stylishScene.ScenePeer.prototype.handleMove = function(e)
 {
   var p = fan.gfx.Point.make(e.clientX, e.clientY);
   if (this.m_mouse.pushPos(p)) this.preventDefault(e);
 }
 
-fan.kawhyScene.ScenePeer.prototype.handleDown = function(e)
+fan.stylishScene.ScenePeer.prototype.handleDown = function(e)
 {
   if (this.handleClick(e, true)) this.preventDefault(e);
 }
 
-fan.kawhyScene.ScenePeer.prototype.handleUp = function(e)
+fan.stylishScene.ScenePeer.prototype.handleUp = function(e)
 {
   if (this.handleClick(e, false)) this.preventDefault(e);
 }
 
-fan.kawhyScene.ScenePeer.prototype.handleClick = function(e, down)
+fan.stylishScene.ScenePeer.prototype.handleClick = function(e, down)
 {
   var mouse = this.m_mouse;
   switch (e.button)
@@ -81,13 +81,13 @@ fan.kawhyScene.ScenePeer.prototype.handleClick = function(e, down)
   return false;
 }
 
-fan.kawhyScene.ScenePeer.prototype.handleWheel = function(e)
+fan.stylishScene.ScenePeer.prototype.handleWheel = function(e)
 {
-  var p = fan.kawhyScene.ScenePeer.toWheelDelta(e);
+  var p = fan.stylishScene.ScenePeer.toWheelDelta(e);
   if (this.m_mouse.m_onWheel.push(p)) this.preventDefault(e);
 }
 
-fan.kawhyScene.ScenePeer.toWheelDelta = function(e)
+fan.stylishScene.ScenePeer.toWheelDelta = function(e)
 {
   var wx = 0;
   var wy = 0;
@@ -125,13 +125,13 @@ fan.kawhyScene.ScenePeer.toWheelDelta = function(e)
 // Focus
 /////////////////////////
 
-fan.kawhyScene.ScenePeer.prototype.focus = function()
+fan.stylishScene.ScenePeer.prototype.focus = function()
 {
   var area = this.m_focusArea;
   if (area != null && area !== document.activeElement) area.focus();
 }
 
-fan.kawhyScene.ScenePeer.prototype.attachFocus = function()
+fan.stylishScene.ScenePeer.prototype.attachFocus = function()
 {
   var area = this.m_focusArea;
   var $this = this;
@@ -139,7 +139,7 @@ fan.kawhyScene.ScenePeer.prototype.attachFocus = function()
   this.addListener(area, "blur",  function() { return $this.handleFocus(false); });
 }
 
-fan.kawhyScene.ScenePeer.prototype.handleFocus = function(focus)
+fan.stylishScene.ScenePeer.prototype.handleFocus = function(focus)
 {
   //do nothing for now
   return true;
@@ -149,7 +149,7 @@ fan.kawhyScene.ScenePeer.prototype.handleFocus = function(focus)
 // Keyboard
 /////////////////////////
 
-fan.kawhyScene.ScenePeer.prototype.attachKeyboard = function()
+fan.stylishScene.ScenePeer.prototype.attachKeyboard = function()
 {
   var area = this.m_focusArea;
   var $this = this;
@@ -158,16 +158,16 @@ fan.kawhyScene.ScenePeer.prototype.attachKeyboard = function()
   this.addListener(area, "keypress", function(e) { return $this.handleKeyPress(e); });
 }
 
-fan.kawhyScene.ScenePeer.prototype.handleKeyDown = function(e)
+fan.stylishScene.ScenePeer.prototype.handleKeyDown = function(e)
 {
-  this.m_modifiers = fan.kawhyScene.ScenePeer.modifiers(e);
-  this.m_key = fan.kawhyScene.ScenePeer.key(e);
-  return this.m_keyboard.onKey(this.m_modifiers.plus(this.m_key));
+  this.m_modifiers = fan.stylishScene.ScenePeer.modifiers(e);
+  this.m_key = fan.stylishScene.ScenePeer.key(e);
+  if (this.m_keyboard.onKey(this.m_modifiers.plus(this.m_key))) this.preventDefault(e);
 }
 
-fan.kawhyScene.ScenePeer.prototype.handleKeyPress = function(e)
+fan.stylishScene.ScenePeer.prototype.handleKeyPress = function(e)
 {
-  var mdfs = fan.kawhyScene.ScenePeer.modifiers(e);
+  var mdfs = fan.stylishScene.ScenePeer.modifiers(e);
   if (fan.fwt.DesktopPeer.$isMac)
   {
     if (!mdfs.isCtrl() && !mdfs.isAlt() && mdfs.isCommand()) return false;
@@ -179,24 +179,24 @@ fan.kawhyScene.ScenePeer.prototype.handleKeyPress = function(e)
         !(mdfs.isAlt() && mdfs.isCtrl())) return false
   }
   this.m_char = e.which;
-  return this.m_keyboard.onChar(this.m_char);
+  if (this.m_keyboard.onChar(this.m_char)) this.preventDefault(e);
 }
 
-fan.kawhyScene.ScenePeer.prototype.handleKeyUp = function(e)
+fan.stylishScene.ScenePeer.prototype.handleKeyUp = function(e)
 {
-  var modifiers = fan.kawhyScene.ScenePeer.modifiers(e);
+  var modifiers = fan.stylishScene.ScenePeer.modifiers(e);
   // on mac when we press command+<key> and then release <key> no key up event occur.
   // When command will be released we need to update key
   if (fan.fwt.DesktopPeer.$isMac && this.m_modifiers.isCommand() && !modifiers.isCommand())
   {
     this.m_modifiers = modifiers;
-    this.m_key = fan.kawhyScene.ScenePeer.key(e);
-    this.m_char = fan.kawhyScene.ScenePeer.char(e);
+    this.m_key = fan.stylishScene.ScenePeer.key(e);
+    this.m_char = fan.stylishScene.ScenePeer.char(e);
     return this.m_keyboard.onKeyChar(modifiers.plus(this.m_key), this.m_char);
   }
   // handle key modifier up
-  var keyModifier = fan.kawhyScene.ScenePeer.keyModifier(e);
-  if (keyModifier != null) modifiers = fan.kawhyUtil.KeyUtil.remove(modifiers, keyModifier);
+  var keyModifier = fan.stylishScene.ScenePeer.keyModifier(e);
+  if (keyModifier != null) modifiers = fan.stylishUtil.KeyUtil.remove(modifiers, keyModifier);
   if (!fan.sys.ObjUtil.equals(modifiers, this.m_modifiers))
   {
     // only modifiers was changed
@@ -209,13 +209,13 @@ fan.kawhyScene.ScenePeer.prototype.handleKeyUp = function(e)
   return this.m_keyboard.onKeyChar(modifiers.plus(this.m_key), null);
 }
 
-fan.kawhyScene.ScenePeer.key = function(e)
+fan.stylishScene.ScenePeer.key = function(e)
 {
   var key = e.keyCode;
   if (!key) return fan.fwt.Key.m_none;
 
   // modifiers will be handled separately
-  var keyModifier = fan.kawhyScene.ScenePeer.keyModifier(e);
+  var keyModifier = fan.stylishScene.ScenePeer.keyModifier(e);
   if (keyModifier != null) return fan.fwt.Key.m_none;
 
   if (key >= 65 && key <= 90)
@@ -224,6 +224,7 @@ fan.kawhyScene.ScenePeer.key = function(e)
   switch (key)
   {
     case 8:  return fan.fwt.Key.m_backspace;
+    case 9:  return fan.fwt.Key.m_tab;
     // keys
     case 32: return fan.fwt.Key.m_space;
     case 33: return fan.fwt.Key.m_pageUp;
@@ -236,11 +237,24 @@ fan.kawhyScene.ScenePeer.key = function(e)
     case 40: return fan.fwt.Key.m_down;
     case 45: return fan.fwt.Key.m_insert;
     case 46: return fan.fwt.Key.m_$delete;
+    // F1-F12
+    case 112: return fan.fwt.Key.m_f1;
+    case 113: return fan.fwt.Key.m_f2;
+    case 114: return fan.fwt.Key.m_f3;
+    case 115: return fan.fwt.Key.m_f4;
+    case 116: return fan.fwt.Key.m_f5;
+    case 117: return fan.fwt.Key.m_f6;
+    case 118: return fan.fwt.Key.m_f7;
+    case 119: return fan.fwt.Key.m_f8;
+    case 120: return fan.fwt.Key.m_f9;
+    case 121: return fan.fwt.Key.m_f10;
+    case 122: return fan.fwt.Key.m_f11;
+    case 123: return fan.fwt.Key.m_f12;
     default: return fan.fwt.Key.fromMask(e.keyCode);
   }
 }
 
-fan.kawhyScene.ScenePeer.modifiers = function(e)
+fan.stylishScene.ScenePeer.modifiers = function(e)
 {
   var modifiers = fan.fwt.Key.m_none;
   if (e.shiftKey) modifiers = modifiers.plus(fan.fwt.Key.m_shift);
@@ -248,15 +262,15 @@ fan.kawhyScene.ScenePeer.modifiers = function(e)
   if (e.altKey)   modifiers = modifiers.plus(fan.fwt.Key.m_alt);
   if (e.metaKey)  modifiers = modifiers.plus(fan.fwt.Key.m_command);
 
-  var keyModifier = fan.kawhyScene.ScenePeer.keyModifier(e);
+  var keyModifier = fan.stylishScene.ScenePeer.keyModifier(e);
   if (keyModifier != null) modifiers = modifiers.plus(keyModifier);
   return modifiers;
 }
 
-fan.kawhyScene.ScenePeer.keyModifier = function(e)
+fan.stylishScene.ScenePeer.keyModifier = function(e)
 {
   var code = e.keyCode;
-  var metaKeyHandler = fan.kawhyScene.ScenePeer.getMetaKeyHandler();
+  var metaKeyHandler = fan.stylishScene.ScenePeer.getMetaKeyHandler();
 
   if (metaKeyHandler(code)) return fan.fwt.Key.m_command;
   switch (code)
@@ -268,9 +282,9 @@ fan.kawhyScene.ScenePeer.keyModifier = function(e)
   }
 }
 
-fan.kawhyScene.ScenePeer.getMetaKeyHandler = function()
+fan.stylishScene.ScenePeer.getMetaKeyHandler = function()
 {
-  var handler = fan.kawhyScene.ScenePeer.metaKeyHandler;
+  var handler = fan.stylishScene.ScenePeer.metaKeyHandler;
   if (handler == null)
   {
     if (!fan.fwt.DesktopPeer.$isMac)
@@ -284,27 +298,27 @@ fan.kawhyScene.ScenePeer.getMetaKeyHandler = function()
       else
         handler = function(k) { return k == 91 || k == 93 };
     }
-    fan.kawhyScene.ScenePeer.metaKeyHandler = handler;
+    fan.stylishScene.ScenePeer.metaKeyHandler = handler;
   }
   return handler;
 }
 
-fan.kawhyScene.ScenePeer.metaKeyHandler = null;
-fan.kawhyScene.ScenePeer.prototype.m_char      = null;
-fan.kawhyScene.ScenePeer.prototype.m_key       = fan.fwt.Key.m_none;
-fan.kawhyScene.ScenePeer.prototype.m_modifiers = fan.fwt.Key.m_none;
+fan.stylishScene.ScenePeer.metaKeyHandler = null;
+fan.stylishScene.ScenePeer.prototype.m_char      = null;
+fan.stylishScene.ScenePeer.prototype.m_key       = fan.fwt.Key.m_none;
+fan.stylishScene.ScenePeer.prototype.m_modifiers = fan.fwt.Key.m_none;
 
 /////////////////////////
 // Clipboard
 /////////////////////////
 
-fan.kawhyScene.ScenePeer.prototype.attachClipboard = function()
+fan.stylishScene.ScenePeer.prototype.attachClipboard = function()
 {
   var $this = this;
   this.addListener(this.m_focusArea, "copy", function(e) { return $this.handleCopy(e);  });
 }
 
-fan.kawhyScene.ScenePeer.prototype.handleTextSource = function()
+fan.stylishScene.ScenePeer.prototype.handleTextSource = function()
 {
   if (this.m_textSource)
   {
@@ -330,9 +344,9 @@ fan.kawhyScene.ScenePeer.prototype.handleTextSource = function()
   }
 }
 
-fan.kawhyScene.ScenePeer.prototype.m_textSource = null;
+fan.stylishScene.ScenePeer.prototype.m_textSource = null;
 
-fan.kawhyScene.ScenePeer.prototype.handleCopy = function(e)
+fan.stylishScene.ScenePeer.prototype.handleCopy = function(e)
 {
   var source = this.m_clipboard.textSource();
   if (source)
@@ -347,41 +361,41 @@ fan.kawhyScene.ScenePeer.prototype.handleCopy = function(e)
 // Fields
 /////////////////////////
 
-fan.kawhyScene.ScenePeer.prototype.root = function(self) { return this.m_root; }
-fan.kawhyScene.ScenePeer.prototype.root$ = function(self, root)
+fan.stylishScene.ScenePeer.prototype.root = function(self) { return this.m_root; }
+fan.stylishScene.ScenePeer.prototype.root$ = function(self, root)
 {
   this.m_root = root;
   this.m_elem.appendChild(root.peer.m_elem);
   root.peer.m_scene = self;
 }
-fan.kawhyScene.ScenePeer.prototype.m_root = null;
+fan.stylishScene.ScenePeer.prototype.m_root = null;
 
-fan.kawhyScene.ScenePeer.prototype.posOnScreen = function(self)
+fan.stylishScene.ScenePeer.prototype.posOnScreen = function(self)
 {
   return fan.gfx.Point.m_defVal;
 }
 
-fan.kawhyScene.ScenePeer.prototype.m_elem = null;
-fan.kawhyScene.ScenePeer.prototype.m_focusArea = null;
+fan.stylishScene.ScenePeer.prototype.m_elem = null;
+fan.stylishScene.ScenePeer.prototype.m_focusArea = null;
 
 /////////////////////////
 // Utils
 /////////////////////////
 
-fan.kawhyScene.ScenePeer.prototype.preventDefault = function(e)
+fan.stylishScene.ScenePeer.prototype.preventDefault = function(e)
 {
   e.stopPropagation();
   e.preventDefault();
 }
 
-fan.kawhyScene.ScenePeer.prototype.addListener = function(t, e, f)
+fan.stylishScene.ScenePeer.prototype.addListener = function(t, e, f)
 {
   var listener = { target: t, event: e, func: f };
   this.listeners.push(listener);
   t.addEventListener(e, f, false);
 }
 
-fan.kawhyScene.ScenePeer.prototype.removeListeners = function()
+fan.stylishScene.ScenePeer.prototype.removeListeners = function()
 {
   var listeners = this.listeners;
   while(listeners.length > 0)
@@ -391,9 +405,9 @@ fan.kawhyScene.ScenePeer.prototype.removeListeners = function()
   }
 }
 
-fan.kawhyScene.ScenePeer.prototype.listeners = [];
+fan.stylishScene.ScenePeer.prototype.listeners = [];
 
-fan.kawhyScene.ScenePeer.createFocusArea = function()
+fan.stylishScene.ScenePeer.createFocusArea = function()
 {
   var elem = document.createElement("textarea");
   with (elem.style)

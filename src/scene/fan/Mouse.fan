@@ -1,5 +1,5 @@
 using gfx
-using kawhyNotice
+using stylishNotice
 
 @Js
 class Mouse

@@ -1,7 +1,7 @@
 using gfx
-using kawhyCss
-using kawhyScene
-using kawhyNotice
+using stylishCss
+using stylishScene
+using stylishNotice
 
 @Js
 abstract class Control

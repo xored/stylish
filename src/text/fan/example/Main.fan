@@ -1,9 +1,9 @@
 using gfx
 using fwt
-using kawhyMath
-using kawhy
-using kawhyCss
-using kawhyScene
+using stylishMath
+using stylish
+using stylishCss
+using stylishScene
 
 @Js
 class Main

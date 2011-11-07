@@ -1,4 +1,4 @@
-using kawhyMath
+using stylishMath
 
 **
 ** Basic array projection implementation.

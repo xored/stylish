@@ -1,6 +1,6 @@
-using kawhyMath
-using kawhyNotice
-using kawhyScene
+using stylishMath
+using stylishNotice
+using stylishScene
 
 @Js
 class StrListView : ListView

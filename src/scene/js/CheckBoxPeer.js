@@ -1,7 +1,7 @@
-fan.kawhyScene.CheckBoxPeer = fan.sys.Obj.$extend(fan.kawhyScene.NodePeer);
-fan.kawhyScene.CheckBoxPeer.prototype.$ctor = function(self) { this.init(self); }
+fan.stylishScene.CheckBoxPeer = fan.sys.Obj.$extend(fan.stylishScene.NodePeer);
+fan.stylishScene.CheckBoxPeer.prototype.$ctor = function(self) { this.init(self); }
 
-fan.kawhyScene.CheckBoxPeer.prototype.create = function()
+fan.stylishScene.CheckBoxPeer.prototype.create = function()
 {
   this.m_check = document.createElement("input");
   this.m_check.type = "checkbox";
@@ -19,29 +19,29 @@ fan.kawhyScene.CheckBoxPeer.prototype.create = function()
 
   return span;
 }
-fan.kawhyScene.CheckBoxPeer.prototype.m_check = null;
+fan.stylishScene.CheckBoxPeer.prototype.m_check = null;
 
-fan.kawhyScene.CheckBoxPeer.prototype.onClick$ = function(self, f)
+fan.stylishScene.CheckBoxPeer.prototype.onClick$ = function(self, f)
 {
   this.m_onClick = f;
 }
-fan.kawhyScene.CheckBoxPeer.prototype.m_onClick = null;
+fan.stylishScene.CheckBoxPeer.prototype.m_onClick = null;
 
-fan.kawhyScene.CheckBoxPeer.prototype.checked = function(self)
+fan.stylishScene.CheckBoxPeer.prototype.checked = function(self)
 {
   return this.m_check.checked;
 }
-fan.kawhyScene.CheckBoxPeer.prototype.checked$ = function(self, checked)
+fan.stylishScene.CheckBoxPeer.prototype.checked$ = function(self, checked)
 {
   this.m_check.checked = checked;
 }
 
-fan.kawhyScene.CheckBoxPeer.prototype.text = function(self)
+fan.stylishScene.CheckBoxPeer.prototype.text = function(self)
 {
   return this.m_text.nodeValue;
 }
 
-fan.kawhyScene.CheckBoxPeer.prototype.text$ = function(self, text)
+fan.stylishScene.CheckBoxPeer.prototype.text$ = function(self, text)
 {
   this.m_text.nodeValue = text;
 }

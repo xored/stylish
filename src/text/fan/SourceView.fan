@@ -1,5 +1,5 @@
 using gfx
-using kawhy
+using stylish
 
 @Js
 class SourceView : GroupControl

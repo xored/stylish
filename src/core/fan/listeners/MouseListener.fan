@@ -1,6 +1,6 @@
 using gfx
-using kawhyScene
-using kawhyNotice
+using stylishScene
+using stylishNotice
 
 @Js
 class MouseListener

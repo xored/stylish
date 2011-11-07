@@ -1,5 +1,5 @@
-using kawhy
-using kawhyNotice
+using stylish
+using stylishNotice
 
 @Js
 abstract class Ruler : Control

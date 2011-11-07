@@ -1,7 +1,7 @@
-using kawhyMath
-using kawhyUtil
-using kawhyNotice
-using kawhyCss
+using stylishMath
+using stylishUtil
+using stylishNotice
+using stylishCss
 
 @Js
 abstract class TextLine : ListNotifier

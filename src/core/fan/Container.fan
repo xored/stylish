@@ -1,6 +1,6 @@
 using gfx
 using fwt
-using kawhyScene
+using stylishScene
 
 @Js
 class Container : ScenePane

@@ -1,9 +1,9 @@
 using gfx
 using fwt
-using kawhy
-using kawhyNotice
-using kawhyScene
-using kawhyCss
+using stylish
+using stylishNotice
+using stylishScene
+using stylishCss
 
 @Js
 class FoldRuler : Ruler

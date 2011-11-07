@@ -1,6 +1,6 @@
 using fwt
-using kawhy
-using kawhyScene
+using stylish
+using stylishScene
 
 @Js
 class SelectAll : Policy

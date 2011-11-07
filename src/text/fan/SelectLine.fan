@@ -1,5 +1,5 @@
-using kawhy
-using kawhyMath
+using stylish
+using stylishMath
 
 @Js
 class SelectLine : Policy

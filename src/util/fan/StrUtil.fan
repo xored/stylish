@@ -1,4 +1,4 @@
-using kawhyMath
+using stylishMath
 
 @Js
 class StrUtil

@@ -1,9 +1,9 @@
 using gfx
-using kawhy
-using kawhyMath
-using kawhyNotice
-using kawhyScene
-using kawhyCss
+using stylish
+using stylishMath
+using stylishNotice
+using stylishScene
+using stylishCss
 
 @Js
 class LineNums : Ruler, ListListener

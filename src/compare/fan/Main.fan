@@ -1,10 +1,10 @@
 using gfx
 using fwt
-using kawhy
-using kawhyCss
-using kawhyMath
-using kawhyText
-using kawhyScene
+using stylish
+using stylishCss
+using stylishMath
+using stylishText
+using stylishScene
 
 @Js
 class Main

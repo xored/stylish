@@ -1,8 +1,8 @@
 using gfx
-using kawhyCss
-using kawhyMath
-using kawhyNotice
-using kawhyScene
+using stylishCss
+using stylishMath
+using stylishNotice
+using stylishScene
 
 @Js
 abstract class ListView : Control
@@ -136,6 +136,9 @@ abstract class ListView : Control
     start := scroll.y / itemSize
     end := ((scroll.y + node.clientArea.h).toFloat / itemSize).ceil.toInt
     end = end.min(source.size)
+    if (start > end) {
+      start = end
+    }
     visibleRows = Region(start, end - start)
     
     size := (end - start).max(1)

@@ -1,5 +1,5 @@
-using kawhyCss
-using kawhyNotice
+using stylishCss
+using stylishNotice
 
 @Js
 class BaseTextDoc : TextDoc

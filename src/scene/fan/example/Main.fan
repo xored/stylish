@@ -1,6 +1,6 @@
 using fwt
 using gfx
-using kawhyCss
+using stylishCss
 
 @Js
 class Main

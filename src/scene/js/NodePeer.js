@@ -1,18 +1,18 @@
-fan.kawhyScene.NodePeer = fan.sys.Obj.$extend(fan.sys.Obj);
-fan.kawhyScene.NodePeer.prototype.$ctor = function(self) {}
+fan.stylishScene.NodePeer = fan.sys.Obj.$extend(fan.sys.Obj);
+fan.stylishScene.NodePeer.prototype.$ctor = function(self) {}
 
-fan.kawhyScene.NodePeer.prototype.m_parent = null;
-fan.kawhyScene.NodePeer.prototype.m_scene  = null;
-fan.kawhyScene.NodePeer.prototype.parent   = function(self) { return this.m_parent; }
-fan.kawhyScene.NodePeer.prototype.scene    = function(self) { return this.m_scene;  }
+fan.stylishScene.NodePeer.prototype.m_parent = null;
+fan.stylishScene.NodePeer.prototype.m_scene  = null;
+fan.stylishScene.NodePeer.prototype.parent   = function(self) { return this.m_parent; }
+fan.stylishScene.NodePeer.prototype.scene    = function(self) { return this.m_scene;  }
 
-fan.kawhyScene.NodePeer.prototype.attach   = function(self, parent)
+fan.stylishScene.NodePeer.prototype.attach   = function(self, parent)
 {
   this.m_parent = parent;
   this.m_scene = parent.scene();
 }
 
-fan.kawhyScene.NodePeer.prototype.detach   = function(self, parent)
+fan.stylishScene.NodePeer.prototype.detach   = function(self, parent)
 {
   if (this.m_hover) this.hover$(self, false);
   //TODO actually need to remove native listeners
@@ -21,9 +21,9 @@ fan.kawhyScene.NodePeer.prototype.detach   = function(self, parent)
   this.m_scene = null;
 }
 
-fan.kawhyScene.NodePeer.prototype.m_pos = fan.gfx.Point.m_defVal;
-fan.kawhyScene.NodePeer.prototype.pos   = function(self) { return this.m_pos; }
-fan.kawhyScene.NodePeer.prototype.pos$  = function(self, pos)
+fan.stylishScene.NodePeer.prototype.m_pos = fan.gfx.Point.m_defVal;
+fan.stylishScene.NodePeer.prototype.pos   = function(self) { return this.m_pos; }
+fan.stylishScene.NodePeer.prototype.pos$  = function(self, pos)
 {
   if (this.m_pos.equals(pos)) return;
   this.m_pos = pos;
@@ -34,22 +34,22 @@ fan.kawhyScene.NodePeer.prototype.pos$  = function(self, pos)
   }
 }
 
-fan.kawhyScene.NodePeer.prototype.id   = function(self) { return this.m_elem.id; }
-fan.kawhyScene.NodePeer.prototype.id$  = function(self, id)
+fan.stylishScene.NodePeer.prototype.id   = function(self) { return this.m_elem.id; }
+fan.stylishScene.NodePeer.prototype.id$  = function(self, id)
 {
   this.m_elem.id = id;
 }
 
-fan.kawhyScene.NodePeer.prototype.tooltip = function(self) { return m_tooltip; }
-fan.kawhyScene.NodePeer.prototype.tooltip$ = function(self, tooltip)
+fan.stylishScene.NodePeer.prototype.tooltip = function(self) { return m_tooltip; }
+fan.stylishScene.NodePeer.prototype.tooltip$ = function(self, tooltip)
 {
   this.m_tooltip = tooltip;
   if (tooltip == null) tooltip = "";
   this.m_elem.title = tooltip;
 }
-fan.kawhyScene.NodePeer.prototype.m_tooltip = null;
+fan.stylishScene.NodePeer.prototype.m_tooltip = null;
 
-fan.kawhyScene.NodePeer.prototype.posOnParent = function(self)
+fan.stylishScene.NodePeer.prototype.posOnParent = function(self)
 {
   if (this.m_parent == null) return this.m_pos;
   var parent = this.m_parent.peer.m_elem;
@@ -65,7 +65,7 @@ fan.kawhyScene.NodePeer.prototype.posOnParent = function(self)
   return fan.gfx.Point.make(x, y);
 }
 
-fan.kawhyScene.NodePeer.prototype.posOnScene = function(self)
+fan.stylishScene.NodePeer.prototype.posOnScene = function(self)
 {
   if (this.m_parent == null) return this.m_pos;
   var pp = this.posOnParent(self);
@@ -76,43 +76,43 @@ fan.kawhyScene.NodePeer.prototype.posOnScene = function(self)
   return fan.gfx.Point.make(x, y);
 }
 
-fan.kawhyScene.NodePeer.prototype.posOnScreen = function(self)
+fan.stylishScene.NodePeer.prototype.posOnScreen = function(self)
 {
   if (this.m_scene == null) return this.posOnScene(self);
   return this.posOnScene(self).translate(this.m_scene.posOnScreen());
 }
 
-fan.kawhyScene.NodePeer.prototype.size   = function(self)
+fan.stylishScene.NodePeer.prototype.size   = function(self)
 {
   var w = this.m_elem.offsetWidth;
   var h = this.m_elem.offsetHeight;
   return fan.gfx.Size.make(w, h);
 }
 
-fan.kawhyScene.NodePeer.prototype.size$  = function(self, size)
+fan.stylishScene.NodePeer.prototype.size$  = function(self, size)
 {
   this.m_size = size;
   this.m_elem.style.width  = size.m_w + "px";
   this.m_elem.style.height = size.m_h + "px";
 }
 
-fan.kawhyScene.NodePeer.prototype.m_size = null;
+fan.stylishScene.NodePeer.prototype.m_size = null;
 
-fan.kawhyScene.NodePeer.prototype.m_style = null;
-fan.kawhyScene.NodePeer.prototype.style   = function(self) { return this.m_style }
-fan.kawhyScene.NodePeer.prototype.style$  = function(self, style)
+fan.stylishScene.NodePeer.prototype.m_style = null;
+fan.stylishScene.NodePeer.prototype.style   = function(self) { return this.m_style }
+fan.stylishScene.NodePeer.prototype.style$  = function(self, style)
 {
   this.m_style = style;
-  fan.kawhyScene.NodePeer.setStyle(this.m_elem, style);
+  fan.stylishScene.NodePeer.setStyle(this.m_elem, style);
   this.initStyle(self);
 }
 
-fan.kawhyScene.NodePeer.setStyle = function(elem, style)
+fan.stylishScene.NodePeer.setStyle = function(elem, style)
 {
   if (style != null)
   {
-    elem.style.cssText = fan.kawhyCss.StyleItem.toStyleString(style.toCss());
-    var property = style.findStyle(fan.kawhyCss.PropertyStyle.$type);
+    elem.style.cssText = fan.stylishCss.StyleItem.toStyleString(style.toCss());
+    var property = style.findStyle(fan.stylishCss.PropertyStyle.$type);
     if (property != null)
     {
       property.m_properties.each(fan.sys.Func.make(
@@ -120,7 +120,7 @@ fan.kawhyScene.NodePeer.setStyle = function(elem, style)
         fan.sys.Void.$type,
         function(val, key)
         {
-          var event = fan.kawhyScene.NodePeer.asEvent(key);
+          var event = fan.stylishScene.NodePeer.asEvent(key);
           if (event)
           {
             elem.addEventListener(event, function(e) { return eval(val); }, false);
@@ -135,30 +135,30 @@ fan.kawhyScene.NodePeer.setStyle = function(elem, style)
   }
 }
 
-fan.kawhyScene.NodePeer.asEvent = function(name)
+fan.stylishScene.NodePeer.asEvent = function(name)
 {
   if (name.length > 2 && name.slice(0, 2) == "on")
   {
-    var index = fan.kawhyScene.NodePeer.events.indexOf(name.slice(2));
-    if (index >= 0) return fan.kawhyScene.NodePeer.events[index];
+    var index = fan.stylishScene.NodePeer.events.indexOf(name.slice(2));
+    if (index >= 0) return fan.stylishScene.NodePeer.events[index];
   }
   return null;
 }
 
-fan.kawhyScene.NodePeer.events = ["mouseover", "mousemove", "mouseout"];
+fan.stylishScene.NodePeer.events = ["mouseover", "mousemove", "mouseout"];
 
-fan.kawhyScene.NodePeer.prototype.m_thru = false;
-fan.kawhyScene.NodePeer.prototype.thru   = function(self) { return this.m_thru; }
-fan.kawhyScene.NodePeer.prototype.thru$  = function(self, thru)
+fan.stylishScene.NodePeer.prototype.m_thru = false;
+fan.stylishScene.NodePeer.prototype.thru   = function(self) { return this.m_thru; }
+fan.stylishScene.NodePeer.prototype.thru$  = function(self, thru)
 {
   this.m_thru = thru;
   this.m_elem.style.pointerEvents = thru ? "none" : "auto";
 }
 
-fan.kawhyScene.NodePeer.prototype.m_hover = false;
-fan.kawhyScene.NodePeer.prototype.m_mouseOut = false;
-fan.kawhyScene.NodePeer.prototype.hover   = function(self) { return this.m_hover; }
-fan.kawhyScene.NodePeer.prototype.hover$  = function(self, hover)
+fan.stylishScene.NodePeer.prototype.m_hover = false;
+fan.stylishScene.NodePeer.prototype.m_mouseOut = false;
+fan.stylishScene.NodePeer.prototype.hover   = function(self) { return this.m_hover; }
+fan.stylishScene.NodePeer.prototype.hover$  = function(self, hover)
 {
   if (this.m_hover != hover)
   {
@@ -166,24 +166,24 @@ fan.kawhyScene.NodePeer.prototype.hover$  = function(self, hover)
     self.m_onHover.push(hover);
   }
 }
-fan.kawhyScene.NodePeer.prototype.mouseIn = function(self)
+fan.stylishScene.NodePeer.prototype.mouseIn = function(self)
 {
   this.m_mouseOut = false;
   if (this.m_parent) this.m_parent.peer.mouseIn(this.m_parent);
   this.hover$(self, true);
 }
-fan.kawhyScene.NodePeer.prototype.mousePreOut = function()
+fan.stylishScene.NodePeer.prototype.mousePreOut = function()
 {
   this.m_mouseOut = true;
   if (this.m_parent) this.m_parent.peer.mousePreOut();
 }
-fan.kawhyScene.NodePeer.prototype.mousePostOut = function(self)
+fan.stylishScene.NodePeer.prototype.mousePostOut = function(self)
 {
   if (this.m_mouseOut) this.hover$(self, false);
   if (this.m_parent) this.m_parent.peer.mousePostOut(this.m_parent);
 }
 
-fan.kawhyScene.NodePeer.prototype.init = function(self)
+fan.stylishScene.NodePeer.prototype.init = function(self)
 {
   this.m_elem = this.create(self);
   this.initStyle(self);
@@ -200,7 +200,7 @@ fan.kawhyScene.NodePeer.prototype.init = function(self)
   }, false);
 }
 
-fan.kawhyScene.NodePeer.prototype.initStyle = function(self)
+fan.stylishScene.NodePeer.prototype.initStyle = function(self)
 {
   with (this.m_elem.style)
   {
@@ -215,9 +215,9 @@ fan.kawhyScene.NodePeer.prototype.initStyle = function(self)
   }
 }
 
-fan.kawhyScene.NodePeer.prototype.create = function(self)
+fan.stylishScene.NodePeer.prototype.create = function(self)
 {
   return document.createElement("span");
 }
 
-fan.kawhyScene.NodePeer.prototype.m_elem = null;
+fan.stylishScene.NodePeer.prototype.m_elem = null;

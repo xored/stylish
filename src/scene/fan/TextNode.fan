@@ -1,5 +1,5 @@
-using kawhyCss
-using kawhyMath
+using stylishCss
+using stylishMath
 
 @Js
 class TextNode : Node

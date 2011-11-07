@@ -1,8 +1,8 @@
 using gfx
 using fwt
-using kawhy
-using kawhyMath
-using kawhyNotice
+using stylish
+using stylishMath
+using stylishNotice
 
 @Js
 class SelectPoint : Policy

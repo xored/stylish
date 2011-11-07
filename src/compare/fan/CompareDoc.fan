@@ -1,7 +1,7 @@
 using gfx
-using kawhyCss
-using kawhyText
-using kawhyNotice
+using stylishCss
+using stylishText
+using stylishNotice
 
 @Js
 class CompareDoc

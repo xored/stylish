@@ -1,6 +1,6 @@
-using kawhyMath
-using kawhyNotice
-using kawhyCss
+using stylishMath
+using stylishNotice
+using stylishCss
 
 @Js
 abstract class TextDoc : ListNotifier

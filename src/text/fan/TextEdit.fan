@@ -1,10 +1,10 @@
 using gfx
 using fwt
-using kawhy
-using kawhyMath
-using kawhyCss
-using kawhyScene
-using kawhyNotice
+using stylish
+using stylishMath
+using stylishCss
+using stylishScene
+using stylishNotice
 
 @Js
 class TextEdit : ListView

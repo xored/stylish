@@ -1,9 +1,9 @@
 using gfx
-using kawhy
-using kawhyText
-using kawhyNotice
-using kawhyScene
-using kawhyCss
+using stylish
+using stylishText
+using stylishNotice
+using stylishScene
+using stylishCss
 
 @Js
 class ScrollRuler : Ruler, ListListener

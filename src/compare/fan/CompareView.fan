@@ -1,8 +1,8 @@
 using gfx
-using kawhy
-using kawhyScene
-using kawhyCss
-using kawhyText
+using stylish
+using stylishScene
+using stylishCss
+using stylishText
 
 @Js
 class CompareView : GroupControl

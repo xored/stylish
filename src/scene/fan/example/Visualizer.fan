@@ -1,5 +1,5 @@
 using gfx
-using kawhyCss
+using stylishCss
 
 @Js
 abstract class Visualizer

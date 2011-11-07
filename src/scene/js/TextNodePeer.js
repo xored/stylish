@@ -1,29 +1,29 @@
-fan.kawhyScene.TextNodePeer = fan.sys.Obj.$extend(fan.kawhyScene.NodePeer);
-fan.kawhyScene.TextNodePeer.prototype.$ctor = function(self) { this.init(self); }
+fan.stylishScene.TextNodePeer = fan.sys.Obj.$extend(fan.stylishScene.NodePeer);
+fan.stylishScene.TextNodePeer.prototype.$ctor = function(self) { this.init(self); }
 
-fan.kawhyScene.TextNodePeer.prototype.create = function()
+fan.stylishScene.TextNodePeer.prototype.create = function()
 {
   var span = document.createElement("span");
   return span;
 }
 
-fan.kawhyScene.TextNodePeer.prototype.text = function(self) { return this.m_text; }
-fan.kawhyScene.TextNodePeer.prototype.text$ = function(self, text)
+fan.stylishScene.TextNodePeer.prototype.text = function(self) { return this.m_text; }
+fan.stylishScene.TextNodePeer.prototype.text$ = function(self, text)
 {
   this.m_text = text;
   this.fillContent();
 }
-fan.kawhyScene.TextNodePeer.prototype.m_text = "";
+fan.stylishScene.TextNodePeer.prototype.m_text = "";
 
-fan.kawhyScene.TextNodePeer.prototype.styles = function(self) { return this.m_styles.dup(); }
-fan.kawhyScene.TextNodePeer.prototype.styles$ = function(self, styles)
+fan.stylishScene.TextNodePeer.prototype.styles = function(self) { return this.m_styles.dup(); }
+fan.stylishScene.TextNodePeer.prototype.styles$ = function(self, styles)
 {
   this.m_styles = styles;
   this.fillContent();
 }
-fan.kawhyScene.TextNodePeer.prototype.m_styles = fan.sys.List.make(fan.kawhyCss.StyleRange.$type);
+fan.stylishScene.TextNodePeer.prototype.m_styles = fan.sys.List.make(fan.stylishCss.StyleRange.$type);
 
-fan.kawhyScene.TextNodePeer.prototype.fillContent = function()
+fan.stylishScene.TextNodePeer.prototype.fillContent = function()
 {
   this.m_elem.innerHTML = "";
   var textSize = this.m_text.length;
@@ -32,7 +32,7 @@ fan.kawhyScene.TextNodePeer.prototype.fillContent = function()
   for(var i = 0; i < this.m_styles.size(); i++)
   {
     var style = this.m_styles.get(i);
-    var region = fan.kawhyMath.Region.fromRange(style.m_range, textSize);
+    var region = fan.stylishMath.Region.fromRange(style.m_range, textSize);
     if (region.m_start < offset)
       throw fan.sys.ArgErr.make("styles should be sorted and can't overlap: " + this.m_styles.toStr());
     if (region.m_start >= textSize) break;
@@ -46,13 +46,13 @@ fan.kawhyScene.TextNodePeer.prototype.fillContent = function()
     if (size > 0)
     {
       var val = this.textRange(region.m_start, region.m_start + size);
-      var linkStyle = style.m_style.findStyle(fan.kawhyCss.LinkStyle.$type);
+      var linkStyle = style.m_style.findStyle(fan.stylishCss.LinkStyle.$type);
       var wrapper;
       if (linkStyle)
       {
         wrapper = document.createElement("a");
         wrapper.href = linkStyle.m_href.toStr();
-        if (linkStyle.m_target == fan.kawhyCss.LinkTarget.m_blank)
+        if (linkStyle.m_target == fan.stylishCss.LinkTarget.m_blank)
         {
           wrapper.target = "_blank";
         }
@@ -62,7 +62,7 @@ fan.kawhyScene.TextNodePeer.prototype.fillContent = function()
         wrapper = document.createElement("span");
       }
       wrapper.appendChild(document.createTextNode(val));
-      fan.kawhyScene.NodePeer.setStyle(wrapper, style.m_style);
+      fan.stylishScene.NodePeer.setStyle(wrapper, style.m_style);
       this.m_elem.appendChild(wrapper);
       offset = region.m_start + size;
     }
@@ -74,15 +74,15 @@ fan.kawhyScene.TextNodePeer.prototype.fillContent = function()
   }
 }
 
-fan.kawhyScene.TextNodePeer.prototype.textRange = function(start, end)
+fan.stylishScene.TextNodePeer.prototype.textRange = function(start, end)
 {
   var val = end ? this.m_text.substring(start, end) : this.m_text.substring(start);
   return val.replace(/\t/g,' ');
 }
 
-fan.kawhyScene.TextNodePeer.prototype.initStyle = function()
+fan.stylishScene.TextNodePeer.prototype.initStyle = function()
 {
-  fan.kawhyScene.NodePeer.prototype.initStyle.call(this);
+  fan.stylishScene.NodePeer.prototype.initStyle.call(this);
   with (this.m_elem.style)
   {
     whiteSpace = "pre"
@@ -90,7 +90,7 @@ fan.kawhyScene.TextNodePeer.prototype.initStyle = function()
   }
 }
 
-fan.kawhyScene.TextNodePeer.prototype.offsetAt = function(self, pos)
+fan.stylishScene.TextNodePeer.prototype.offsetAt = function(self, pos)
 {
   //TODO only for monospace fonts without tabs for now
   var offset = Math.floor(pos / this.charWidth());
@@ -98,34 +98,34 @@ fan.kawhyScene.TextNodePeer.prototype.offsetAt = function(self, pos)
   return offset;
 }
 
-fan.kawhyScene.TextNodePeer.prototype.charRegion = function(self, index)
+fan.stylishScene.TextNodePeer.prototype.charRegion = function(self, index)
 {
   if (index >= this.m_text.length)
     throw new ArgErr("invalid index: " + index);
   var width = this.charWidth();
   var start = Math.round(index * width);
   var end = Math.round((index + 1) * width);
-  return fan.kawhyMath.Region.make(start, end - start);
+  return fan.stylishMath.Region.make(start, end - start);
 }
 
-fan.kawhyScene.TextNodePeer.prototype.charWidth = function()
+fan.stylishScene.TextNodePeer.prototype.charWidth = function()
 {
   return this.m_elem.offsetWidth / this.m_text.length;
 }
 
-fan.kawhyScene.TextNodePeer.prototype.textWidth = function(str)
+fan.stylishScene.TextNodePeer.prototype.textWidth = function(str)
 {
   // use global var to store a context for computing string width
-  if (fan.kawhyScene.TextNodePeer.fontCx == null)
+  if (fan.stylishScene.TextNodePeer.fontCx == null)
   {
-    fan.kawhyScene.TextNodePeer.fontCx = document.createElement("canvas").getContext("2d");
+    fan.stylishScene.TextNodePeer.fontCx = document.createElement("canvas").getContext("2d");
   }
 
   fan.fwt.FwtEnvPeer.fontCx.font = this.calcFont();
   return Math.round(fan.fwt.FwtEnvPeer.fontCx.measureText(str).width);
 }
 
-fan.kawhyScene.TextNodePeer.prototype.calcFont = function()
+fan.stylishScene.TextNodePeer.prototype.calcFont = function()
 {
   var font = null;
   var defView = document.defaultView;
@@ -141,7 +141,7 @@ fan.kawhyScene.TextNodePeer.prototype.calcFont = function()
   return font;
 }
 
-fan.kawhyScene.TextNodePeer.fontToCss = function(font)
+fan.stylishScene.TextNodePeer.fontToCss = function(font)
 {
   if (font == null) return "";
   var s = "";
@@ -153,4 +153,4 @@ fan.kawhyScene.TextNodePeer.fontToCss = function(font)
 }
 
 //global variable to store a CanvasRenderingContext2D
-fan.kawhyScene.TextNodePeer.fontCx = null;
+fan.stylishScene.TextNodePeer.fontCx = null;

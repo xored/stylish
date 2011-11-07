@@ -1,26 +1,26 @@
-fan.kawhyScene.ShapePeer = fan.sys.Obj.$extend(fan.kawhyScene.NodePeer);
-fan.kawhyScene.ShapePeer.prototype.$ctor = function(self) { this.init(self); }
+fan.stylishScene.ShapePeer = fan.sys.Obj.$extend(fan.stylishScene.NodePeer);
+fan.stylishScene.ShapePeer.prototype.$ctor = function(self) { this.init(self); }
 
-fan.kawhyScene.ShapePeer.prototype.create = function()
+fan.stylishScene.ShapePeer.prototype.create = function()
 {
   return document.createElement("canvas");
 }
 
-fan.kawhyScene.ShapePeer.prototype.figures = function(self)
+fan.stylishScene.ShapePeer.prototype.figures = function(self)
 {
   if (this.m_figures == null)
-    this.m_figures = fan.sys.List.make(fan.kawhyScene.Figure.$type);
+    this.m_figures = fan.sys.List.make(fan.stylishScene.Figure.$type);
   return this.m_figures;
 }
 
-fan.kawhyScene.ShapePeer.prototype.figures$ = function(self, figures)
+fan.stylishScene.ShapePeer.prototype.figures$ = function(self, figures)
 {
   this.m_figures = figures;
   this.draw();
 }
-fan.kawhyScene.ShapePeer.prototype.m_figures = null;
+fan.stylishScene.ShapePeer.prototype.m_figures = null;
 
-fan.kawhyScene.ShapePeer.prototype.draw = function()
+fan.stylishScene.ShapePeer.prototype.draw = function()
 {
   var g = new fan.fwt.Graphics();
   var figures = this.figures();
@@ -36,9 +36,9 @@ fan.kawhyScene.ShapePeer.prototype.draw = function()
   });
 }
 
-fan.kawhyScene.ShapePeer.prototype.size$ = function(self, size)
+fan.stylishScene.ShapePeer.prototype.size$ = function(self, size)
 {
-  fan.kawhyScene.NodePeer.prototype.size$.call(this, self, size);
+  fan.stylishScene.NodePeer.prototype.size$.call(this, self, size);
   this.m_elem.width = size.m_w;
   this.m_elem.height = size.m_h;
 }

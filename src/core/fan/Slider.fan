@@ -1,5 +1,5 @@
 using gfx
-using kawhyScene
+using stylishScene
 
 @Js
 class Slider : Control

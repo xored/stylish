@@ -10,7 +10,11 @@ class ListenerStorage
 
   Bool notify(Obj key, Obj? val)
   {
-    storage[key]?.notify(val) ?: false
+    if (null != val) { 
+      return storage[key]?.notify(val) ?: false      
+    } else {
+      return false
+    }
   }
 
   Void clear() { storage = [:] }

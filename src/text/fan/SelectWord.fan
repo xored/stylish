@@ -1,6 +1,6 @@
-using kawhy
-using kawhyUtil
-using kawhyMath
+using stylish
+using stylishUtil
+using stylishMath
 
 @Js
 class SelectWord : Policy

@@ -1,6 +1,6 @@
-using kawhyNotice
-using kawhyMath
-using kawhyUtil
+using stylishNotice
+using stylishMath
+using stylishUtil
 
 @Js
 class TextNotifier : ListNotifier
