@@ -32,6 +32,15 @@ const class StyleList
     }
     return StyleList(ranges)
   }
+  
+  Style? posStyle(Int pos) {
+    index := findRangeIndex(pos)
+    if (0 > index) {
+      return null
+    } else {
+      return ranges[index].style
+    }
+  }
 
   private StyleRange[] before(Int pos)
   {
