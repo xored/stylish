@@ -236,7 +236,7 @@ fan.stylishScene.ScenePeer.key = function(e)
     case 39: return fan.fwt.Key.m_right;
     case 40: return fan.fwt.Key.m_down;
     case 45: return fan.fwt.Key.m_insert;
-    case 46: return fan.fwt.Key.m_$delete;
+    case 46: return fan.fwt.Key.m_delete;
     // F1-F12
     case 112: return fan.fwt.Key.m_f1;
     case 113: return fan.fwt.Key.m_f2;

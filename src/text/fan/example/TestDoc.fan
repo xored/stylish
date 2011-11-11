@@ -5,10 +5,9 @@ using stylishNotice
 @Js
 class TestDoc : TextDoc
 {
-  override Int size
+  override Int size() { lines.size }
 
   new make(Int size) { 
-    this.size = size 
     for (i := 0; i < size; ++i) {
       lines.add(TestLine(this, i))
     }
@@ -24,11 +23,19 @@ class TestDoc : TextDoc
       lines.each { it.updateText }
     }
   }
+  
+  Void removeLines(Int start, Int size) 
+  {
+    lines.removeRange(start..<start+size)
+    fire(RemoveNotice(start, size))
+  }
 
   Void addLines(Int size)
   {
     oldSize := this.size
-    this.size = oldSize + size
+    for (i := oldSize; i < oldSize + size; ++i) {
+      lines.add(TestLine(this, i))
+    }
     fire(AddNotice(oldSize, size))
   }
 
@@ -46,7 +53,7 @@ class TestLine : TextLine
   new make(TestDoc doc, Int index)
   {
     this.doc = doc
-    baseText = "line number: $index clicks count: "
+    baseText = "this is long long long long long long long long long long long long line with number: $index clicks count: "
     text = baseText
     style = BgStyle(Color.orange)
     tooltip := PropertyStyle(["title":"tooltip", "onmouseout":"alert(\"Hello!\")"])

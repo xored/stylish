@@ -11,7 +11,7 @@ class Main
 
   static Void main()
   {
-    doc := TestDoc(30)
+    doc := TestDoc(50)
     edit := TextEdit { source = doc }    
     
     view := SourceView
@@ -23,9 +23,9 @@ class Main
     container := Container(view)
     
     Desktop.callLater(5sec) |->| {
-      echo("setting style, old style = ${doc.get(0).style}")
-      doc.get(0).setStyle(BgStyle(Color.black))
-      echo("style set, style = ${doc.get(0).style}")
+      10.times {
+        doc.removeLines(0, 1)
+      }
     }
     
     container.open
