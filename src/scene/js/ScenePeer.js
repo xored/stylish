@@ -167,6 +167,15 @@ fan.stylishScene.ScenePeer.prototype.handleKeyDown = function(e)
 
 fan.stylishScene.ScenePeer.prototype.handleKeyPress = function(e)
 {
+  if (e.which == 0) {
+    // got special char, must be handled in "keydown" or "keyup"
+    return false
+  }
+  if (e.which == 8 || e.which == 27) {
+    // 8 = Backspace, 27 = Esc
+    // this is still special keys, which must be handled in "keydown" or "keyup"
+    return false
+  }
   var mdfs = fan.stylishScene.ScenePeer.modifiers(e);
   if (fan.fwt.DesktopPeer.$isMac)
   {
@@ -236,7 +245,7 @@ fan.stylishScene.ScenePeer.key = function(e)
     case 39: return fan.fwt.Key.m_right;
     case 40: return fan.fwt.Key.m_down;
     case 45: return fan.fwt.Key.m_insert;
-    case 46: return fan.fwt.Key.m_delete;
+    case 46: return fan.fwt.Key.m_$delete;
     // F1-F12
     case 112: return fan.fwt.Key.m_f1;
     case 113: return fan.fwt.Key.m_f2;
@@ -384,8 +393,8 @@ fan.stylishScene.ScenePeer.prototype.m_focusArea = null;
 
 fan.stylishScene.ScenePeer.prototype.preventDefault = function(e)
 {
-  e.stopPropagation();
-  e.preventDefault();
+	e.stopPropagation();
+	e.preventDefault();
 }
 
 fan.stylishScene.ScenePeer.prototype.addListener = function(t, e, f)
