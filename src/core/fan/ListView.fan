@@ -89,7 +89,7 @@ abstract class ListView : Control
   // max width in pixels
   protected Int maxWidth := 0
 
-  protected Node itemByIndex(Int i)
+  protected Node itemByIndex(Int i, Int width := maxWidth.max(this.node.clientArea.w))
   {
     node := cache[i] as Group
     if (node == null)
@@ -102,7 +102,7 @@ abstract class ListView : Control
       nodeUpdate(node)
     }
     node.pos = Point(0, i * itemSize)
-    node.size = Size(maxWidth.max(this.node.clientArea.w), itemSize)
+    node.size = Size(width, itemSize)
     return node.kids[0]
   }
   
@@ -118,7 +118,8 @@ abstract class ListView : Control
     {
       updateVisibleRegion
       rows := loadedRows
-      for(i := rows.start; i < rows.end; i++) itemByIndex(i)
+      w := maxWidth.max(this.node.clientArea.w)
+      for(i := rows.start; i < rows.end; i++) itemByIndex(i, w)
       syncContentHeight
       syncContentWidth
     }
