@@ -20,10 +20,10 @@ class Main
     total.text = "Total elements: $v.sum"
     v.onSumChange = |Int sum| { total.text = "Total elements: $sum" }
 
-    checkbox := CheckBox()
-    checkbox.text = "Filter timestamps"
-    checkbox.style = BoxStyle { padding = Insets(5, 0, 5, 0) }
-    checkbox.onClick = |Bool check| { v.filtered = check }
+//    checkbox := CheckBox()
+//    checkbox.text = "Filter timestamps"
+//    checkbox.style = BoxStyle { padding = Insets(5, 0, 5, 0) }
+//    checkbox.onClick = |Bool check| { v.filtered = check }
 
     shape := Shape()
     shape.size = Size(100, 100)
@@ -43,7 +43,7 @@ class Main
     g := Group()
     g.position = Position.vertical
     g.add(total)
-    g.add(checkbox)
+    //g.add(checkbox)
     g.add(shape)
     g.add(v.scroll)
     g.style = BoxStyle { padding = Insets(10) }

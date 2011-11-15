@@ -115,6 +115,7 @@ fan.stylishScene.ScrollBarPeer.prototype.doInit = function(self)
 
 fan.stylishScene.ScrollBarPeer.prototype.sync = function(self)
 {
+  fan.stylishScene.NodePeer.prototype.sizeChanged.call(this, self);
   var vert = this.m_orientation == fan.gfx.Orientation.m_vertical;
   var size = this.m_size;
   var w = size.m_w;

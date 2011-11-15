@@ -37,5 +37,8 @@ class Node
   native Bool thru
 
   Str:Obj data := [:]
+  
+  ** Notifies the node that its size is changed (node caches its size)
+  protected native Void sizeChanged()
 
 }

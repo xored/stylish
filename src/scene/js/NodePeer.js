@@ -32,6 +32,7 @@ fan.stylishScene.NodePeer.prototype.pos$  = function(self, pos)
     left = pos.m_x + "px";
     top  = pos.m_y + "px";
   }
+  this.sizeChanged(self);
 }
 
 fan.stylishScene.NodePeer.prototype.id   = function(self) { return this.m_elem.id; }
@@ -84,9 +85,12 @@ fan.stylishScene.NodePeer.prototype.posOnScreen = function(self)
 
 fan.stylishScene.NodePeer.prototype.size   = function(self)
 {
-  var w = this.m_elem.offsetWidth;
-  var h = this.m_elem.offsetHeight;
-  return fan.gfx.Size.make(w, h);
+  if (null == this.m_getSize) {
+    var w = this.m_elem.offsetWidth;
+    var h = this.m_elem.offsetHeight;
+    this.m_getSize = fan.gfx.Size.make(w, h);
+  }
+  return this.m_getSize;
 }
 
 fan.stylishScene.NodePeer.prototype.size$  = function(self, size)
@@ -94,9 +98,16 @@ fan.stylishScene.NodePeer.prototype.size$  = function(self, size)
   this.m_size = size;
   this.m_elem.style.width  = size.m_w + "px";
   this.m_elem.style.height = size.m_h + "px";
+  this.sizeChanged(self);
+}
+
+fan.stylishScene.NodePeer.prototype.sizeChanged = function(self) 
+{
+  this.m_getSize = null;  
 }
 
 fan.stylishScene.NodePeer.prototype.m_size = null;
+fan.stylishScene.NodePeer.prototype.m_getSize = null;
 
 fan.stylishScene.NodePeer.prototype.m_style = null;
 fan.stylishScene.NodePeer.prototype.style   = function(self) { return this.m_style }
@@ -168,6 +179,7 @@ fan.stylishScene.NodePeer.prototype.hover$  = function(self, hover)
 }
 fan.stylishScene.NodePeer.prototype.mouseIn = function(self)
 {
+  this.sizeChanged(self);
   this.m_mouseOut = false;
   if (this.m_parent) this.m_parent.peer.mouseIn(this.m_parent);
   this.hover$(self, true);
@@ -179,6 +191,7 @@ fan.stylishScene.NodePeer.prototype.mousePreOut = function()
 }
 fan.stylishScene.NodePeer.prototype.mousePostOut = function(self)
 {
+  this.sizeChanged(self);
   if (this.m_mouseOut) this.hover$(self, false);
   if (this.m_parent) this.m_parent.peer.mousePostOut(this.m_parent);
 }
@@ -202,6 +215,7 @@ fan.stylishScene.NodePeer.prototype.init = function(self)
 
 fan.stylishScene.NodePeer.prototype.initStyle = function(self)
 {
+  this.sizeChanged(self);
   with (this.m_elem.style)
   {
     position = "absolute";

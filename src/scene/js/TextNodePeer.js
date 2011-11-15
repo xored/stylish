@@ -25,6 +25,7 @@ fan.stylishScene.TextNodePeer.prototype.m_styles = fan.sys.List.make(fan.stylish
 
 fan.stylishScene.TextNodePeer.prototype.fillContent = function()
 {
+  fan.stylishScene.NodePeer.prototype.sizeChanged.call(this, self);
   this.m_elem.innerHTML = "";
   var textSize = this.m_text.length;
   if (textSize == 0) return
@@ -110,7 +111,7 @@ fan.stylishScene.TextNodePeer.prototype.charRegion = function(self, index)
 
 fan.stylishScene.TextNodePeer.prototype.charWidth = function()
 {
-  return this.m_elem.offsetWidth / this.m_text.length;
+  return this.size().m_w / this.m_text.length;
 }
 
 fan.stylishScene.TextNodePeer.prototype.textWidth = function(str)

@@ -73,7 +73,7 @@ abstract class Visualizer
     if ((line + 1) % 10 == 0)
     {
       group.add(TextNode() { it.text = text; it.styles = styles })
-      group.add(Link() { link = "http://google.com"; it.text = "ssr-server2:" })
+//      group.add(Link() { link = "http://google.com"; it.text = "ssr-server2:" })
       text = ""
       styles = [,]
       offset = 0

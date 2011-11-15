@@ -3,6 +3,7 @@ fan.stylishScene.GroupPeer.prototype.$ctor = function(self) { this.init(self); }
 
 fan.stylishScene.GroupPeer.prototype.add = function(self, kid)
 {
+  fan.stylishScene.NodePeer.prototype.sizeChanged.call(this, self);
   if (this.m_kids == null)
     this.m_kids = fan.sys.List.make(fan.stylishScene.Node.$type);
 
@@ -29,6 +30,7 @@ fan.stylishScene.GroupPeer.prototype.add = function(self, kid)
 fan.stylishScene.GroupPeer.prototype.addAll = function(self, kids)
 {
   if (kids.size == 0) return;
+  fan.stylishScene.NodePeer.prototype.sizeChanged.call(this, self);
   if (this.m_kids == null)
     this.m_kids = fan.sys.List.make(fan.stylishScene.Node.$type);
   this.m_kids.addAll(kids);
@@ -60,6 +62,7 @@ fan.stylishScene.GroupPeer.prototype.addAll = function(self, kids)
 fan.stylishScene.GroupPeer.prototype.remove = function(self, kid)
 {
   if (this.m_kids == null) return;
+  fan.stylishScene.NodePeer.prototype.sizeChanged.call(this, self);
   this.content().removeChild(kid.peer.m_elem);
   this.m_kids.remove(kid);
   kid.peer.detach(kid, self);
@@ -81,6 +84,7 @@ fan.stylishScene.GroupPeer.prototype.removeAll = function(self)
 fan.stylishScene.GroupPeer.prototype.attach = function(self, parent)
 {
   fan.stylishScene.NodePeer.prototype.attach.call(this, self, parent);
+  fan.stylishScene.NodePeer.prototype.sizeChanged.call(this, self);
   var kids = this.m_kids;
   if (kids)
   {
@@ -98,6 +102,7 @@ fan.stylishScene.GroupPeer.prototype.m_position = fan.stylishScene.Position.m_ho
 fan.stylishScene.GroupPeer.prototype.position   = function(self) { return this.m_position }
 fan.stylishScene.GroupPeer.prototype.position$  = function(self, position)
 {
+  fan.stylishScene.NodePeer.prototype.sizeChanged.call(this, self);
   this.m_position = position;
   var kids = this.m_kids;
   if (kids != null)
@@ -119,6 +124,7 @@ fan.stylishScene.GroupPeer.prototype.m_clip = false;
 fan.stylishScene.GroupPeer.prototype.clip   = function(self) { return this.m_clip; }
 fan.stylishScene.GroupPeer.prototype.clip$  = function(self, clip)
 {
+  fan.stylishScene.NodePeer.prototype.sizeChanged.call(this, self);
   this.m_clip = clip;
   if (clip) this.syncClip();
   else this.m_elem.style.clip = "";

@@ -15,6 +15,7 @@ fan.stylishScene.ShapePeer.prototype.figures = function(self)
 
 fan.stylishScene.ShapePeer.prototype.figures$ = function(self, figures)
 {
+  fan.stylishScene.NodePeer.prototype.sizeChanged.call(this, self);
   this.m_figures = figures;
   this.draw();
 }
