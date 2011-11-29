@@ -81,6 +81,7 @@ class TextEdit : ListView
   {
     selectStyle := BgStyle(Color.makeArgb(100, 51, 153, 255))
     node.scene.clipboard.textSource = TextEditSource(this)
+    node.scene.clipboard.onPaste { Desktop.callAsync |->| { selection.range = GridRange.defVal } }
     selectArea.add(Group { it.style = selectStyle; thru = true }) 
     selectArea.add(Group { it.style = selectStyle; thru = true }) 
     selectArea.add(Group { it.style = selectStyle; thru = true })

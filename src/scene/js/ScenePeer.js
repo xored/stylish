@@ -324,7 +324,8 @@ fan.stylishScene.ScenePeer.prototype.m_modifiers = fan.fwt.Key.m_none;
 fan.stylishScene.ScenePeer.prototype.attachClipboard = function()
 {
   var $this = this;
-  this.addListener(this.m_focusArea, "copy", function(e) { return $this.handleCopy(e);  });
+  this.addListener(this.m_focusArea, "copy", function(e) { return $this.handleCopy(e); });
+  this.addListener(this.m_focusArea, "paste", function(e) { return $this.handlePaste(e); });
 }
 
 fan.stylishScene.ScenePeer.prototype.handleTextSource = function()
@@ -344,7 +345,8 @@ fan.stylishScene.ScenePeer.prototype.handleTextSource = function()
       var area = $this.m_focusArea;
       if (!source.isEmpty())
       {
-        area.value = "Copy to clipboard is not supported for this browser";
+        //area.value = "Copy to clipboard is not supported for this browser";
+        area.value = "";
         area.select();
       }
       else area.value = "";
@@ -364,6 +366,17 @@ fan.stylishScene.ScenePeer.prototype.handleCopy = function(e)
     area.value = source.text();
     area.select();
   }
+}
+
+fan.stylishScene.ScenePeer.prototype.handlePaste = function(e)
+{
+  var area = this.m_focusArea;
+  var c = this.m_clipboard; 
+  var f = function()
+  {
+    c.paste(area.value);
+  }
+  setTimeout(f, 1);
 }
 
 /////////////////////////
