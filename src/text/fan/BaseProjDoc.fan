@@ -523,14 +523,14 @@ internal class DecoratedTextLine : TextLine
 
   override Void listen(ListListener l)
   {
-    TextLine.super.listen(l)
+    super.listen(l)
     if (listeners.size == 1)
       doc.addToCache(this)
   }
   
   override Void discard(ListListener l)
   {
-    TextLine.super.discard(l)
+    super.discard(l)
     if (listeners.isEmpty)
       doc.removeFromCache(this)
   }
