@@ -1,6 +1,7 @@
 using fwt
 using stylish
 using stylishScene
+using stylishUtil
 
 @Js
 class SelectAll : Policy
@@ -23,7 +24,7 @@ class SelectAll : Policy
   private |Obj?->Bool| onKey := |val->Bool|
   {
     key := val as Key
-    if (Key.ctrl + Key.a == key)
+    if (KeyUtil.mod1 + Key.a == key)
     {
       control.selection.all()
       return true
