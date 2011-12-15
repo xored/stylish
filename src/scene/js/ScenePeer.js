@@ -180,6 +180,7 @@ fan.stylishScene.ScenePeer.prototype.handleKeyPress = function(e)
   if (fan.fwt.DesktopPeer.$isMac)
   {
     if (!mdfs.isCtrl() && !mdfs.isAlt() && mdfs.isCommand()) return false;
+    if (mdfs.isCtrl()) return false;
   }
   else
   {
