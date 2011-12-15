@@ -346,7 +346,7 @@ fan.stylishScene.ScenePeer.prototype.handleTextSource = function()
       if (!source.isEmpty())
       {
         //area.value = "Copy to clipboard is not supported for this browser";
-        area.value = "";
+        area.value = source.text();
         area.select();
       }
       else area.value = "";
