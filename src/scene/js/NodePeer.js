@@ -156,7 +156,7 @@ fan.stylishScene.NodePeer.asEvent = function(name)
   return null;
 }
 
-fan.stylishScene.NodePeer.events = ["mouseover", "mousemove", "mouseout"];
+fan.stylishScene.NodePeer.events = ["mouseover", "mousemove", "mouseout", "click"];
 
 fan.stylishScene.NodePeer.prototype.m_thru = false;
 fan.stylishScene.NodePeer.prototype.thru   = function(self) { return this.m_thru; }
