@@ -1,0 +1,6 @@
+DOM-based FWT-compatible widgets for Fantom.
+Build:
+	fan src/build.fan
+
+Install/deploy (javaDeploy is needed, https://bitbucket.org/dsavenko/fantom-java-deploy)
+	fan deploy/build.fan mvnInstall/mvnDeploy
