@@ -32,7 +32,7 @@ fan.stylishScene.ScenePeer.prototype.attach = function(elem)
   this.attachMouse();
   this.attachKeyboard();
   this.attachClipboard();
-  this.focus();
+  this.setFocus();
 }
 
 fan.stylishScene.ScenePeer.prototype.detach = function()
