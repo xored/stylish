@@ -13,7 +13,9 @@ class Scene
   native Clipboard clipboard()
 
   native Point posOnScreen()
+  
+  native Focus focus()
 
-  native Void focus()
+  internal native Void setFocus()
 
 }

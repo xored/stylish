@@ -13,6 +13,7 @@ fan.stylishScene.ScenePeer.prototype.$ctor = function()
   this.m_mouse = fan.stylishScene.Mouse.make();
   this.m_keyboard = fan.stylishScene.Keyboard.make();
   this.m_clipboard = fan.stylishScene.Clipboard.make();
+  this.m_focus = fan.stylishScene.Focus.make(this);
   var $this = this;
   this.m_clipboard.peer.onSourceChange = function() { $this.handleTextSource(); }
 }
@@ -20,6 +21,7 @@ fan.stylishScene.ScenePeer.prototype.$ctor = function()
 fan.stylishScene.ScenePeer.prototype.mouse     = function(self) { return this.m_mouse;     }
 fan.stylishScene.ScenePeer.prototype.keyboard  = function(self) { return this.m_keyboard;  }
 fan.stylishScene.ScenePeer.prototype.clipboard = function(self) { return this.m_clipboard; }
+fan.stylishScene.ScenePeer.prototype.focus     = function(self) { return this.m_focus;     }
 
 fan.stylishScene.ScenePeer.prototype.attach = function(elem)
 {
@@ -125,7 +127,7 @@ fan.stylishScene.ScenePeer.toWheelDelta = function(e)
 // Focus
 /////////////////////////
 
-fan.stylishScene.ScenePeer.prototype.focus = function()
+fan.stylishScene.ScenePeer.prototype.setFocus = function()
 {
   var area = this.m_focusArea;
   if (area != null && area !== document.activeElement) area.focus();
@@ -141,7 +143,7 @@ fan.stylishScene.ScenePeer.prototype.attachFocus = function()
 
 fan.stylishScene.ScenePeer.prototype.handleFocus = function(focus)
 {
-  //do nothing for now
+  this.m_focus.onFocus(focus)
   return true;
 }
 
