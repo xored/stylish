@@ -9,6 +9,8 @@ class MouseListener
   |Point|? onMove
 
   |Bool, Int|? onClick
+  
+  |Bool, Int, MouseBtn|? onBtnClick
 
   |Point->Bool|? onWheel
 
@@ -48,7 +50,17 @@ class MouseListener
       move  = mouse.onPos.handle { fireMove() }
       click = mouse.onLeft.handle |Bool val|
       {
-        fireClick(val)
+        fireClick(val, MouseBtn.leftBtn)
+        updateListeners()
+      }
+      rightClick = mouse.onRight.handle |Bool val|
+      {
+        fireClick(val, MouseBtn.rightBtn)
+        updateListeners()
+      }
+      middleClick = mouse.onMiddle.handle |Bool val|
+      {
+        fireClick(val, MouseBtn.middleBtn)
         updateListeners()
       }
       wheel = mouse.onWheel.process |Point val->Bool|
@@ -75,38 +87,51 @@ class MouseListener
     move = null
     click?.discard
     click = null
+    rightClick?.discard
+    rightClick = null
+    middleClick?.discard
+    middleClick = null
     wheel?.discard
     wheel = null
   }
 
-  protected Void fireClick(Bool down)
+  protected Void fireClick(Bool down, MouseBtn btn)
   {
     if (down)
     {
       now := DateTime.nowTicks / 1000000
       diff := now - clickTime
       clickTime = now
-      if (diff < 600 && clickPos.equals(pos))
+      if (diff < 600 && clickPos.equals(pos) && btn == clickBtn)
       {
         clickCount++
       }
       else
       {
         clickCount = 1
+        clickBtn = btn
         clickPos = pos
       }
     }
-    onClick?.call(down, clickCount)
+    
+    if (MouseBtn.leftBtn == clickBtn)
+    {
+      onClick?.call(down, clickCount)
+    }
+    onBtnClick?.call(down, clickCount, clickBtn)
   }
 
   private Int clickCount
   private Int clickTime
   private Point? pos
   private Point clickPos := Point.defVal
+  private MouseBtn clickBtn := MouseBtn.leftBtn
 
   private Notice hover
   private Notice? move
   private Notice? click
+  private Notice? rightClick
+  private Notice? middleClick
   private Notice? wheel
 
 }

@@ -15,13 +15,13 @@ class SelectPoint : Policy
   override Void attach()
   {
     onMove = control.onMouseMove.handle { if (pressed) move() }
-    control.onMouseClick(onClick)
+    control.onMouseBtnClick(onBtnClick)
   }
 
   override Void detach()
   {
     onMove.discard
-    control.unMouseClick(onClick)
+    control.unMouseBtnClick(onBtnClick)
   }
 
   private Void move()
@@ -88,20 +88,27 @@ class SelectPoint : Policy
   }
 
   private Notice? onMove
-
-  private |Bool, Int| onClick := |Bool down, Int count|
+  
+  private |Bool, Int, MouseBtn| onBtnClick := |Bool down, Int count, MouseBtn btn| 
   {
-    if (count == 1)
-    {
-      pressed = down
-      if (down)
+    if (MouseBtn.leftBtn == btn) {
+      if (count == 1)
       {
-        if (control.keyboard.key.isShift)
-          control.selection.extend(pos)
-        else
-          control.selection.range = GridRange(pos)
+        pressed = down
+        if (down)
+        {
+          if (control.keyboard.key.isShift)
+            control.selection.extend(pos)
+          else
+            control.selection.range = GridRange(pos)
+        }
+        else endAutoScroll()
       }
-      else endAutoScroll()
+    } 
+    else 
+    {
+      // clear selection on non-left click
+      control.selection.range = GridRange(pos)
     }
   }
 

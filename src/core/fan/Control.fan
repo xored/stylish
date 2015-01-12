@@ -4,6 +4,9 @@ using stylishScene
 using stylishNotice
 
 @Js
+enum class MouseBtn { leftBtn, middleBtn, rightBtn }
+
+@Js
 abstract class Control
 {
 
@@ -45,12 +48,18 @@ abstract class Control
 
   Void unMouseClick(|Bool down, Int count| f) { clicks.remove(f) }
 
+  Void onMouseBtnClick(|Bool down, Int count, MouseBtn btn| f) { btnClicks.add(f) }
+
+  Void unMouseBtnClick(|Bool down, Int count, MouseBtn btn| f) { btnClicks.remove(f) }
+
   Void onMouseWheel(|Point| f) { wheels.add(f) }
 
   Void unMouseWheel(|Point| f) { wheels.remove(f) }
 
   private |Bool down, Int count|[] clicks := [,]
 
+  private |Bool down, Int count, MouseBtn btn|[] btnClicks := [,]
+  
   private |Point|[] wheels := [,]
 
   internal Void doAttach(GroupControl? parent, Group? content)
@@ -65,6 +74,7 @@ abstract class Control
       it.onHover = |Bool hover| { this.onHover.push(hover) }
       onMove = |Point p| { onMouseMove.push(mouse = p) }
       onClick = |Bool down, Int count| { this.clicks.each { it.call(down, count) } }
+      onBtnClick = |Bool down, Int count, MouseBtn btn| { this.btnClicks.each { it.call(down, count, btn) } }
       onWheel = |Point p->Bool|
       {
         if (this.wheels.size > 0)
