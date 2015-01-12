@@ -3,6 +3,7 @@ using fwt
 using stylish
 using stylishMath
 using stylishNotice
+using stylishScene
 
 @Js
 class SelectPoint : Policy
@@ -16,12 +17,14 @@ class SelectPoint : Policy
   {
     onMove = control.onMouseMove.handle { if (pressed) move() }
     control.onMouseBtnClick(onBtnClick)
+    control.keyboard?.on(Keyboard#key)?.add(onKeyPress)
   }
 
   override Void detach()
   {
     onMove.discard
     control.unMouseBtnClick(onBtnClick)
+    control.keyboard?.on(Keyboard#key)?.remove(onKeyPress)
   }
 
   private Void move()
@@ -98,9 +101,13 @@ class SelectPoint : Policy
         if (down)
         {
           if (control.keyboard.key.isShift)
+          {
             control.selection.extend(pos)
+          }
           else
+          {
             control.selection.range = GridRange(pos)
+          }
         }
         else endAutoScroll()
       }
@@ -110,6 +117,40 @@ class SelectPoint : Policy
       // clear selection on non-left click
       control.selection.range = GridRange(pos)
     }
+  }
+  
+  private |Obj?->Bool| onKeyPress := |Obj? key -> Bool|
+  {    
+    k := (Key)key
+    if (k.isShift) 
+    {
+      pk := k.primary
+      r := control.selection.range
+      e := r.end
+      
+      if (Key.left == pk)
+      {
+        e = GridPos(e.row, (e.col - 1).max(0))
+      } 
+      else if (Key.right == pk) 
+      {
+        e = GridPos(e.row, e.col + 1)
+      } 
+      else if (Key.up == pk) 
+      {
+        e = GridPos((e.row - 1).max(0), e.col)
+      } 
+      else if (Key.down == pk) 
+      {
+        e = GridPos(e.row + 1, e.col)
+      }
+      
+      if (e != r.end) 
+      {
+        control.selection.extend(e)
+      }      
+    }
+    return false
   }
 
   private Bool pressed := false
