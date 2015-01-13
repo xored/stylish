@@ -112,11 +112,6 @@ class SelectPoint : Policy
         else endAutoScroll()
       }
     } 
-    else 
-    {
-      // clear selection on non-left click
-      control.selection.range = GridRange(pos)
-    }
   }
   
   private |Obj?->Bool| onKeyPress := |Obj? key -> Bool|

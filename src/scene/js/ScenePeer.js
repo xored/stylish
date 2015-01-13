@@ -28,6 +28,8 @@ fan.stylishScene.ScenePeer.prototype.attach = function(elem)
   elem.appendChild(this.m_elem);
   this.m_focusArea = fan.stylishScene.ScenePeer.createFocusArea();
   document.body.appendChild(this.m_focusArea);
+  this.m_contextMenuArea = fan.stylishScene.ScenePeer.createContextMenuArea();
+  document.body.appendChild(this.m_contextMenuArea);
   this.attachFocus();
   this.attachMouse();
   this.attachKeyboard();
@@ -38,6 +40,7 @@ fan.stylishScene.ScenePeer.prototype.attach = function(elem)
 fan.stylishScene.ScenePeer.prototype.detach = function()
 {
   document.body.removeChild(this.m_focusArea);
+  document.body.removeChild(this.m_contextMenuArea);
   this.m_elem.parentNode.removeChild(this.m_elem);
   this.removeListeners();
 }
@@ -53,6 +56,48 @@ fan.stylishScene.ScenePeer.prototype.attachMouse = function()
   this.addListener(window, "mousedown",  function(e) { return $this.handleDown(e);  });
   this.addListener(window, "mouseup",    function(e) { return $this.handleUp(e);    });
   this.addListener(window, "mousewheel", function(e) { return $this.handleWheel(e); });
+  this.addListener(window, "contextmenu", function(e) { return $this.handleContextMenu(e); });
+}
+
+fan.stylishScene.ScenePeer.prototype.handleContextMenu = function(e)
+{
+	var sceneParent = this.m_elem.parentNode;
+	var r = sceneParent.getBoundingClientRect();
+	var mx = e.pageX;
+	var my = e.pageY;
+	if (!(r.left < mx && mx < r.right && r.top < my && my < r.bottom)) {
+		// mouse is not under the scene -> don't bother
+		return true;
+	}
+	// TODO: the following is a part of selection policy in fact, so should be refactored 
+	// Chrome selects word on right click, so remove the old selection
+	if (window.getSelection) {
+		window.getSelection().removeAllRanges();
+	} else if (document.selection) {
+		document.selection.empty();
+	}
+	// Select what we need by browser means
+	var el = this.m_contextMenuArea;
+	el.innerHTML = "<pre>" + this.m_focusArea.value + "</pre>";
+	// Select it
+	if (window.getSelection && document.createRange) {
+		var sel = window.getSelection();
+		var range = document.createRange();
+		range.selectNodeContents(el);
+		sel.removeAllRanges();
+		sel.addRange(range);
+	} else if (document.selection && document.body.createTextRange) {
+		var textRange = document.body.createTextRange();
+		textRange.moveToElementText(el);
+		textRange.select();
+	}
+	// place it under the mouse
+	with (el.style) {
+		left = "" + (mx - 2) + "px";
+		top = "" + (my - 2) + "px";
+	}
+	// let the browser show context menu
+	return true;
 }
 
 fan.stylishScene.ScenePeer.prototype.handleMove = function(e)
@@ -143,7 +188,7 @@ fan.stylishScene.ScenePeer.prototype.attachFocus = function()
 
 fan.stylishScene.ScenePeer.prototype.handleFocus = function(focus)
 {
-  this.m_focus.onFocus(focus)
+  this.m_focus.onFocus(focus);
   return true;
 }
 
@@ -442,6 +487,21 @@ fan.stylishScene.ScenePeer.createFocusArea = function()
     visible = "false";
     left = "-1000000px";
     top = "-1000000px";
+  }
+  elem.tabindex = -1;
+  return elem;
+}
+
+fan.stylishScene.ScenePeer.createContextMenuArea = function()
+{
+  var elem = document.createElement("div");
+  with (elem.style)
+  {
+    position = "absolute";
+    zIndex = "999";
+    opacity = 0;
+    left = "0px";
+    top = "0px";
   }
   elem.tabindex = -1;
   return elem;
