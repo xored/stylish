@@ -5,6 +5,7 @@ class Build : BuildJar
   new make()
   {
     podName = "stylishDeploy"
+    version = Version.fromStr((scriptDir.parent + `src/version`).readAllLines.first)
     summary = ""
     srcDirs = [`fan/`]
     depends = ["sys 1.0", "gfx 1.0", "fwt 1.0", 
@@ -18,7 +19,7 @@ class Build : BuildJar
     
     mvnGroupId = "com.xored"
     mvnArtifactId = "stylish"
-    mvnVersion = "1.0.0-SNAPSHOT"
+    mvnVersion = version.toStr + "-SNAPSHOT"
     
     mvnRepositoryUrl = "http://maven.xored.com/nexus/content/repositories/cisco-snapshots/"
     mvnRepositoryId = "xored"

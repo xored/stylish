@@ -4,6 +4,7 @@ class Build : build::BuildPod
   new make()
   {
     podName = "stylishScene"
+    version = Version.fromStr((scriptDir.parent + `version`).readAllLines.first)
     summary = ""
     srcDirs = [`fan/`, `fan/trash/`, `fan/example/`]
     javaDirs = [`java/`]
