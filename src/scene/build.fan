@@ -9,6 +9,6 @@ class Build : build::BuildPod
     srcDirs = [`fan/`, `fan/trash/`, `fan/example/`]
     javaDirs = [`java/`]
     jsDirs = [`js/`]
-    depends = ["sys 1.0", "gfx 1.0", "fwt 1.0", "stylishCss 1.0", "stylishNotice 1.0", "stylishMath 1.0", "stylishUtil 1.0"]
+    depends = ["sys 1.0", "gfx 1.0", "fwt 1.0", "stylishCss 1.2", "stylishNotice 1.2", "stylishMath 1.2", "stylishUtil 1.2"]
   }
 }

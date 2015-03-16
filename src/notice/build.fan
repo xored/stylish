@@ -7,6 +7,6 @@ class Build : build::BuildPod
     version = Version.fromStr((scriptDir.parent + `version`).readAllLines.first)
     summary = ""
     srcDirs = [`fan/`]
-    depends = ["sys 1.0", "stylishMath 1.0"]
+    depends = ["sys 1.0", "stylishMath 1.2"]
   }
 }
