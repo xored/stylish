@@ -19,9 +19,9 @@ class Build : BuildJar
     
     mvnGroupId = "com.xored"
     mvnArtifactId = "stylish"
-    mvnVersion = version.toStr + "-SNAPSHOT"
+    mvnVersion = version.toStr
     
-    mvnRepositoryUrl = "http://maven.xored.com/nexus/content/repositories/cisco-snapshots/"
+    mvnRepositoryUrl = "http://maven.xored.com/nexus/content/repositories/cisco-releases/"
     mvnRepositoryId = "xored"
   }
 }
